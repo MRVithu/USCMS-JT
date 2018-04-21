@@ -4,8 +4,8 @@ package com.vithu.uscms.others;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 19th January 2017
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose URL formating service
  */
 

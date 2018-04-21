@@ -3,7 +3,7 @@ package com.vithu.uscms.others;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 19th December 2017
+ * @CreatedOn 20th April 2018
  * @Purpose Return result definition - to return complex results in methods
  */
 public class GenericResult

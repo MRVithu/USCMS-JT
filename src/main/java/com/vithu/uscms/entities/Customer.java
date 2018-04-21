@@ -2,8 +2,8 @@ package com.vithu.uscms.entities;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 21th December 2017
- * @Purpose User Entity Class
+ * @CreatedOn 20th April 2018
+ * @Purpose Customer Entity Class
  */
 public class Customer
 {

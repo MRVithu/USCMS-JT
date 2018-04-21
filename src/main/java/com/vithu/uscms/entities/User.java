@@ -2,7 +2,7 @@ package com.vithu.uscms.entities;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 20th December 2017
+ * @CreatedOn 20th April 2018
  * @Purpose User Entity Class
  */
 public class User {

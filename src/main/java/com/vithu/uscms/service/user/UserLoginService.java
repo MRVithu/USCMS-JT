@@ -20,8 +20,8 @@ import com.vithu.uscms.session.CurrentUser;
 import com.vithu.uscms.session.TokenManager;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 23rd December 2017
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose Service for users to login
  */
 

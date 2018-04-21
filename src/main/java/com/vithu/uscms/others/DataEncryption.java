@@ -4,8 +4,8 @@ package com.vithu.uscms.others;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 28th January 2018
+ * @author m.Vithhusanth
+ * @CreatedOn 20th April 2018
  * @Purpose Service for data encryption
  */
 

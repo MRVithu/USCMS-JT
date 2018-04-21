@@ -6,8 +6,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 30th January 2018
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose To Encrypt & Decrypt data
  */
 

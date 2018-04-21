@@ -1,6 +1,5 @@
 package com.vithu.uscms.session;
 
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +8,8 @@ import com.vithu.uscms.entities.Customer;
 import com.vithu.uscms.entities.Employee;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 23rd December 2017
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose Holds the information about the current user
  */
 public class CurrentUser {
@@ -44,7 +43,7 @@ public class CurrentUser {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-	
+
 	public String getToken() {
 		return token;
 	}

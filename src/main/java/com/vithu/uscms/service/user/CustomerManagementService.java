@@ -16,10 +16,11 @@ import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
 
+
 /**
  * @author M.Vithusanth
- * @CreatedOn 21th December 2017
- * @Purpose User Entity Class
+ * @CreatedOn 21th April 2018
+ * @Purpose Services for Add/Edit/Delete/View Single/View All Customers
  */
 
 @Service

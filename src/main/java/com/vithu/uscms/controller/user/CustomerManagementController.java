@@ -21,8 +21,8 @@ import com.vithu.uscms.session.TokenManager;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 21th December 2017
- * @Purpose User Entity Class
+ * @CreatedOn 21th April 2018
+ * @Purpose  Controller for Add/Edit/Delete/View Single/View All Customers
  */
 
 @CrossOrigin(origins = "http://localhost:4200")

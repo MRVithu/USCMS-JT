@@ -25,10 +25,11 @@ import com.vithu.uscms.session.AuthorityConstant;
 import com.vithu.uscms.session.CurrentUser;
 import com.vithu.uscms.session.TokenManager;
 
+
 /**
- * @author S.Sugashan
- * @CreatedOn 19th December 2017
- * @Purpose Controller for Add/Edit/Delete/View Single/View All Users
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
+ * @Purpose Controller for Add/Edit/Delete/View Single/View All Employees
  */
 
 @CrossOrigin(origins = "http://localhost:4200")

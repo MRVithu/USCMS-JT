@@ -24,9 +24,9 @@ import com.vithu.uscms.session.TokenManager;
 
 
 /**
- * @author S.Sugashan
- * @CreatedOn 23rd December 2017
- * @Purpose Controller for users to login
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
+ * @Purpose  Controller for users to login
  */
 
 @CrossOrigin(origins = "http://localhost:4200")

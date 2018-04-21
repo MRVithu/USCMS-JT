@@ -1,5 +1,10 @@
 package com.vithu.uscms.entities;
 
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
+ * @Purpose Brand Entity Class
+ */
 public class Brand {
 	 private Integer id;
 	 private String name;

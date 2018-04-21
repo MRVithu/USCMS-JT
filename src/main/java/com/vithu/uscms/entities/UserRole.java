@@ -4,8 +4,8 @@ import java.util.List;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 20th December 2017
- * @Purpose User Authority Entity Class
+ * @CreatedOn 20th April 2018
+ * @Purpose User role Entity Class
  */
 public class UserRole {
 	private Integer id;

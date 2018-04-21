@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
- * @author S.Sugashan
- * @CreatedOn 19th January 2018
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose Controller for Initial
  */
 
@@ -22,7 +22,11 @@ public class IndexController {
 	    return "hello";
 	}
 	
-
+	@RequestMapping("/home")
+	public String home() {
+	    return "home";
+	}
+	
 	@RequestMapping("vehicles/vehicle")
 	public String vehicle() {
 	    return "vehicle";

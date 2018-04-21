@@ -2,8 +2,8 @@ package com.vithu.uscms.entities;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 20th December 2017
- * @Purpose User Authority Entity Class
+ * @CreatedOn 20th April 2018
+ * @Purpose User authority Entity Class
  */
 public class UserAuthority {
 	private Integer id;

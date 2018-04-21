@@ -1,8 +1,8 @@
 package com.vithu.uscms.session;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 23rd December 2017
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * @Purpose AuthorityConstants employees
  */
 

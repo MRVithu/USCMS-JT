@@ -21,9 +21,9 @@ import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.session.TokenManager;
 
 /**
- * @author S.Sugashan
- * @CreatedOn 19th December 2017
- * @Purpose Services for Add/Edit/Delete/View Single/View All Users
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
+ * @Purpose Services for Add/Edit/Delete/View Single/View All Employees
  */
 
 @Service

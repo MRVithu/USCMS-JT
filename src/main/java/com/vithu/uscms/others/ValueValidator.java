@@ -2,8 +2,8 @@ package com.vithu.uscms.others;
 
 
 /**
- * @author S.Sugashan
- * @CreatedOn 26th December 2017
+* @author M.Vithusanth
+ * @CreatedOn 20th April 2018
  * Method that validates plain text is it is empty or null
  * @param value: Value to be validated
  * @param label: Label to show which field is being validated
