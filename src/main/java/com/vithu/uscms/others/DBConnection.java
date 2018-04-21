@@ -21,7 +21,7 @@ public class DBConnection {
 		   
 	private static Connection conn = DBConnection.startConnection();
 	
-	//Initialize a connection
+	//Initialize a connectionss
 	public static Connection startConnection() {
 		Connection conn = null;
 		try {
