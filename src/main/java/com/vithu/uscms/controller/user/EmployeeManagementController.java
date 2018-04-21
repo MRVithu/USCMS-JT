@@ -99,7 +99,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/employee")
 	public String viewUser(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 		
-		CurrentUser currentUser = TokenManager.validateToken(token);
+//		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "");
 		GenericResult mandatoryResult = new GenericResult(false, MessageConstant.MSG_FAILED, " ", " ");

@@ -17,7 +17,7 @@ public class DBConnection {
 
 	//  Database credentials
 	static final String USER = "root";
-	static final String PASS = "root";
+	static final String PASS = "";
 		   
 	private static Connection conn = DBConnection.startConnection();
 	
