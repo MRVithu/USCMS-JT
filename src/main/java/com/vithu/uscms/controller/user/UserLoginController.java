@@ -52,8 +52,9 @@ public class UserLoginController {
 
 		try {
 			JSONObject user = new JSONObject(request.getParameter("data"));
-			System.out.println("obj" + user);
-			System.out.println("name" + user.getString("userName"));
+//			System.out.println("obj" + user);
+//			System.out.println("name" + user.getString("userName"));
+			
 			// Validate userName
 			if (ValueValidator.validateText(user.getString("userName"), "Name").isStatus() == false) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Name");
@@ -77,7 +78,7 @@ public class UserLoginController {
 			e.printStackTrace();
 		}
 		if (returnResult.isStatus() == true) {
-//			sesssion.setAttribute("Token", ((CurrentUser) returnResult.getResult()).getToken());
+			sesssion.setAttribute("Token", ((CurrentUser) returnResult.getResult()).getToken());
 		}
 		return responseResult;
 	}

@@ -99,7 +99,9 @@ public class EmployeeManagementController {
 	// VIEW USERS
 	@RequestMapping(value = "/employee")
 	public String viewUser(@RequestParam("token") String token, HttpServletRequest request, Model model) {
+		DataEncryption de = new DataEncryption();
 		
+		System.out.println(de.encrptyMe("mrvithu")+"------------");
 //		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "");

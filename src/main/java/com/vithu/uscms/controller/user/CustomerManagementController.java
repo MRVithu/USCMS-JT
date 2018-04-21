@@ -25,7 +25,6 @@ import com.vithu.uscms.session.TokenManager;
  * @Purpose  Controller for Add/Edit/Delete/View Single/View All Customers
  */
 
-@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class CustomerManagementController {
 	private CustomerManagementService cusService = new CustomerManagementService();
@@ -35,21 +34,21 @@ public class CustomerManagementController {
 	// VIEW CUSTOMER
 	@RequestMapping("/customer")
 	public String viewCustomer(@RequestParam("token") String token, HttpServletRequest request, Model model) {
-//		CurrentUser currentUser = TokenManager.validateToken(token);
+		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
 		
 		try {
-//			if (currentUser == null) {
-//				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
-//			} else if (currentUser != null) {
-//				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
 						returnResult = cusService.getAllCustomers();
-//				} else {
-//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
-//				}
-//			}
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}

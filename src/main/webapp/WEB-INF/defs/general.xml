@@ -36,5 +36,11 @@
 	    <put-attribute name="containerbody" value="/WEB-INF/jsp/user/customer.jsp" />
 	    <put-attribute name="current" value="customer"/>
 	  </definition>
+	  
+	   <definition name="brand" extends="common">
+	    <put-attribute name="title" value="USCMS Brand" />
+	    <put-attribute name="containerbody" value="/WEB-INF/jsp/product/brand.jsp" />
+	    <put-attribute name="current" value="brand"/>
+	  </definition>
 	
   </tiles-definitions>

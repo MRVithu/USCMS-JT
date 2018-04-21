@@ -39,6 +39,7 @@ public class BrandManagementService {
 				Brand brand = new Brand();
 				brand.setId(res.getInt("id"));
 				brand.setName(res.getString("name"));
+				brand.setDescription(res.getString("description"));
 				brandList.add(brand);
 			}
 

@@ -53,13 +53,19 @@
           </ul>
         </li>
 		
-	   <li class="treeview ${current == 'vehicle' ? 'active' : '' }">
-          <a href="/vehicle.html?token=<%= session.getAttribute("Token") %>"><i class="fa fa-car"></i><span> Vehicles</span></a>
+		 <li class="treeview ${current == 'brand' or current == 'customer' ? 'active' : '' }">
+          <a href="#"><i class="fa fa-user"></i> <span>Product</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+          	 <li class = "${current == 'brand' ? 'active' : '' }"><a href="/brand.html?token=<%= session.getAttribute("Token") %>"><i class="fa fa-circle-thin"></i><span> Brand</span></a></li>
+           
+            <li class = "${current == 'customer' ? 'active' : '' }"><a href="/customer.html?token=<%= session.getAttribute("Token") %>"><i class="fa fa-circle-thin"></i><span> Customers</span></a></li>
+          </ul>
         </li>
-
-          <li class="treeview ${current == 'route' ? 'active' : '' }">
-          <a href="/route.html?token=<%= session.getAttribute("Token") %>"><i class="fa fa-road"></i><span> Routes</span></a>
-        </li>
+	  
 		  <li class="treeview">
           <a href="#"><i class="fa fa-cart-arrow-down"></i> <span>Sales</span>
             <span class="pull-right-container">
