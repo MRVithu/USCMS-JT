@@ -1,5 +1,11 @@
 package com.vithu.uscms.controller.product;
 
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 21th April 2018
+ * @Purpose  Controller for Add/Edit/Delete/View Single/View All Brands
+ */
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -10,17 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
-import com.vithu.uscms.service.product.ItemTypeManagementService;
-
-/**
- * @author M.Vithusanth
- * @CreatedOn 21th April 2018
- * @Purpose  Controller for Add/Edit/Delete/View Single/View All Item types
- */
+import com.vithu.uscms.service.product.ProductManagementService;
 
 @Controller
-public class ItemTypeManagementController {
-	private ItemTypeManagementService itemTypeService = new ItemTypeManagementService();
+public class ProductManagementController {
+	private ProductManagementService proService = new ProductManagementService();
 
 	private String response;
 
@@ -37,7 +37,7 @@ public class ItemTypeManagementController {
 //			} else if (currentUser != null) {
 //				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
-						returnResult = itemTypeService.getAllItemTypes();
+						returnResult = proService.getAllProducts();
 //				} else {
 //					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
 //				}

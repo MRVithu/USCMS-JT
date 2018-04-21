@@ -1,23 +1,22 @@
 package com.vithu.uscms.service.product;
-
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 20th April 2018
+ * @Purpose Services for Add/Edit/Delete/View Single/View All Brands
+ */
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vithu.uscms.entities.Brand;
+import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.others.DBConnection;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
 
-/**
- * @author M.Vithusanth
- * @CreatedOn 20th April 2018
- * @Purpose Services for Add/Edit/Delete/View Single/View All Brands
- */
-public class BrandManagementService {
+public class ProductManagementService {
 	private DBConnection conn = new DBConnection();
 
 	private PreparedStatement stmt;
@@ -27,26 +26,26 @@ public class BrandManagementService {
 	private ResultSet res;
 
 	// METHOD TO VIEW ALL BRANDS
-	public GenericResult getAllBrands() {
+	public GenericResult getAllProducts() {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
 					"SELECT * FROM `pro_brands`  WHERE `is_deleted`=FALSE;");
 			res = stmt.executeQuery();
-			List<Brand> brandList = new ArrayList<Brand>();
+			List<Product> productList = new ArrayList<Product>();
 			while (res.next()) {
 				System.out.println("id : " + res.getInt("id"));
-				Brand brand = new Brand();
-				brand.setId(res.getInt("id"));
-				brand.setName(res.getString("name"));
-				brandList.add(brand);
+				Product product = new Product();
+				product.setId(res.getInt("id"));
+				product.setName(res.getString("name"));
+				productList.add(product);
 			}
 
 			GenericResult rs = new GenericResult();
 			rs.setStatus(true);
-			rs.setResult(brandList);
+			rs.setResult(productList);
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "retriveed successfully", brandList,
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "retriveed successfully", productList,
 					JsonFormer.form(rs), " ");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
