@@ -1,0 +1,12 @@
+@charset "ISO-8859-1";
+
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 23rd January 2018
+ * @Purpose User Entity Class
+ */
+
+.form-control[disabled]{
+	background-color:#fafafa;
+	cursor:pointer;
+}

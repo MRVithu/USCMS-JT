@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+	   <definition name="jsonview" template="/WEB-INF/layouts/jsonPrinter.jsp">
+	   	 <put-attribute name="body" value="/WEB-INF/jsp/common/jsonview.jsp" />
+	  </definition>
+	  
+	   <definition name="login" template="/WEB-INF/layouts/loginClassic.jsp">
+	    <put-attribute name="title" value="DropMe Login" />
+	   	 <put-attribute name="body" value="/WEB-INF/jsp/user/login.jsp" />
+	  </definition>
+		
+	  <definition name="common" template="/WEB-INF/layouts/classic.jsp">
+	    <put-attribute name="leftMenu"  value="/WEB-INF/layouts/leftMenu.jsp"/>
+	    <put-attribute name="header"  value="/WEB-INF/layouts/header.jsp"/>
+	    <put-attribute name="footer" value="/WEB-INF/layouts/footer.jsp" />
+	  </definition>
+	  
+	  <definition name="home" extends="common">
+	    <put-attribute name="title" value="DropMe Home" />
+	    <put-attribute name="containerbody" value="/WEB-INF/jsp/home.jsp" />
+	    <put-attribute name="current" value="home"/>
+	  </definition>
+	  
+   	 <definition name="employee" extends="common">
+	    <put-attribute name="title" value="DropMe Employee" />
+	    <put-attribute name="containerbody" value="/WEB-INF/jsp/user/employee.jsp" />
+	    <put-attribute name="current" value="employee"/>
+	  </definition>
+	  
+	  <definition name="customer" extends="common">
+	    <put-attribute name="title" value="DropMe Customer" />
+	    <put-attribute name="containerbody" value="/WEB-INF/jsp/user/customer.jsp" />
+	    <put-attribute name="current" value="customer"/>
+	  </definition>
+	
+  </tiles-definitions>
