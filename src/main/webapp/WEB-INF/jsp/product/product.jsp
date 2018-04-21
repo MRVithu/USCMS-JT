@@ -56,12 +56,16 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
+				<div class="input-group">
+						<label class="input-group-addon">Code</label> <input type="text"
+							id="name" readonly class="form-control " />
+					</div>
 					<div class="input-group">
 						<label class="input-group-addon">Name</label> <input type="text"
 							id="name" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon">Mobile</label> <input type="text"
+						<label class="input-group-addon">Description</label> <input type="text"
 							id="mobile" readonly class="form-control " />
 					</div>
 					<div class="input-group">
@@ -109,13 +113,13 @@
 	//To view single customer
 	function singleView(id) {
 		console.log(products.result);
-		$.each(customers.result, function(i, cus){
-			if(cus.user.id==id){
-				//alert(cus.user.name);
-				$("#name").val(cus.user.name);
-				$("#mobile").val(cus.user.mobile);
-				$("#email").val(cus.user.email);
-				$("#user-name").val(cus.user.userName);
+		$.each(products.result, function(i, product){
+			if(product.id==id){
+				alert(product.name);
+				//$("#name").val(cus.user.name);
+				//$("#mobile").val(cus.user.mobile);
+				//$("#email").val(cus.user.email);
+				//$("#user-name").val(cus.user.userName);
 			}
 		});
 		$('#view-modal').modal({

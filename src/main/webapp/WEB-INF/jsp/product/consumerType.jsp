@@ -27,7 +27,7 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${consumerTypes.result}" var="consumerType">
-						<tr onclick="singleView(${customer.user.id})">
+						<tr onclick="singleView(${consumerType.id})">
 							<td>${consumerType.name}</td>
 							<td>${consumerType.description}</td>
 						</tr>
@@ -57,16 +57,8 @@
 							id="name" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon">Mobile</label> <input type="text"
-							id="mobile" readonly class="form-control " />
-					</div>
-					<div class="input-group">
-						<label class="input-group-addon">Email</label> <input type="text"
-							id="email" readonly class="form-control " />
-					</div>
-					<div class="input-group">
-						<label class="input-group-addon">User Name</label> <input
-							type="text" id="user-name" readonly class="form-control " />
+						<label class="input-group-addon">Description</label> <input type="text"
+							id="description" readonly class="form-control " />
 					</div>
 				</div>
 			</div>
@@ -104,14 +96,12 @@
 
 	//To view single customer
 	function singleView(id) {
-		console.log(customers.result);
-		$.each(customers.result, function(i, cus){
-			if(cus.user.id==id){
+		console.log(consumerTypes.result);
+		$.each(consumerTypes.result, function(i, consumerType){
+			if(consumerType.id==id){
 				//alert(cus.user.name);
-				$("#name").val(cus.user.name);
-				$("#mobile").val(cus.user.mobile);
-				$("#email").val(cus.user.email);
-				$("#user-name").val(cus.user.userName);
+				$("#name").val(consumerType.name);
+				$("#description").val(consumerType.description);
 			}
 		});
 		$('#view-modal').modal({

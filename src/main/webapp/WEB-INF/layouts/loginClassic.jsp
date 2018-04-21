@@ -37,7 +37,7 @@
 	
 	<div class="login-box">
 		  <div class="login-logo">
-		    <a href="#"><b>Drop</b>Me</a>
+		    <a href="#"><b>USCMS</b>JT</a>
 		  </div>
 		 <div class="login-box-body">
 		   
