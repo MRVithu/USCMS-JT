@@ -31,7 +31,7 @@ public class ConsumerTypeManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT * FROM `pro_brands`  WHERE `is_deleted`=FALSE;");
+					"SELECT * FROM `consumer_types`  WHERE `is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<ConsumerType> consumerTypeList = new ArrayList<ConsumerType>();
 			while (res.next()) {
@@ -39,6 +39,7 @@ public class ConsumerTypeManagementService {
 				ConsumerType consumeType = new ConsumerType();
 				consumeType.setId(res.getInt("id"));
 				consumeType.setName(res.getString("name"));
+				consumeType.setDescription(res.getString("description"));
 				consumerTypeList.add(consumeType);
 			}
 

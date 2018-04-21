@@ -22,18 +22,18 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Email</th>
-						<th>Mobile</th>
-						<th>User Name</th>
+						<th>Code</th>
+						<th>Brand</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${customers.result}" var="customer">
-						<tr onclick="singleView(${customer.user.id})">
-							<td>${customer.user.name}</td>
-							<td>${customer.user.email}</td>
-							<td>${customer.user.mobile}</td>
-							<td>${customer.user.userName}</td>
+					<c:forEach items="${products.result}" var="product">
+						<tr onclick="singleView(${product.id})">
+							<td>${product.name}</td>
+							<td>${product.code}</td>
+							<td>${product.brand.name}</td>
+							<td>${product.description}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -52,7 +52,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Customer</h4>
+				<h4 class="modal-title">View Product</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -89,8 +89,8 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var customers = "";
-	customers = ${customers.resultString};
+	var products = "";
+	products = ${products.resultString};
 
 	//Data table
 	$(function() {
@@ -108,7 +108,7 @@
 
 	//To view single customer
 	function singleView(id) {
-		console.log(customers.result);
+		console.log(products.result);
 		$.each(customers.result, function(i, cus){
 			if(cus.user.id==id){
 				//alert(cus.user.name);

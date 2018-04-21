@@ -11,6 +11,9 @@ import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
 import com.vithu.uscms.service.product.ItemTypeManagementService;
+import com.vithu.uscms.session.AuthorityConstant;
+import com.vithu.uscms.session.CurrentUser;
+import com.vithu.uscms.session.TokenManager;
 
 /**
  * @author M.Vithusanth
@@ -27,21 +30,21 @@ public class ItemTypeManagementController {
 	// VIEW CUSTOMER
 	@RequestMapping("/itemType")
 	public String viewItemType(@RequestParam("token") String token, HttpServletRequest request, Model model) {
-//		CurrentUser currentUser = TokenManager.validateToken(token);
+		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
 		
 		try {
-//			if (currentUser == null) {
-//				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
-//			} else if (currentUser != null) {
-//				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
 						returnResult = itemTypeService.getAllItemTypes();
-//				} else {
-//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
-//				}
-//			}
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
@@ -56,10 +59,9 @@ public class ItemTypeManagementController {
 		}
 		else
 		{
-			System.out.println("hi not json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("brands", returnResult);
-			response = "brand";
+			model.addAttribute("itemTypes", returnResult);
+			response = "itemType";
 		}
 		return response;
 	}

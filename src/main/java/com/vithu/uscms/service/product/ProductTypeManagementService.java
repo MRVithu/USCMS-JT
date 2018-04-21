@@ -31,7 +31,7 @@ public class ProductTypeManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT * FROM `pro_brands`  WHERE `is_deleted`=FALSE;");
+					"SELECT * FROM `pro_types`  WHERE `is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<ProductType> productTypeList = new ArrayList<ProductType>();
 			while (res.next()) {
@@ -39,6 +39,7 @@ public class ProductTypeManagementService {
 				ProductType productType = new ProductType();
 				productType.setId(res.getInt("id"));
 				productType.setName(res.getString("name"));
+				productType.setDescription(res.getString("description"));
 				productTypeList.add(productType);
 			}
 

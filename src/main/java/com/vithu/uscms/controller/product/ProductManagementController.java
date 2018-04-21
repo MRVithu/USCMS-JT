@@ -17,6 +17,9 @@ import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
 import com.vithu.uscms.service.product.ProductManagementService;
+import com.vithu.uscms.session.AuthorityConstant;
+import com.vithu.uscms.session.CurrentUser;
+import com.vithu.uscms.session.TokenManager;
 
 @Controller
 public class ProductManagementController {
@@ -27,39 +30,36 @@ public class ProductManagementController {
 	// VIEW CUSTOMER
 	@RequestMapping("/product")
 	public String viewProduct(@RequestParam("token") String token, HttpServletRequest request, Model model) {
-//		CurrentUser currentUser = TokenManager.validateToken(token);
+		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
 		
 		try {
-//			if (currentUser == null) {
-//				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
-//			} else if (currentUser != null) {
-//				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
 						returnResult = proService.getAllProducts();
-//				} else {
-//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
-//				}
-//			}
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
 		
 		if(URLFormatter.MEDIA_JSON.equals(mediaType))
 		{
-			System.out.println("hi json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);
 			response = "jsonview";
-			System.out.println("**************"+response);
 		}
 		else
 		{
-			System.out.println("hi not json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("brands", returnResult);
-			response = "brand";
+			model.addAttribute("products", returnResult);
+			response = "product";
 		}
 		return response;
 	}

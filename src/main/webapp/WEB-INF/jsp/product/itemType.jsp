@@ -22,18 +22,14 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Email</th>
-						<th>Mobile</th>
-						<th>User Name</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${customers.result}" var="customer">
+					<c:forEach items="${itemTypes.result}" var="itemType">
 						<tr onclick="singleView(${customer.user.id})">
-							<td>${customer.user.name}</td>
-							<td>${customer.user.email}</td>
-							<td>${customer.user.mobile}</td>
-							<td>${customer.user.userName}</td>
+							<td>${itemType.name}</td>
+							<td>${itemType.description}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -89,15 +85,15 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var customers = "";
-	customers = ${customers.resultString};
+	var itemTypes = "";
+	itemTypes = ${itemTypes.resultString};
 
 	//Data table
 	$(function() {
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
 				"bSortable" : false,
-				"aTargets" : [ 0, 2, 3 ]
+				"aTargets" : [ 0]
 			}, {
 				"bSearchable" : false,
 				"aTargets" : [ 0 ]

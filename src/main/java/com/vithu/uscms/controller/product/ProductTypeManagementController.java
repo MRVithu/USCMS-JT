@@ -25,8 +25,8 @@ public class ProductTypeManagementController {
 	private String response;
 
 	// VIEW CUSTOMER
-	@RequestMapping("/brand")
-	public String viewCustomer(@RequestParam("token") String token, HttpServletRequest request, Model model) {
+	@RequestMapping("/productType")
+	public String viewProductType(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 //		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");

@@ -11,11 +11,14 @@ import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
 import com.vithu.uscms.service.product.ConsumerTypeManagementService;
+import com.vithu.uscms.session.AuthorityConstant;
+import com.vithu.uscms.session.CurrentUser;
+import com.vithu.uscms.session.TokenManager;
 
 /**
  * @author M.Vithusanth
  * @CreatedOn 21th April 2018
- * @Purpose  Controller for Add/Edit/Delete/View Single/View All Consumer types
+ * @Purpose Controller for Add/Edit/Delete/View Single/View All Consumer types
  */
 
 @Controller
@@ -24,24 +27,24 @@ public class ConsumerTypeManagementController {
 
 	private String response;
 
-	// VIEW CUSTOMER
+	// VIEW CONSUMER TYPES
 	@RequestMapping("/consumerType")
 	public String viewConsumerType(@RequestParam("token") String token, HttpServletRequest request, Model model) {
-//		CurrentUser currentUser = TokenManager.validateToken(token);
+		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
 		
 		try {
-//			if (currentUser == null) {
-//				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
-//			} else if (currentUser != null) {
-//				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
 						returnResult = consumerTypeService.getAllConsumerTypes();
-//				} else {
-//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
-//				}
-//			}
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
@@ -58,8 +61,8 @@ public class ConsumerTypeManagementController {
 		{
 			System.out.println("hi not json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("brands", returnResult);
-			response = "brand";
+			model.addAttribute("consumerTypes", returnResult);
+			response = "consumerType";
 		}
 		return response;
 	}

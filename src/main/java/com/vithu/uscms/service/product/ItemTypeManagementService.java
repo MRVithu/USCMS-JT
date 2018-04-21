@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vithu.uscms.entities.ItemType;
+import com.vithu.uscms.entities.ProductType;
 import com.vithu.uscms.others.DBConnection;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
@@ -31,7 +32,10 @@ public class ItemTypeManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT * FROM `pro_brands`  WHERE `is_deleted`=FALSE;");
+					"SELECT * FROM `pro_item_types` it\r\n" + 
+					"LEFT JOIN `pro_types` pt \r\n" + 
+					"ON pt.`id`=it.`pro_type`\r\n" + 
+					" WHERE it.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<ItemType> itemTypeList = new ArrayList<ItemType>();
 			while (res.next()) {
@@ -39,6 +43,12 @@ public class ItemTypeManagementService {
 				ItemType itemType = new ItemType();
 				itemType.setId(res.getInt("id"));
 				itemType.setName(res.getString("name"));
+				itemType.setDescription(res.getString("description"));
+				
+				ProductType proType= new ProductType();
+				proType.setName(res.getString("pro_type"));
+				
+				itemType.setProType(proType);
 				itemTypeList.add(itemType);
 			}
 
