@@ -103,16 +103,6 @@
 							</select>
 						</div>
 						<div class="input-group">
-							<label class="input-group-addon ">Consumer Type</label> <select
-								id="consumer-type" class="form-control type"
-								name="consumer-type">
-								<!-- Dropdown List Option -->
-								<c:forEach items="${consumerTypes.result}" var="consumerType">
-									<option value="${consumerType.id}">${consumerType.name}</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="input-group">
 							<label class="input-group-addon">Size</label> <input type="text"
 								id="size" class="form-control " />
 						</div>
@@ -180,6 +170,7 @@
 	//Function for view single product
 	function singleView(id) {
 		fillDataToModal(id);
+		$(".modal-title").html("View Product");
 		$(".form-control").prop("readonly", true);
 		$(".form-control").prop("disabled", true);
 		$('#modal').modal({
@@ -222,12 +213,24 @@
 	$("#btn-add").on("click",function(){
 		method="addProduct.json";
 		clear();
+		$(".modal-title").html("Add Product");
 		$(".form-control").prop("readonly", false);
 		$(".form-control").prop("disabled", false);
 		$("#modal").modal({backdrop: 'static', keyboard: false});
 		$("#modal").modal("show");
 	});
 	
+	//Function for update vehicle
+	function updateProduct(id){
+		method = "updateProduct.json";
+		$(".form-control").prop("readonly", false);
+		$(".form-control").prop("disabled", false);
+  		fillDataToModal(id);
+  		$(".modal-title").html("Edit Product");
+  		$("#pro-id").val(id);
+  		$("#modal").modal('show');
+  	}
+
 	//Function for submit all data. 
 	function update(form){
 		try
@@ -248,7 +251,6 @@
 				product.description=$("#description").val();
 				product.brand=$("#brand").val();
 				product.itemType=$("#item-type").val();
-				product.consumerType=$("#consumer-type").val();
 				
 				console.log(product);
 				console.log(method);
@@ -266,7 +268,6 @@
 							$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
 							$("#res-msg strong").html(res.description);
 						} else if (res.status == true) {
-							alert(1);
 							$("#res-msg").removeClass("alert-danger").removeClass("alert-info").addClass("alert-success");
 							$("#res-msg strong").html(res.description);
 						}
@@ -275,7 +276,7 @@
 							$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
 							$("#res-msg strong").html("Fill all fields and hit Save");
 							if (res.message == "SUCCESS"){
-								$("#add-edit-view-vehicle").modal("hide");
+								$("#modal").modal("hide");
 								window.location.reload(true);
 							}
 						}, 1000);
@@ -310,7 +311,6 @@
 				
 				$("#brand").prepend("<option>"+product.brand.name+"</option>");
 				$("#item-type").prepend("<option>"+product.itemType.name+"</option>");
-				$("#consumer-type").prepend("<option>"+product.consumerType.name+"</option>");
 			}
 		});
 	}

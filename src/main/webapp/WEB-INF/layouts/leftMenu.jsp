@@ -62,7 +62,7 @@
 			</li>
 
 			<li
-				class="treeview ${current == 'brand' or current == 'product' or current== 'productType' or current== 'itemType' or current== 'consumerType' ? 'active' : '' }">
+				class="treeview ${current == 'brand' or current == 'product' or current== 'productType' or current== 'itemType'  ? 'active' : '' }">
 				<a href="#"><i class="fa  fa-link"></i> <span>Product</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
@@ -84,10 +84,6 @@
 						href="/itemType.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Item Type</span></a></li>
 
-
-					<li class="${current == 'consumerType' ? 'active' : '' }"><a
-						href="/consumerType.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Consumer Type</span></a></li>
 
 				</ul>
 			</li>

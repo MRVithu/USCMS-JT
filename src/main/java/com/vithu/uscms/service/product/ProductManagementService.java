@@ -14,7 +14,6 @@ import java.util.List;
 
 import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Brand;
-import com.vithu.uscms.entities.ConsumerType;
 import com.vithu.uscms.entities.ItemType;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.ProductType;
@@ -37,13 +36,11 @@ public class ProductManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`, \r\n"
+					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`,\r\n"
 							+ "i.`id` as itemTypeId, i.`name` AS itemTypeName, p.`size`, p.`selling_price` AS salesPrice,\r\n"
-							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount, \r\n"
-							+ "c.`id` as consumerTypeId, c.`name` AS consumerTypeName \r\n" + "FROM `products` p\r\n"
-							+ "LEFT JOIN `pro_brands` b\r\n" + "ON p.`brand`=b.`id`\r\n"
+							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount\r\n"
+							+ "FROM `products` p\r\n" + "LEFT JOIN `pro_brands` b\r\n" + "ON p.`brand`=b.`id`\r\n"
 							+ "LEFT JOIN `pro_item_types` i\r\n" + "ON p.`pro_item_type`=i.`id`\r\n"
-							+ "LEFT JOIN `consumer_types` c\r\n" + "ON p.`consumer_type`=c.`id`\r\n"
 							+ "WHERE p.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<Product> productList = new ArrayList<Product>();
@@ -69,11 +66,6 @@ public class ProductManagementService {
 				itemType.setId(res.getInt("itemTypeId"));
 				itemType.setName(res.getString("itemTypeName"));
 				product.setItemType(itemType);
-
-				ConsumerType consumerType = new ConsumerType();
-				consumerType.setId(res.getInt("consumerTypeId"));
-				consumerType.setName(res.getString("consumerTypeName"));
-				product.setConsumerType(consumerType);
 
 				productList.add(product);
 			}
@@ -125,13 +117,12 @@ public class ProductManagementService {
 
 			// Add Vehicle Credentials
 			addStmt = newConn.prepareStatement(
-					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`, `consumer_type`) \r\n"
+					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`) \r\n"
 							+ "VALUES ('" + newProduct.getName() + "','" + newProduct.getBrand().getId() + "','"
 							+ newProduct.getCode() + "','" + newProduct.getDescription() + "','"
 							+ newProduct.getItemType().getId() + "','" + newProduct.getSize() + "','"
-							+ newProduct.getSelleingPrice() + "','" + newProduct.getLastPurchasePrice() + "','"
-							+ newProduct.getMinPrice() + "','" + newProduct.getDiscount() + "','"
-							+ newProduct.getConsumerType().getId() + "');",
+							+ newProduct.getSelleingPrice() + "','" + newProduct.getLastPurchasePrice() + "', '"
+							+ newProduct.getMinPrice() + "', '" + newProduct.getDiscount() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addStmt.executeUpdate();
 
@@ -143,6 +134,38 @@ public class ProductManagementService {
 		} finally {
 			try {
 				addStmt.close();
+				conn.closeCon();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+	}
+
+	// UPDATE EXISTING PRODUCT
+	public GenericResult updateProduct(Product newProduct) {
+		PreparedStatement updateStmt = null;
+
+		try {
+			newConn = conn.getCon();
+
+			// Update Product Credentials
+			updateStmt = newConn.prepareStatement("UPDATE `products` SET `name`='" + newProduct.getName()
+					+ "', `brand`='" + newProduct.getBrand().getId() + "', `code`='" + newProduct.getCode()
+					+ "', `description`='" + newProduct.getDescription() + "', `pro_item_type`='"
+					+ newProduct.getItemType().getId() + "', `size`='" + newProduct.getSize() + "', `selling_price`='"
+					+ newProduct.getSelleingPrice() + "', `last_purchase_price`='" + newProduct.getLastPurchasePrice()
+					+ "', `min_price`='" + newProduct.getMinPrice() + "', `dicount_par`='" + newProduct.getMinPrice()
+					+ "' WHERE `id`='" + newProduct.getId() + "'", Statement.RETURN_GENERATED_KEYS);
+			updateStmt.executeUpdate();
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Updated Successfully");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		} finally {
+			try {
+				updateStmt.close();
 				conn.closeCon();
 			} catch (SQLException e2) {
 				e2.printStackTrace();

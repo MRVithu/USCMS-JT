@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vithu.uscms.entities.Brand;
-import com.vithu.uscms.entities.ConsumerType;
 import com.vithu.uscms.entities.ItemType;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.others.GenericResult;
@@ -28,7 +27,6 @@ import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
 import com.vithu.uscms.others.ValueValidator;
 import com.vithu.uscms.service.product.BrandManagementService;
-import com.vithu.uscms.service.product.ConsumerTypeManagementService;
 import com.vithu.uscms.service.product.ItemTypeManagementService;
 import com.vithu.uscms.service.product.ProductManagementService;
 import com.vithu.uscms.session.AuthorityConstant;
@@ -71,10 +69,6 @@ public class ProductManagementController {
 		ItemTypeManagementService itemTypeService = new ItemTypeManagementService();
 		mandatoryResult = itemTypeService.getAllItemTypes();
 		model.addAttribute("itemTypes", mandatoryResult);
-
-		ConsumerTypeManagementService consumerTypeService = new ConsumerTypeManagementService();
-		mandatoryResult = consumerTypeService.getAllConsumerTypes();
-		model.addAttribute("consumerTypes", mandatoryResult);
 
 		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
@@ -155,11 +149,67 @@ public class ProductManagementController {
 						itemType.setId(product.getInt("itemType"));
 						addProduct.setItemType(itemType);
 						
-						ConsumerType consumerType = new ConsumerType();
-						consumerType.setId(product.getInt("consumerType"));
-						addProduct.setConsumerType(consumerType);
-
 						returnResult = proService.addProduct(addProduct);
+					} else {
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
+					}
+
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+		}
+		try {
+			response = JsonFormer.form(returnResult);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	// UPDATE EXISITING PRODUCT
+	@RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateProduct(@RequestParam("token") String token, HttpServletRequest request) {
+System.out.println("===========hi!! this is update ============");
+		Product updateProduct = new Product();
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
+		CurrentUser currentUser = TokenManager.validateToken(token);
+		
+		try {
+			JSONObject product = new JSONObject(request.getParameter("data"));
+			
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+
+					// Validate Product Code
+					GenericResult validateResult = ValueValidator.validateText(product.getString("code"), "Code");
+					if (validateResult.isStatus()) {
+						updateProduct.setId(product.getInt("id"));
+						updateProduct.setCode(product.getString("code"));
+						updateProduct.setName(product.getString("name"));
+						updateProduct.setDescription(product.getString("description"));
+						updateProduct.setDiscount(product.getDouble("discount"));
+						updateProduct.setLastPurchasePrice(product.getDouble("purPrice"));
+						updateProduct.setMinPrice(product.getDouble("minPrice"));
+						updateProduct.setSelleingPrice(product.getDouble("salesPrice"));
+						
+						Brand brand =new Brand();
+						brand.setId(product.getInt("brand"));
+						updateProduct.setBrand(brand);
+						
+						ItemType itemType = new ItemType();
+						itemType.setId(product.getInt("itemType"));
+						updateProduct.setItemType(itemType);
+					
+						returnResult = proService.updateProduct(updateProduct);
 					} else {
 						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
 					}

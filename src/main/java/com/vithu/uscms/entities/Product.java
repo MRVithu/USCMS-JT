@@ -12,7 +12,6 @@ public class Product {
 	private String description;
 	private Brand brand;
 	private ItemType itemType;
-	private ConsumerType consumerType;
 	private Double selleingPrice;
 	private Double minPrice;
 	private Double lastPurchasePrice;
@@ -73,14 +72,6 @@ public class Product {
 
 	public void setItemType(ItemType itemType) {
 		this.itemType = itemType;
-	}
-
-	public ConsumerType getConsumerType() {
-		return consumerType;
-	}
-
-	public void setConsumerType(ConsumerType consumerType) {
-		this.consumerType = consumerType;
 	}
 
 	public Double getSelleingPrice() {
