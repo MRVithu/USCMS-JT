@@ -8,14 +8,28 @@ package com.vithu.uscms.controller.product;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.vithu.uscms.entities.Brand;
+import com.vithu.uscms.entities.ConsumerType;
+import com.vithu.uscms.entities.ItemType;
+import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.others.GenericResult;
+import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
+import com.vithu.uscms.others.ValueValidator;
+import com.vithu.uscms.service.product.BrandManagementService;
+import com.vithu.uscms.service.product.ConsumerTypeManagementService;
+import com.vithu.uscms.service.product.ItemTypeManagementService;
 import com.vithu.uscms.service.product.ProductManagementService;
 import com.vithu.uscms.session.AuthorityConstant;
 import com.vithu.uscms.session.CurrentUser;
@@ -32,15 +46,16 @@ public class ProductManagementController {
 	public String viewProduct(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
-		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
-		
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "", "");
+		GenericResult mandatoryResult = new GenericResult(false, MessageConstant.MSG_FAILED, " ", " ");
+
 		try {
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-			
-						returnResult = proService.getAllProducts();
+
+					returnResult = proService.getAllProducts();
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
 				}
@@ -48,19 +63,123 @@ public class ProductManagementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
-		
-		if(URLFormatter.MEDIA_JSON.equals(mediaType))
-		{
+
+		BrandManagementService brandService = new BrandManagementService();
+		mandatoryResult = brandService.getAllBrands();
+		model.addAttribute("brands", mandatoryResult);
+
+		ItemTypeManagementService itemTypeService = new ItemTypeManagementService();
+		mandatoryResult = itemTypeService.getAllItemTypes();
+		model.addAttribute("itemTypes", mandatoryResult);
+
+		ConsumerTypeManagementService consumerTypeService = new ConsumerTypeManagementService();
+		mandatoryResult = consumerTypeService.getAllConsumerTypes();
+		model.addAttribute("consumerTypes", mandatoryResult);
+
+		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);
 			response = "jsonview";
-		}
-		else
-		{
+		} else {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
 			model.addAttribute("products", returnResult);
 			response = "product";
 		}
 		return response;
 	}
+
+	// DISABLE Product
+	@RequestMapping(value = "/deleteProduct/{id}")
+	@ResponseBody
+	public String deleteVehicle(@RequestParam("token") String token, HttpServletRequest request, Model model,
+			@PathVariable String id) {
+
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
+		CurrentUser currentUser = TokenManager.validateToken(token);
+
+		try {
+
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_VEHICLE) != null) {
+					returnResult = proService.deleteProduct(Integer.parseInt(id));
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
+		} catch (Exception e) {
+			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+		}
+		try {
+			response = JsonFormer.form(returnResult);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	// ADD NEW VEHICLE
+	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+	@ResponseBody
+	public String addVehicle(@RequestParam("token") String token, HttpServletRequest request) {
+
+		Product addProduct = new Product();
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
+		CurrentUser currentUser = TokenManager.validateToken(token);
+		System.out.println("ADD NEW PRODUCT");
+		try {
+			JSONObject product = new JSONObject(request.getParameter("data"));
+			
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+
+					// Validate Product Code
+					GenericResult validateResult = ValueValidator.validateText(product.getString("code"), "Code");
+					if (validateResult.isStatus()) {
+						addProduct.setCode(product.getString("code"));
+						addProduct.setName(product.getString("name"));
+						addProduct.setDescription(product.getString("description"));
+						addProduct.setDiscount(product.getDouble("discount"));
+						addProduct.setLastPurchasePrice(product.getDouble("purPrice"));
+						addProduct.setMinPrice(product.getDouble("minPrice"));
+						addProduct.setSelleingPrice(product.getDouble("salesPrice"));
+						
+						Brand brand =new Brand();
+						brand.setId(product.getInt("brand"));
+						addProduct.setBrand(brand);
+						
+						ItemType itemType = new ItemType();
+						itemType.setId(product.getInt("itemType"));
+						addProduct.setItemType(itemType);
+						
+						ConsumerType consumerType = new ConsumerType();
+						consumerType.setId(product.getInt("consumerType"));
+						addProduct.setConsumerType(consumerType);
+
+						returnResult = proService.addProduct(addProduct);
+					} else {
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
+					}
+
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+		}
+		try {
+			response = JsonFormer.form(returnResult);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+	}
+
 }

@@ -7,7 +7,7 @@
 
 $(document).ready(function(){
 	var sessionToken = $("#checklogintext").val();
-	console.log(sessionToken);
+//	console.log(sessionToken);
 	if(sessionToken === "null" || sessionToken.trim() === "" || sessionToken === "undifined" ){
 		$("#hidePurposeFooterBtn").css("display", "none");
 		$("#modal-title").html("Log in to continue.");
