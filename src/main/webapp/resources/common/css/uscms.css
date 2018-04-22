@@ -1,0 +1,56 @@
+@charset "ISO-8859-1";
+
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 22th April 2018
+ * @Purpose User Entity Class
+ */
+
+.form-control[disabled]{
+	background-color:#fafafa;
+	cursor:pointer;
+}
+.common {
+	height: 35px;
+	width: 35px !important;
+}
+
+.b {
+	background-color: blue;
+}
+
+.g {
+	background-color: green;
+}
+
+.btn-update {
+	
+}
+
+.input-group-addon {
+	background-color: #f6f6f6 !important;
+	color: #091547;
+	width: 130px;
+	font-weight: bold;
+}
+
+.form-control {
+	background-color: #fafafa;
+	cursor: pointer;
+}
+
+.input-group {
+	margin-top: 3px !important;
+	width: 100%;
+}
+
+.modal-body{
+	margin-left:5px;
+	margin-right:5px;
+}
+.modal-header{
+	padding:2px ; 
+	padding-top:5px ; 
+	margin:2px ;
+	text-align:center;
+}

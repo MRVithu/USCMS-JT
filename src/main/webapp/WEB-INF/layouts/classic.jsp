@@ -26,7 +26,7 @@
    	  <link href="<c:url value="/resources/dist/css/skins/skin-blue.min.css" />" rel="stylesheet">
    	  
    	    <!-- Common css  -->
-   	  <link href="<c:url value="/resources/common/css/DropMe.css" />" rel="stylesheet">
+   	  <link href="<c:url value="/resources/common/css/uscms.css" />" rel="stylesheet">
    	  
    	   <!-- DataTable  -->
    	  <link href="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.css" />" rel="stylesheet">
@@ -48,7 +48,7 @@
 	<!-- AdminLTE App -->
 	<script src="<c:url value="/resources/dist/js/app.min.js" />"></script>	
 	<!-- Common JS -->
-	<script src="<c:url value="/resources/common/js/dropme.js" />"></script>
+	<script src="<c:url value="/resources/common/js/uscms.js" />"></script>
 	<!-- common resources -->
 	<jsp:include page="../jsp/common/modalCommon.jsp" />
 	

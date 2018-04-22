@@ -22,7 +22,7 @@
 	  <link href="<c:url value="../resources/dist/css/AdminLTE.min.css" />" rel="stylesheet">
 		
 	  <!-- AdminLTE Skins.  -->
-   	  <link href="<c:url value="../../plugins/iCheck/square/blue.css" />" rel="stylesheet">
+   	  <link href="<c:url value="../resources/plugins/iCheck/square/blue.css" />" rel="stylesheet">
    	  
    	  <title><tiles:getAsString name="title"/></title>
 </head>

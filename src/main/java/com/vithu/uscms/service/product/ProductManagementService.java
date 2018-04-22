@@ -35,11 +35,13 @@ public class ProductManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT p.`id`, p.`name`, b.`name` as brand, p.`code`, p.`description`, i.`name` as itemType, p.`size`, p.`selling_price` as salesPrice,\r\n"
-							+ "p.`last_purchase_price` as purchasePrice, p.`min_price` as minPrice, p.`dicount_par` as discount, c.`name` as consumerType \r\n"
-							+ "FROM `products` p\r\n" + "left join `pro_brands` b\r\n" + "on p.`brand`=b.`id`\r\n"
-							+ "left join `pro_item_types` i\r\n" + "on p.`pro_item_type`=i.`id`\r\n"
-							+ "left join `consumer_types` c\r\n" + "on p.`consumer_type`=c.`id`\r\n"
+					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`, \r\n"
+							+ "i.`id` as itemTypeId, i.`name` AS itemTypeName, p.`size`, p.`selling_price` AS salesPrice,\r\n"
+							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount, \r\n"
+							+ "c.`id` as consumerTypeId, c.`name` AS consumerTypeName \r\n" + "FROM `products` p\r\n"
+							+ "LEFT JOIN `pro_brands` b\r\n" + "ON p.`brand`=b.`id`\r\n"
+							+ "LEFT JOIN `pro_item_types` i\r\n" + "ON p.`pro_item_type`=i.`id`\r\n"
+							+ "LEFT JOIN `consumer_types` c\r\n" + "ON p.`consumer_type`=c.`id`\r\n"
 							+ "WHERE p.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<Product> productList = new ArrayList<Product>();
@@ -51,21 +53,26 @@ public class ProductManagementService {
 				product.setCode(res.getString("code"));
 				product.setDescription(res.getString("description"));
 				product.setDiscount(res.getDouble("discount"));
+				product.setSize(res.getString("size"));
+				product.setSelleingPrice(res.getDouble("salesPrice"));
 				product.setLastPurchasePrice(res.getDouble("purchasePrice"));
 				product.setMinPrice(res.getDouble("minPrice"));
-				
-				Brand brand =new Brand();
-				brand.setName(res.getString("brand"));
+
+				Brand brand = new Brand();
+				brand.setId(res.getInt("brandId"));
+				brand.setName(res.getString("brandName"));
 				product.setBrand(brand);
-				
-				ItemType itemType=new ItemType();
-				itemType.setName(res.getString("itemType"));
+
+				ItemType itemType = new ItemType();
+				itemType.setId(res.getInt("itemTypeId"));
+				itemType.setName(res.getString("itemTypeName"));
 				product.setItemType(itemType);
-				
-				ConsumerType consumerType=new ConsumerType();
-				consumerType.setName(res.getString("consumertype"));
-				product.setConsumerType(consumerType);				
-				
+
+				ConsumerType consumerType = new ConsumerType();
+				consumerType.setId(res.getInt("consumerTypeId"));
+				consumerType.setName(res.getString("consumerTypeName"));
+				product.setConsumerType(consumerType);
+
 				productList.add(product);
 			}
 

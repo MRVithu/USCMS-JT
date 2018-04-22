@@ -48,7 +48,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Customer</h4>
+				<h4 class="modal-title">View Consumer Type</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">

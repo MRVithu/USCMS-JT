@@ -6,9 +6,9 @@
     <!-- Logo -->
     <a href="home.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>J</b>T</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Just-Post</b></span>
+      <span class="logo-lg"><b>USCMS-JT</b></span>
     </a>
 
     <!-- Header Navbar -->
@@ -36,7 +36,7 @@
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="/resources/dist/img/vithu.jpg" class="img-circle" alt="User Image">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -120,14 +120,14 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="<c:url value="/resources/dist/img/user2-160x160.jpg" />" class="user-image" alt="User Image">
+              <img src="<c:url value="/resources/dist/img/vithu.jpg" />" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">Alexander Pierce</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="<c:url value="/resources/dist/img/user2-160x160.jpg" />" class="img-circle" alt="User Image">
+                <img src="<c:url value="/resources/dist/img/vithu.jpg" />" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer

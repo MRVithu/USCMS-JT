@@ -15,7 +15,7 @@
 		<!-- Sidebar user panel (optional) -->
 		<div class="user-panel">
 			<div class="pull-left image">
-				<img src="<c:url value="/resources/dist/img/user2-160x160.jpg" />"
+				<img src="<c:url value="/resources/dist/img/vithu.jpg" />"
 					class="img-circle" alt="User Image">
 			</div>
 			<div class="pull-left info">
@@ -62,8 +62,8 @@
 			</li>
 
 			<li
-				class="treeview ${current == 'brand' or current == 'customer' ? 'active' : '' }">
-				<a href="#"><i class="fa fa-user"></i> <span>Product</span> <span
+				class="treeview ${current == 'brand' or current == 'product' or current== 'productType' or current== 'itemType' or current== 'consumerType' ? 'active' : '' }">
+				<a href="#"><i class="fa  fa-link"></i> <span>Product</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
@@ -119,26 +119,6 @@
 							class="fa fa-circle-thin"></i><span> </span></a></li>
 				</ul></li>
 
-			<li class="treeview"><a href="#"><i class="fa fa-money"></i>
-					<span>Payments</span> <span class="pull-right-container"> <i
-						class="fa fa-angle-left pull-right"></i>
-				</span> </a>
-				<ul class="treeview-menu">
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span>Pay Cash</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Card</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Deposit</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Cheque</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Credit</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Voucher</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Pay Loyalty</span></a></li>
-				</ul></li>
 
 			<li class="treeview"><a href="#"><i class="fa fa-money"></i>
 					<span>Transections</span> <span class="pull-right-container">
