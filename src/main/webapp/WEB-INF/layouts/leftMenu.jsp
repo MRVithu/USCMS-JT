@@ -106,19 +106,24 @@
 							class="fa fa-circle-thin"></i><span> </span></a></li>
 				</ul></li>
 
-			<li class="treeview"><a href="#"><i class="fa fa-truck"></i>
-					<span>Purchase</span> <span class="pull-right-container"> <i
+			
+			<li
+				class="treeview ${current == 'purchaseOrder' or current == 'purchase'   ? 'active' : '' }">
+				<a href="#"><i class="fa  fa-truck"></i> <span>Purchase</span> <span
+					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-				</ul></li>
+					<li class="${current == 'purchaseOrder' ? 'active' : '' }"><a
+						href="/purchase.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Purchase</span></a></li>
 
+					<li class="${current == 'purchase' ? 'active' : '' }"><a
+						href="/purchaseOrder.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Purchase Order</span></a></li>
+
+				</ul>
+			</li>
 
 			<li class="treeview"><a href="#"><i class="fa fa-money"></i>
 					<span>Transections</span> <span class="pull-right-container">
