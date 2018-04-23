@@ -1,10 +1,10 @@
 <!-- /** -->
 <!--  * @author M.Vithusanth -->
-<!--  * @CreatedOn 21th April 2018 -->
-<!--  * @Purpose Consumer type Page  -->
+<!--  * @CreatedOn 23rd April 2018 -->
+<!--  * @Purpose for Department Page  -->
 <!--  */ -->
 
-<%@page import="com.vithu.uscms.entities.ConsumerType"%>
+<%@page import="com.vithu.uscms.entities.Department"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vithu.uscms.others.GenericResult"%>
 <%@ include file="../../layouts/taglib.jsp"%>
@@ -22,14 +22,16 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Type</th>
 						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${consumerTypes.result}" var="consumerType">
-						<tr onclick="singleView(${consumerType.id})">
-							<td>${consumerType.name}</td>
-							<td>${consumerType.description}</td>
+					<c:forEach items="${departments.result}" var="department">
+						<tr onclick="singleView(${department.id})">
+							<td>${department.name}</td>
+							<td>${department.type}</td>
+							<td>${department.description}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -48,13 +50,17 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Consumer Type</h4>
+				<h4 class="modal-title">View Bank</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
 					<div class="input-group">
 						<label class="input-group-addon">Name</label> <input type="text"
 							id="name" readonly class="form-control " />
+					</div>
+					<div class="input-group">
+						<label class="input-group-addon">Type</label> <input type="text"
+							id="type" readonly class="form-control " />
 					</div>
 					<div class="input-group">
 						<label class="input-group-addon">Description</label> <input type="text"
@@ -77,8 +83,8 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var consumerTypes = "";
-	consumerTypes = ${consumerTypes.resultString};
+	var departments = "";
+	departments = ${departments.resultString};
 
 	//Data table
 	$(function() {
@@ -94,14 +100,14 @@
 		});
 	});
 
-	//To view single customer
+	//To view single department
 	function singleView(id) {
-		console.log(consumerTypes.result);
-		$.each(consumerTypes.result, function(i, consumerType){
-			if(consumerType.id==id){
-				//alert(cus.user.name);
-				$("#name").val(consumerType.name);
-				$("#description").val(consumerType.description);
+		console.log(departments.result);
+		$.each(departments.result, function(i, department){
+			if(department.id==id){
+				$("#name").val(department.name);
+				$("#type").val(department.type);
+				$("#description").val(department.description);
 			}
 		});
 		$('#view-modal').modal({

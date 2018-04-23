@@ -1,10 +1,10 @@
 <!-- /** -->
 <!--  * @author M.Vithusanth -->
-<!--  * @CreatedOn 21th April 2018 -->
-<!--  * @Purpose Item Type Page  -->
+<!--  * @CreatedOn 23rd April 2018 -->
+<!--  * @Purpose Customer Page  -->
 <!--  */ -->
 
-<%@page import="com.vithu.uscms.entities.ItemType"%>
+<%@page import="com.vithu.uscms.entities.Supplier"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vithu.uscms.others.GenericResult"%>
 <%@ include file="../../layouts/taglib.jsp"%>
@@ -17,21 +17,23 @@
 	<!-- Main content -->
 	<section class="content">
 		<div class="box box-body">
-			<table id="user-table" style="cursor: pointer;"
+			<table id="user-table"  style="cursor:pointer;"
 				class="table table-condensed table-bordered table-hover table-striped table-pad">
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Product Type</th>
-						<th>Description</th>
+						<th>Email</th>
+						<th>Mobile</th>
+						<th>User Name</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${itemTypes.result}" var="itemType">
-						<tr onclick="singleView(${itemType.id})">
-							<td>${itemType.name}</td>
-							<td>${itemType.proType.name}</td>
-							<td>${itemType.description}</td>
+					<c:forEach items="${suppliers.result}" var="supplier">
+						<tr onclick="singleView(${supplier.user.id})">
+							<td>${supplier.user.name}</td>
+							<td>${supplier.user.email}</td>
+							<td>${supplier.user.mobile}</td>
+							<td>${supplier.user.userName}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -43,13 +45,14 @@
 
 
 <!-- modal -->
-<div class="modal fade" id="modal" role="dialog">
+<!-- add new employee Modal -->
+<div class="modal fade" id="view-modal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Item Type</h4>
+				<h4 class="modal-title">View Customer</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -58,17 +61,16 @@
 							id="name" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon ">Pro Type</label> <select
-							id="pro-type" class="form-control type" name="pro-type">
-							<%-- <!-- Dropdown List Option -->
-							<c:forEach items="${brands.result}" var="brand">
-								<option value="${brand.id}">${brand.name}</option>
-							</c:forEach> --%>
-						</select>
+						<label class="input-group-addon">Mobile</label> <input type="text"
+							id="mobile" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon">Dep</label> <input type="text"
-							id="description" readonly class="form-control " />
+						<label class="input-group-addon">Email</label> <input type="text"
+							id="email" readonly class="form-control " />
+					</div>
+					<div class="input-group">
+						<label class="input-group-addon">User Name</label> <input
+							type="text" id="user-name" readonly class="form-control " />
 					</div>
 				</div>
 			</div>
@@ -87,15 +89,15 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var itemTypes = "";
-	itemTypes = ${itemTypes.resultString};
+	var suppliers = "";
+	suppliers = ${suppliers.resultString};
 
 	//Data table
 	$(function() {
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
 				"bSortable" : false,
-				"aTargets" : [ 0]
+				"aTargets" : [ 0, 2, 3 ]
 			}, {
 				"bSearchable" : false,
 				"aTargets" : [ 0 ]
@@ -104,30 +106,23 @@
 		});
 	});
 
-	//To view single item type
-		function singleView(id) {
-		fillDataToModal(id);
-		$(".modal-title").html("View Item Type");
-		$(".form-control").prop("readonly", true);
-		$(".form-control").prop("disabled", true);
-		$('#modal').modal({
+	//To view single customer
+	function singleView(id) {
+		console.log(suppliers.result);
+		$.each(suppliers.result, function(i, supplier){
+			if(supplier.user.id==id){
+				//alert(supplier.user.name);
+				$("#name").val(supplier.user.name);
+				$("#mobile").val(supplier.user.mobile);
+				$("#email").val(supplier.user.email);
+				$("#user-name").val(supplier.user.userName);
+			}
+		});
+		$('#view-modal').modal({
 			backdrop : 'static',
 			keyboard : false
 		});
-		$("#modal").modal("show");
+		$("#view-modal").modal("show");
 	}
-		
-	//Fill data in modal.
-	function fillDataToModal(id){
-		console.log(itemTypes.result);
-		$.each(itemTypes.result, function(i, itemType){
-			if(itemType.id==id){
-				
-				$("#name").val(itemType.name);
-				$("#description").val(itemType.description);
-				$("#pro-type").prepend("<option>"+itemType.proType.name+"</option>");
-			}
-		});
-	}
-	
+</script>
 </script>

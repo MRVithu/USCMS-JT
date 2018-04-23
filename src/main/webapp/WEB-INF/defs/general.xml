@@ -36,7 +36,13 @@
 		<put-attribute name="containerbody" value="/WEB-INF/jsp/user/customer.jsp" />
 		<put-attribute name="current" value="customer" />
 	</definition>
-	
+
+	<definition name="supplier" extends="common">
+		<put-attribute name="title" value="USCMS Supplier" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/user/supplier.jsp" />
+		<put-attribute name="current" value="supplier" />
+	</definition>
+
 	<definition name="product" extends="common">
 		<put-attribute name="title" value="USCMS Product" />
 		<put-attribute name="containerbody" value="/WEB-INF/jsp/product/product.jsp" />
@@ -51,15 +57,33 @@
 
 	<definition name="productType" extends="common">
 		<put-attribute name="title" value="USCMS Product Type" />
-		<put-attribute name="containerbody" value="/WEB-INF/jsp/product/productType.jsp" />
+		<put-attribute name="containerbody"
+			value="/WEB-INF/jsp/product/productType.jsp" />
 		<put-attribute name="current" value="productType" />
 	</definition>
-	
+
 	<definition name="itemType" extends="common">
 		<put-attribute name="title" value="USCMS Item Type" />
 		<put-attribute name="containerbody" value="/WEB-INF/jsp/product/itemType.jsp" />
 		<put-attribute name="current" value="itemType" />
 	</definition>
 
+	<definition name="bank" extends="common">
+		<put-attribute name="title" value="USCMS Bank" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/others/bank.jsp" />
+		<put-attribute name="current" value="bank" />
+	</definition>
+
+	<definition name="department" extends="common">
+		<put-attribute name="title" value="USCMS Department" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/others/department.jsp" />
+		<put-attribute name="current" value="department" />
+	</definition>
+
+	<definition name="counter" extends="common">
+		<put-attribute name="title" value="USCMS Department" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/others/counter.jsp" />
+		<put-attribute name="current" value="counter" />
+	</definition>
 
 </tiles-definitions>

@@ -1,11 +1,16 @@
 package com.vithu.uscms.controller.user;
 
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 23rd April 2018
+ * @Purpose  Controller for Add/Edit/Delete/View Single/View All Suppliers
+ */
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,26 +19,21 @@ import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
-import com.vithu.uscms.service.user.CustomerManagementService;
+import com.vithu.uscms.service.user.SupplierManagementService;
 import com.vithu.uscms.session.AuthorityConstant;
 import com.vithu.uscms.session.CurrentUser;
 import com.vithu.uscms.session.TokenManager;
 
-/**
- * @author M.Vithusanth
- * @CreatedOn 21th April 2018
- * @Purpose  Controller for Add/Edit/Delete/View Single/View All Customers
- */
-
 @Controller
-public class CustomerManagementController {
-	private CustomerManagementService cusService = new CustomerManagementService();
+public class SupplierManagementController {
+	private SupplierManagementService supService = new SupplierManagementService();
 
 	private String response;
 
-	// VIEW CUSTOMER
-	@RequestMapping("/customer")
+	// VIEW SUPPLIERS
+	@RequestMapping("/supplier")
 	public String viewCustomer(@RequestParam("token") String token, HttpServletRequest request, Model model) {
+		
 		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
@@ -44,7 +44,7 @@ public class CustomerManagementController {
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 			
-						returnResult = cusService.getAllCustomers();
+						returnResult = supService.getAllSuppliers();
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
 				}
@@ -62,21 +62,21 @@ public class CustomerManagementController {
 		else
 		{
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("customers", returnResult);
-			response = "customer";
+			model.addAttribute("suppliers", returnResult);
+			response = "supplier";
 		}
 		return response;
 	}
 
 	// DISABLE CUSTOMER
-	@RequestMapping("/disableCustomer")
+	@RequestMapping("/disableSupplier")
 	@ResponseBody
 	public String disableCustomer(@RequestParam("token") String token, @RequestParam("id") String id) {
 		
 		  CurrentUser currentUser = TokenManager.validateToken( token ); 
 		  if (  currentUser.getAuthorityMap().get( AuthorityConstant.AUTH_VIEW_CUSTOMER ) != null ) {		 
 			try {
-				response = JsonFormer.form(cusService.deleteCustomer(id));
+				response = JsonFormer.form(supService.deleteCustomer(id));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

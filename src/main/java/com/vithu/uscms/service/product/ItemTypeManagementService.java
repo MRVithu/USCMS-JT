@@ -32,9 +32,10 @@ public class ItemTypeManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT * FROM `pro_item_types` it\r\n" + 
+					"SELECT it.`id`,it.`name`,it.`description`,pt.`name` AS proType\r\n" + 
+					"FROM `pro_item_types` it\r\n" + 
 					"LEFT JOIN `pro_types` pt \r\n" + 
-					"ON pt.`id`=it.`pro_type`\r\n" + 
+					"ON it.`pro_type`=pt.`id`\r\n" + 
 					" WHERE it.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<ItemType> itemTypeList = new ArrayList<ItemType>();
@@ -46,7 +47,7 @@ public class ItemTypeManagementService {
 				itemType.setDescription(res.getString("description"));
 				
 				ProductType proType= new ProductType();
-				proType.setName(res.getString("pro_type"));
+				proType.setName(res.getString("proType"));
 				
 				itemType.setProType(proType);
 				itemTypeList.add(itemType);

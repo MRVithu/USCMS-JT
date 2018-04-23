@@ -45,7 +45,7 @@
 				href="/home.html"> <i class="fa fa-home"></i><span>Home</span></a></li>
 
 			<li
-				class="treeview ${current == 'employee' or current == 'customer' ? 'active' : '' }">
+				class="treeview ${current == 'employee' or current == 'customer' or current == 'supplier' ? 'active' : '' }">
 				<a href="#"><i class="fa fa-user"></i> <span>Users</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
@@ -58,6 +58,10 @@
 					<li class="${current == 'customer' ? 'active' : '' }"><a
 						href="/customer.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Customers</span></a></li>
+
+					<li class="${current == 'supplier' ? 'active' : '' }"><a
+						href="/supplier.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Suppliers</span></a></li>
 				</ul>
 			</li>
 
@@ -70,19 +74,19 @@
 				<ul class="treeview-menu">
 					<li class="${current == 'product' ? 'active' : '' }"><a
 						href="/product.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Product</span></a></li>
+							class="fa fa-circle-thin"></i><span> Products</span></a></li>
 
 					<li class="${current == 'brand' ? 'active' : '' }"><a
 						href="/brand.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Brand</span></a></li>
+							class="fa fa-circle-thin"></i><span> Brands</span></a></li>
 
 					<li class="${current == 'productType' ? 'active' : '' }"><a
 						href="/productType.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Product Type</span></a></li>
+							class="fa fa-circle-thin"></i><span> Product Types</span></a></li>
 
 					<li class="${current == 'itemType' ? 'active' : '' }"><a
 						href="/itemType.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Item Type</span></a></li>
+							class="fa fa-circle-thin"></i><span> Item Types</span></a></li>
 
 
 				</ul>
@@ -129,18 +133,28 @@
 							class="fa fa-circle-thin"></i> <span>ank Transections</span></a></li>
 				</ul></li>
 
-			<li class="treeview"><a href="#"><i class="fa fa-link"></i>
-					<span>Others</span> <span class="pull-right-container"> <i
+			<li
+				class="treeview ${current == 'bank' or current == 'counter' or current== 'department'  ? 'active' : '' }">
+				<a href="#"><i class="fa  fa-link"></i> <span>Others</span> <span
+					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin "></i> <span>Departments</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Counters</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Banks</span></a></li>
-				</ul></li>
+					<li class="${current == 'bank' ? 'active' : '' }"><a
+						href="/bank.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Banks</span></a></li>
+
+					<li class="${current == 'department' ? 'active' : '' }"><a
+						href="/department.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Departments</span></a></li>
+
+					<li class="${current == 'counter' ? 'active' : '' }"><a
+						href="/counter.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Counters</span></a></li>
+
+				</ul>
+			</li>
+
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>

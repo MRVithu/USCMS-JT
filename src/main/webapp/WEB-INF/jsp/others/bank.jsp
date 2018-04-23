@@ -1,10 +1,10 @@
 <!-- /** -->
 <!--  * @author M.Vithusanth -->
-<!--  * @CreatedOn 21th April 2018 -->
-<!--  * @Purpose Product Type Page  -->
+<!--  * @CreatedOn 23rd April 2018 -->
+<!--  * @Purpose Bank Page  -->
 <!--  */ -->
 
-<%@page import="com.vithu.uscms.entities.ProductType"%>
+<%@page import="com.vithu.uscms.entities.Bank"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vithu.uscms.others.GenericResult"%>
 <%@ include file="../../layouts/taglib.jsp"%>
@@ -21,15 +21,17 @@
 				class="table table-condensed table-bordered table-hover table-striped table-pad">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Description</th>
+						<th>Acc Name</th>
+						<th>Number</th>
+						<th>Bank Name</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${productTypes.result}" var="productType">
-						<tr onclick="singleView(${productType.id})">
-							<td>${productType.name}</td>
-							<td>${productType.description}</td>
+					<c:forEach items="${banks.result}" var="bank">
+						<tr onclick="singleView(${bank.id})">
+							<td>${bank.name}</td>
+							<td>${bank.number}</td>
+							<td>${bank.bankName}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -41,25 +43,29 @@
 
 
 <!-- modal -->
-<div class="modal fade" id="modal" role="dialog">
+<!-- add new employee Modal -->
+<div class="modal fade" id="view-modal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Product Type</h4>
+				<h4 class="modal-title">View Bank</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
 					<div class="input-group">
-						<label class="input-group-addon">Name</label> <input type="text"
-							id="name" readonly class="form-control " />
+						<label class="input-group-addon">Acc Name</label> <input type="text"
+							id="acc-name" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon">Description</label> <input type="text"
-							id="description" readonly class="form-control " />
+						<label class="input-group-addon">Number</label> <input type="text"
+							id="number" readonly class="form-control " />
 					</div>
-					
+					<div class="input-group">
+						<label class="input-group-addon">Bank Name</label> <input type="text"
+							id="bank-name" readonly class="form-control " />
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -77,15 +83,15 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var productTypes = "";
-	productTypes = ${productTypes.resultString};
+	var banks = "";
+	banks = ${banks.resultString};
 
 	//Data table
 	$(function() {
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
 				"bSortable" : false,
-				"aTargets" : [ 0, 2, 3 ]
+				"aTargets" : [ 0 ]
 			}, {
 				"bSearchable" : false,
 				"aTargets" : [ 0 ]
@@ -94,27 +100,21 @@
 		});
 	});
 
-	//To view single product type
+	//To view single bank acc
 	function singleView(id) {
-		fillDataToModal(id);
-		$(".modal-title").html("View Product Type");
-		$(".form-control").prop("readonly", true);
-		$(".form-control").prop("disabled", true);
-		$('#modal').modal({
+		console.log(banks.result);
+		$.each(banks.result, function(i, banks){
+			if(banks.id==id){
+				$("#acc-name").val(banks.name);
+				$("#number").val(banks.number);
+				$("#bank-name").val(banks.bankName);
+			}
+		});
+		$('#view-modal').modal({
 			backdrop : 'static',
 			keyboard : false
 		});
-		$("#modal").modal("show");
+		$("#view-modal").modal("show");
 	}
-		
-	//Fill data in modal.
-	function fillDataToModal(id){
-		console.log(productTypes.result);
-		$.each(productTypes.result, function(i, productType){
-			if(productType.id==id){
-				$("#name").val(productType.name);
-				$("#description").val(productType.description);
-			}
-		});
-	}
+</script>
 </script>

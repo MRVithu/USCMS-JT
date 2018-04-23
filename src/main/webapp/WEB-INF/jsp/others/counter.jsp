@@ -1,10 +1,10 @@
 <!-- /** -->
 <!--  * @author M.Vithusanth -->
-<!--  * @CreatedOn 21th April 2018 -->
+<!--  * @CreatedOn 23rd April 2018 -->
 <!--  * @Purpose Item Type Page  -->
 <!--  */ -->
 
-<%@page import="com.vithu.uscms.entities.ItemType"%>
+<%@page import="com.vithu.uscms.entities.Counter"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vithu.uscms.others.GenericResult"%>
 <%@ include file="../../layouts/taglib.jsp"%>
@@ -22,16 +22,14 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Product Type</th>
-						<th>Description</th>
+						<th>Department</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${itemTypes.result}" var="itemType">
-						<tr onclick="singleView(${itemType.id})">
-							<td>${itemType.name}</td>
-							<td>${itemType.proType.name}</td>
-							<td>${itemType.description}</td>
+					<c:forEach items="${counters.result}" var="counter">
+						<tr onclick="singleView(${counter.id})">
+							<td>${counter.name}</td>
+							<td>${counter.dept.name}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -49,7 +47,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" onclick="clear()">×</button>
-				<h4 class="modal-title">View Item Type</h4>
+				<h4 class="modal-title">View Counter</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -58,8 +56,8 @@
 							id="name" readonly class="form-control " />
 					</div>
 					<div class="input-group">
-						<label class="input-group-addon ">Pro Type</label> <select
-							id="pro-type" class="form-control type" name="pro-type">
+						<label class="input-group-addon ">Department</label> <select
+							id="dept" class="form-control type" name="dept">
 							<%-- <!-- Dropdown List Option -->
 							<c:forEach items="${brands.result}" var="brand">
 								<option value="${brand.id}">${brand.name}</option>
@@ -87,8 +85,8 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var itemTypes = "";
-	itemTypes = ${itemTypes.resultString};
+	var counters = "";
+	counters = ${counters.resultString};
 
 	//Data table
 	$(function() {
@@ -104,10 +102,10 @@
 		});
 	});
 
-	//To view single item type
-		function singleView(id) {
+	//To view single customer
+	function singleView(id) {
 		fillDataToModal(id);
-		$(".modal-title").html("View Item Type");
+		$(".modal-title").html("View Counter");
 		$(".form-control").prop("readonly", true);
 		$(".form-control").prop("disabled", true);
 		$('#modal').modal({
@@ -116,18 +114,16 @@
 		});
 		$("#modal").modal("show");
 	}
-		
+	
 	//Fill data in modal.
 	function fillDataToModal(id){
-		console.log(itemTypes.result);
-		$.each(itemTypes.result, function(i, itemType){
-			if(itemType.id==id){
-				
-				$("#name").val(itemType.name);
-				$("#description").val(itemType.description);
-				$("#pro-type").prepend("<option>"+itemType.proType.name+"</option>");
+		console.log(counters.result);
+		$.each(counters.result, function(i, counter){
+			if(counter.id==id){
+				$("#name").val(counter.name);
+				$("#description").val(counter.description);
+				$("#dept").prepend("<option>"+counter.dept.name+"</option>");
 			}
 		});
 	}
-	
 </script>
