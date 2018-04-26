@@ -97,5 +97,11 @@
 		<put-attribute name="containerbody" value="/WEB-INF/jsp/transaction/purchase/purchaseOrder.jsp" />
 		<put-attribute name="current" value="purchaseOrder" />
 	</definition>
+	
+	<definition name="purchaseOrderAdd" extends="common">
+		<put-attribute name="title" value="USCMS Purchase Order Add" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/transaction/purchase/purchaseOrderAdd.jsp" />
+		<put-attribute name="current" value="purchaseOrderAdd" />
+	</definition>
 
 </tiles-definitions>

@@ -1,5 +1,7 @@
 package com.vithu.uscms.entities;
 
+import java.util.List;
+
 /**
  * @author M.Vithusanth
  * @CreatedOn 23rd April 2018
@@ -12,7 +14,9 @@ public class PurchaseOrder {
 	private String tDate;
 	private String expectedDate;
 	private Supplier supplier;
+	private Department dept;
 	private Boolean isClosed;
+	private List<PurchaseOrderProduct> poProduct;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -69,4 +73,20 @@ public class PurchaseOrder {
 		this.isClosed = isClosed;
 	}
 
+	public List<PurchaseOrderProduct> getPoProduct() {
+		return poProduct;
+	}
+
+	public void setPoProduct(List<PurchaseOrderProduct> poProduct) {
+		this.poProduct = poProduct;
+	}
+
+	public Department getDept() {
+		return dept;
+	}
+
+	public void setDept(Department dept) {
+		this.dept = dept;
+	}
+	
 }

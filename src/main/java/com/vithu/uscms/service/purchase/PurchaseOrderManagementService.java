@@ -3,11 +3,14 @@ package com.vithu.uscms.service.purchase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.PurchaseOrder;
+import com.vithu.uscms.entities.PurchaseOrderProduct;
 import com.vithu.uscms.entities.Supplier;
 import com.vithu.uscms.entities.User;
 import com.vithu.uscms.others.DBConnection;
@@ -23,11 +26,13 @@ import com.vithu.uscms.others.MessageConstant;
 public class PurchaseOrderManagementService {
 	private DBConnection conn = new DBConnection();
 
-	private PreparedStatement stmt;
+	private PreparedStatement stmt = null;
+	PreparedStatement getPOProductsStmt = null;
 
 	private Connection newConn;
 
 	private ResultSet res;
+	private ResultSet result;
 
 	// METHOD TO VIEW ALL PURCHASE ORDERS
 	public GenericResult getAllPurchaseOrders() {
@@ -47,8 +52,8 @@ public class PurchaseOrderManagementService {
 
 				purOrder.setId(res.getInt("id"));
 				purOrder.setCode(res.getString("code"));
-//				purOrder.setExpectedDate(res.getString("expected_date"));
-//				purOrder.settDate(res.getString("t_date"));
+				purOrder.setExpectedDate(res.getString("expected_date"));
+				purOrder.settDate(res.getString("t_date"));
 				purOrder.setIsClosed(res.getBoolean("is_closed"));
 
 				Supplier supplier = new Supplier();
@@ -58,6 +63,30 @@ public class PurchaseOrderManagementService {
 				supplier.setUser(user);
 				purOrder.setSupplier(supplier);
 
+				getPOProductsStmt = newConn.prepareStatement(
+						"SELECT  pop.`id`,p.`id` AS proId, p.`name` AS proName, p.`code` AS proCode,pop.`quantity`,pop.`ex_unit_price`\r\n"
+								+ "FROM `purchase_order_products` pop\r\n" + "LEFT JOIN `products` p\r\n"
+								+ "ON p.`id`=pop.`prdouct`\r\n" + "WHERE pop.`purchase_order`='" + res.getInt("id")
+								+ "';");
+				result = getPOProductsStmt.executeQuery();
+				List<PurchaseOrderProduct> poProductList = new ArrayList<PurchaseOrderProduct>();
+
+				while (result.next()) {
+					PurchaseOrderProduct poProduct = new PurchaseOrderProduct();
+					poProduct.setId(result.getInt("proId"));
+					poProduct.setQty(result.getDouble("quantity"));
+					poProduct.setUnitPrice(result.getDouble("ex_unit_price"));
+
+					Product product = new Product();
+					product.setId(result.getInt("id"));
+					product.setName(result.getString("proName"));
+					product.setCode(result.getString("proCode"));
+					poProduct.setProduct(product);
+
+					poProductList.add(poProduct);
+				}
+
+				purOrder.setPoProduct(poProductList);
 				purchaseOrderList.add(purOrder);
 			}
 
@@ -73,6 +102,84 @@ public class PurchaseOrderManagementService {
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
 		}
 
+	}
+
+	// METHORD TO CLOSE PURCHASE ORDER
+	public GenericResult closepurchaseOrder(int id) {
+		PreparedStatement Stmt = null;
+		try {
+			newConn = conn.getCon();
+			Stmt = newConn
+					.prepareStatement("UPDATE `purchase_order` SET `is_closed` = TRUE WHERE `id` = '" + id + "';");
+			Stmt.executeUpdate();
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		} finally {
+			try {
+				Stmt.close();
+				conn.closeCon();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+			}
+		}
+	}
+
+	// ADD PURCHASE ORDER METHOD
+	public GenericResult addPurchaseOrder(PurchaseOrder newPurchaseOrder) {
+		PreparedStatement addPurchaseOrderStmt = null;
+
+		try {
+			int last_inserted_id = 0;
+
+			newConn = conn.getCon();
+
+			// Add purchase order credentials
+			addPurchaseOrderStmt = newConn
+					.prepareStatement(
+							"INSERT INTO `purchase_order`( `code`, `supplier`,`t_date`, `expected_date`, `dept` ) VALUES ('"
+									+ newPurchaseOrder.getCode() + "','" + newPurchaseOrder.getSupplier().getId()
+									+ "','" + newPurchaseOrder.gettDate() + "','" + newPurchaseOrder.getExpectedDate()
+									+ "','" + newPurchaseOrder.getDept().getId() + "');",
+							Statement.RETURN_GENERATED_KEYS);
+			addPurchaseOrderStmt.executeUpdate();
+
+			// get the previous IDs
+			res = addPurchaseOrderStmt.getGeneratedKeys();
+			if (res.next()) {
+				last_inserted_id = res.getInt(1);
+			}
+
+			// Add Purchase Order Product Credentials
+			List<PurchaseOrderProduct> poProList = new ArrayList<PurchaseOrderProduct>();
+			poProList = newPurchaseOrder.getPoProduct();
+			System.out.println("======="+poProList+"========");
+			for (PurchaseOrderProduct poProduct : poProList) {
+				System.out.println("***********"+ poProduct.getUnitPrice() +"***************");
+				PreparedStatement addPOPStmt = null;
+				addPOPStmt = newConn.prepareStatement(
+						"INSERT INTO `purchase_order_products` (`purchase_order`,`quantity`,`ex_unit_price`,`prdouct`)\r\n"
+								+ "VALUES('" + last_inserted_id + "','" + poProduct.getQty() + "','"
+								+ poProduct.getUnitPrice() + "','" + poProduct.getProduct().getId() + "');");
+				addPOPStmt.executeUpdate();
+			}
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Purchase order Added Successfully");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		} finally {
+			try {
+				addPurchaseOrderStmt.close();
+				conn.closeCon();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
 	}
 
 }

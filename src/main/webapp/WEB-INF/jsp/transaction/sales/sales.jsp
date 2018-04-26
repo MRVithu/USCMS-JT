@@ -1,20 +1,10 @@
-<!-- /** -->
-<!--  * @author M.Vithusanth -->
-<!--  * @Created On 23rd April 2018 -->
-<!--  * @Purpose Purchase Order Add Page  -->
-<!--  */ -->
-
-<%@page import="com.vithu.uscms.entities.PurchaseOrder"%>
-<%@page import="java.util.List"%>
-<%@page import="com.vithu.uscms.others.GenericResult"%>
-<%@ include file="../../../layouts/taglib.jsp"%>
-
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<a href="/purchaseOrderAddView.html?token=<%=session.getAttribute("Token")%>" class="btn btn-success">Add New Purchase Order</a>
+		<button id="btn-add" id="addProduct" class="btn btn-success">Add
+			New</button>
 	</section>
 
 	<!-- Main content -->
@@ -39,12 +29,14 @@
 								<tr onclick="viewPOProduct(${purchaseOrder.id})">
 									<td></td>
 									<td>${purchaseOrder.code}</td>
-									<td>${purchaseOrder.supplier.user.name}</td>
-									<td>${purchaseOrder.tDate}</td>
-									<td>${purchaseOrder.expectedDate}</td>
+									<td>${purchaseOrder.code}</td>
+									<td>${purchaseOrder.code}</td>
+									<td>${purchaseOrder.code}</td>
 									<td style='text-align: center; position: relative;'>${!purchaseOrder.isClosed
-										? "<span class='label label-danger'>Pending</span>" : "<span
-										class='label label-success'>Closed</span>"}<i class='arrow glyphicon glyphicon-arrow-right'></i></td>
+										? "<span class='label label-success'>Pending</span>" : "<span
+										class='label label-danger'>Closed</span>"}<i
+										class='arrow glyphicon glyphicon-arrow-right'></i>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -131,23 +123,19 @@
 				$.each(po.poProduct, function(i, pop) {
 					var htmlStr = "<tr>";
 					htmlStr += "<td >"+pop.product.name+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.unitPrice,2)+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.qty,2)+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.qty*pop.unitPrice,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.unitPrice,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.qty,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.qty*pop.unitPrice,2)+"</td>";
 					htmlStr += "</tr>";
 					
 					$("#po-product").append(htmlStr);
 					grandTotal=grandTotal+(pop.qty*pop.unitPrice);
 				});
 				$("#grand-total").html(formatNumber(grandTotal,2));
-				if(po.isClosed==false){				
-					var htmlString="<input type='button' onclick='' id='btn-make-purchase' class='btn btn-info app-button tbtn' value='Make as purchase' />";
-					htmlString +="<input type='button' onclick='closePurchaseOrder("+id+")' id='btn-close' class='btn btn-danger app-button tbtn'  value='Close Order' />"
-					$("#pop-table-footer").html(htmlString);
-				}
-				else{
-					$("#pop-table-footer").empty();
-				}
+				
+				var htmlString="<input type='button' onclick='' id='btn-make-purchase class='btn btn-info app-button tbtn' value='Make as purchase' ></input>";
+				htmlString +="<input type='button' onclick='closePurchaseOrder("+id+")' id='btn-close' class='btn btn-danger app-button tbtn value='Close Order' ></input>";
+				$("#pop-table-footer").html(htmlString);
 			}
 		});
 	}
@@ -180,6 +168,7 @@
 		}
 		return false;
 	}
+
 	
 	
 </script>

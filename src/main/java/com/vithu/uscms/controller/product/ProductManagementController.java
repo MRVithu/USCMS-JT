@@ -113,7 +113,7 @@ public class ProductManagementController {
 		return response;
 	}
 
-	// ADD NEW VEHICLE
+	// ADD NEW PRODUCT
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	@ResponseBody
 	public String addVehicle(@RequestParam("token") String token, HttpServletRequest request) {
