@@ -24,6 +24,9 @@
 	  <!-- AdminLTE Skins.  -->
    	  <link href="<c:url value="../resources/plugins/iCheck/square/blue.css" />" rel="stylesheet">
    	  
+   	  <!-- Common css  -->
+   	  <link href="<c:url value="/resources/common/css/uscms.css" />" rel="stylesheet">
+   	  
    	  <title><tiles:getAsString name="title"/></title>
 </head>
 
@@ -39,7 +42,7 @@
 		  <div class="login-logo">
 		    <a href="#"><b>USCMS</b>JT</a>
 		  </div>
-		 <div class="login-box-body">
+		 <div class="login-box-body" style="border-radius:5px 5px 5px 5px;">
 		   
 		    
 		    <tiles:insertAttribute name = "body"/>

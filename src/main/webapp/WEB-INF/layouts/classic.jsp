@@ -23,9 +23,9 @@
 	  <link href="<c:url value="/resources/dist/css/AdminLTE.min.css" />" rel="stylesheet">
 		
 	  <!-- AdminLTE Skins.  -->
-   	  <link href="<c:url value="/resources/dist/css/skins/skin-blue.min.css" />" rel="stylesheet">
+   	  <link href="<c:url value="/resources/dist/css/skins/_all-skins.min.css" />" rel="stylesheet">
    	  
-   	    <!-- Common css  -->
+   	  <!-- Common css  -->
    	  <link href="<c:url value="/resources/common/css/uscms.css" />" rel="stylesheet">
    	  
    	   <!-- DataTable  -->
@@ -39,7 +39,7 @@
 
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body id="sidebar-style" class="hold-transition skin-purple sidebar-mini">
 	 
 	<!-- REQUIRED JS SCRIPTS -->
 	<!-- jQuery 2.2.3 -->

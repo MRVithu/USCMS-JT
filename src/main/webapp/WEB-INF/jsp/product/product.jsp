@@ -123,6 +123,10 @@
 							<label class="input-group-addon">Description</label> <input
 								type="text" id="description" class="form-control " />
 						</div>
+						<div class="input-group" id="added-by-div">
+							<label class="input-group-addon">Added By</label> <input
+								type="text" id="added-by" class="form-control " />
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -218,6 +222,7 @@
 		$("#modal").modal({backdrop: 'static', keyboard: false});
 		$("#reset-btn").show();
 		$("#submit-btn").show();
+		$("#added-by-div").hide();
 		$("#modal").modal("show");
 	});
 	
@@ -232,6 +237,8 @@
   		$("#modal").modal({backdrop: 'static', keyboard: false});
 		$("#reset-btn").show();
 		$("#submit-btn").show();
+		$("#added-by-div").hide();
+		$("#added-by-div").show();
   		$("#modal").modal('show');
   	}
 
@@ -312,6 +319,7 @@
 				$("#min-price").val(product.minPrice);
 				$("#discount").val(product.discount);
 				$("#description").val(product.description);
+				$("#added-by").val(product.addedBy.user.name)
 				
 				$("#brand").prepend("<option>"+product.brand.name+"</option>");
 				$("#item-type").prepend("<option>"+product.itemType.name+"</option>");

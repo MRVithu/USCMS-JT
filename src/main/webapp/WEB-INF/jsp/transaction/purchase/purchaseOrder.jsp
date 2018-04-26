@@ -14,7 +14,9 @@
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<a href="/purchaseOrderAddView.html?token=<%=session.getAttribute("Token")%>" class="btn btn-success">Add New Purchase Order</a>
+		<a
+			href="/purchaseOrderAddView.html?token=<%=session.getAttribute("Token")%>"
+			class="btn btn-success">Add New Purchase Order</a>
 	</section>
 
 	<!-- Main content -->
@@ -36,7 +38,7 @@
 						</thead>
 						<tbody>
 							<c:forEach items="${purchaseOrders.result}" var="purchaseOrder">
-								<tr onclick="viewPOProduct(${purchaseOrder.id})">
+								<tr onclick="viewPOProduct(${purchaseOrder.id})" id="${purchaseOrder.id}">
 									<td></td>
 									<td>${purchaseOrder.code}</td>
 									<td>${purchaseOrder.supplier.user.name}</td>
@@ -44,7 +46,9 @@
 									<td>${purchaseOrder.expectedDate}</td>
 									<td style='text-align: center; position: relative;'>${!purchaseOrder.isClosed
 										? "<span class='label label-danger'>Pending</span>" : "<span
-										class='label label-success'>Closed</span>"}<i class='arrow glyphicon glyphicon-arrow-right'></i></td>
+										class='label label-success'>Closed</span>"}<i
+										class='arrow glyphicon glyphicon-arrow-right'></i>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -78,17 +82,17 @@
 
 					<div class="input-group">
 						<label class="input-group-addon">Added By</label> <input
-							type="text" readonly class="form-control" value="" />
+							type="text" readonly class="form-control" id="added-by" />
 					</div>
 
 					<div class="input-group">
 						<label class="input-group-addon">Department</label> <input
-							type="text" readonly class="form-control" value="" />
+							type="text" readonly class="form-control" id="dept-name" />
 					</div>
 
 					<div class="input-group">
 						<label class="input-group-addon">Note</label>
-						<textarea readonly rows="1" class="form-control"></textarea>
+						<textarea readonly rows="1" class="form-control" id="note"></textarea>
 					</div>
 
 					<hr />
@@ -124,11 +128,25 @@
 
 	//Function for view purchase order products
 	function viewPOProduct(id) {
+		$(".selected-row").removeClass("selected-row");
+		$("#"+id).addClass("selected-row");
+
+		
+		
 		var grandTotal=0;
 		$("#po-product").empty();
 		$.each(purchaseOrders.result, function(i, po) {
+			
+			
 			if (po.id == id) {
+				console.log(po.addedBy.user.name);
+				console.log(po.dept.name);
+				console.log(po.note);
+				$("#added-by").val(po.addedBy.user.name);
+				$("#dept-name").val(po.dept.name);
+				$("#note").val(po.note);
 				$.each(po.poProduct, function(i, pop) {
+					
 					var htmlStr = "<tr>";
 					htmlStr += "<td >"+pop.product.name+"</td>";
 					htmlStr += "<td>"+formatNumber(pop.unitPrice,2)+"</td>";
@@ -181,5 +199,9 @@
 		return false;
 	}
 	
+
+	$(document).ready(function () {
+		$("#sidebar-style").addClass('sidebar-collapse');
+	});
 	
 </script>

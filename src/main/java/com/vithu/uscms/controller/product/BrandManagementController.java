@@ -28,7 +28,7 @@ public class BrandManagementController {
 
 	private String response;
 
-	// VIEW CUSTOMER
+	// VIEW BRAND
 	@RequestMapping("/brand")
 	public String viewBrand(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 		CurrentUser currentUser = TokenManager.validateToken(token);

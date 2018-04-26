@@ -15,7 +15,7 @@
 	<div class="form-group has-feedback">
 		<input type="text" name="username" id="user-name" class="form-control"
 			placeholder="username" /> <span
-			class="glyphicon glyphicon-envelope form-control-feedback"></span>
+			class="glyphicon glyphicon-user form-control-feedback"></span>
 	</div>
 	<div class="form-group has-feedback">
 		<input type="password" name="password" id="password"
@@ -25,7 +25,7 @@
 	<div class="row">
 		<!-- /.col -->
 		<div class="col-xs-4">
-			<input class="btn btn-primary btn-block btn-flat" name="submit"
+			<input style="width:307px" class="btn btn-primary  app-button tbtn" name="submit"
 				type="submit" value="Sign In" />
 		</div>
 		<!-- /.col -->

@@ -28,6 +28,7 @@ import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.PurchaseOrder;
 import com.vithu.uscms.entities.PurchaseOrderProduct;
 import com.vithu.uscms.entities.Supplier;
+import com.vithu.uscms.entities.User;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
@@ -70,7 +71,8 @@ public class PurchaseOrderManangementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
-
+		
+		
 		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);
@@ -183,10 +185,9 @@ public class PurchaseOrderManangementController {
 				Product product=new Product();
 				product.setId(purchaseOrderProducts.getJSONObject(i).getInt("id"));
 				product.setName(purchaseOrderProducts.getJSONObject(i).getString("name"));
-				product.setLastPurchasePrice(purchaseOrderProducts.getJSONObject(i).getDouble("purchasePrice"));
 				
 				poProduct.setProduct(product);
-				poProduct.setUnitPrice(purchaseOrderProducts.getJSONObject(i).getDouble("sellingPrice"));
+				poProduct.setUnitPrice(purchaseOrderProducts.getJSONObject(i).getDouble("purchasePrice"));
 				
 				poProductList.add(poProduct);
 			}
@@ -202,16 +203,20 @@ public class PurchaseOrderManangementController {
 						addPurchaseOrder.setCode(purOrder.getString("code"));
 						addPurchaseOrder.settDate(purOrder.getString("poDate"));
 						addPurchaseOrder.setExpectedDate(purOrder.getString("exDate"));
+						addPurchaseOrder.setNote(purOrder.getString("note"));
 						
 						Department dept =new Department();
 						dept.setId(purOrder.getInt("department"));
 						addPurchaseOrder.setDept(dept);
 						
 						Supplier supplier= new Supplier();
-						supplier.setId(purOrder.getInt("supplier"));
+						User user=new User();
+						user.setId(purOrder.getInt("supplier"));
+						supplier.setUser(user);
 						addPurchaseOrder.setSupplier(supplier);
 						
 						addPurchaseOrder.setPoProduct(poProductList);
+						addPurchaseOrder.setAddedBy(currentUser.getEmployee());
 						
 						returnResult = purOrderService.addPurchaseOrder(addPurchaseOrder);
 					} else {

@@ -140,6 +140,7 @@ public class ProductManagementController {
 						addProduct.setLastPurchasePrice(product.getDouble("purPrice"));
 						addProduct.setMinPrice(product.getDouble("minPrice"));
 						addProduct.setSelleingPrice(product.getDouble("salesPrice"));
+						addProduct.setAddedBy(currentUser.getEmployee());
 						
 						Brand brand =new Brand();
 						brand.setId(product.getInt("brand"));

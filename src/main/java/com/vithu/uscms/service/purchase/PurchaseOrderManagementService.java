@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.jdbc.Statement;
+import com.vithu.uscms.entities.Department;
+import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.PurchaseOrder;
 import com.vithu.uscms.entities.PurchaseOrderProduct;
@@ -39,9 +41,11 @@ public class PurchaseOrderManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT po.`id`,po.`t_date`,u.`name` AS supplier, po.`expected_date`,po.`code`, po.`is_closed` \r\n"
+					"SELECT po.`id`,po.`t_date`,u.`name` AS supplier, po.`expected_date`,po.`code`, po.`is_closed`, ui.`name` AS addedBy, po.`note`, d.`name` as dept\r\n"
 							+ "FROM `purchase_order` po\r\n" + "LEFT JOIN `suppliers` s\r\n"
-							+ "ON s.`id`=po.`supplier`\r\n" + "	LEFT JOIN `users` u\r\n" + "	ON u.`id`=s.`user_id`");
+							+ "ON s.`id`=po.`supplier`\r\n" + "LEFT JOIN `users` u\r\n" + "ON u.`id`=s.`user_id`\r\n"
+							+ "LEFT JOIN `employees` e\r\n" + "ON e.`id`=po.`added_by`\r\n" + "LEFT JOIN `users` ui\r\n"
+							+ "ON ui.`id`=e.`user_id`\r\n" + "left join `departments` d\r\n" + "on d.`id`=po.`dept`");
 			res = stmt.executeQuery();
 
 			List<PurchaseOrder> purchaseOrderList = new ArrayList<PurchaseOrder>();
@@ -55,6 +59,17 @@ public class PurchaseOrderManagementService {
 				purOrder.setExpectedDate(res.getString("expected_date"));
 				purOrder.settDate(res.getString("t_date"));
 				purOrder.setIsClosed(res.getBoolean("is_closed"));
+				purOrder.setNote(res.getString("note"));
+
+				Department dept = new Department();
+				dept.setName(res.getString("dept"));
+				purOrder.setDept(dept);
+
+				Employee employee = new Employee();
+				User addedBy = new User();
+				addedBy.setName(res.getString("addedBy"));
+				employee.setUser(addedBy);
+				purOrder.setAddedBy(employee);
 
 				Supplier supplier = new Supplier();
 				User user = new User();
@@ -138,13 +153,14 @@ public class PurchaseOrderManagementService {
 			newConn = conn.getCon();
 
 			// Add purchase order credentials
-			addPurchaseOrderStmt = newConn
-					.prepareStatement(
-							"INSERT INTO `purchase_order`( `code`, `supplier`,`t_date`, `expected_date`, `dept` ) VALUES ('"
-									+ newPurchaseOrder.getCode() + "','" + newPurchaseOrder.getSupplier().getId()
-									+ "','" + newPurchaseOrder.gettDate() + "','" + newPurchaseOrder.getExpectedDate()
-									+ "','" + newPurchaseOrder.getDept().getId() + "');",
-							Statement.RETURN_GENERATED_KEYS);
+			addPurchaseOrderStmt = newConn.prepareStatement(
+					"INSERT INTO `purchase_order`( `code`, `supplier`,`t_date`, `expected_date`, `dept`,`added_by`,`note` ) \r\n"
+							+ "VALUES ('" + newPurchaseOrder.getCode() + "','" + newPurchaseOrder.getSupplier().getUser().getId()
+							+ "','" + newPurchaseOrder.gettDate() + "','" + newPurchaseOrder.getExpectedDate() + "','"
+							+ newPurchaseOrder.getDept().getId() + "','"
+							+ newPurchaseOrder.getAddedBy().getUser().getId() + "','" + newPurchaseOrder.getNote()
+							+ "');",
+					Statement.RETURN_GENERATED_KEYS);
 			addPurchaseOrderStmt.executeUpdate();
 
 			// get the previous IDs
@@ -156,9 +172,8 @@ public class PurchaseOrderManagementService {
 			// Add Purchase Order Product Credentials
 			List<PurchaseOrderProduct> poProList = new ArrayList<PurchaseOrderProduct>();
 			poProList = newPurchaseOrder.getPoProduct();
-			System.out.println("======="+poProList+"========");
+
 			for (PurchaseOrderProduct poProduct : poProList) {
-				System.out.println("***********"+ poProduct.getUnitPrice() +"***************");
 				PreparedStatement addPOPStmt = null;
 				addPOPStmt = newConn.prepareStatement(
 						"INSERT INTO `purchase_order_products` (`purchase_order`,`quantity`,`ex_unit_price`,`prdouct`)\r\n"
@@ -180,6 +195,30 @@ public class PurchaseOrderManagementService {
 				e2.printStackTrace();
 			}
 		}
+	}
+
+	// METHOD TO GET MAX PURCHASE ID
+	public GenericResult getMaxPurchaseOrderId() {
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement("");
+			res = stmt.executeQuery();
+			List<PurchaseOrder> purchaseOrderList = new ArrayList<PurchaseOrder>();
+			while (res.next()) {
+
+				PurchaseOrder purOrder = new PurchaseOrder();
+
+				purOrder.setId(res.getInt("id"));
+				purchaseOrderList.add(purOrder);
+			}
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", purchaseOrderList, "",
+					" ");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+
 	}
 
 }

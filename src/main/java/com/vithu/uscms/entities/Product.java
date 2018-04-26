@@ -17,6 +17,7 @@ public class Product {
 	private Double lastPurchasePrice;
 	private Double discount;
 	private String size;
+	private Employee addedBy;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -112,6 +113,14 @@ public class Product {
 
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	public Employee getAddedBy() {
+		return addedBy;
+	}
+
+	public void setAddedBy(Employee addedBy) {
+		this.addedBy = addedBy;
 	}
 
 }

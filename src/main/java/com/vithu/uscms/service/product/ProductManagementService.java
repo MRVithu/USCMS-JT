@@ -14,9 +14,11 @@ import java.util.List;
 
 import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Brand;
+import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.ItemType;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.ProductType;
+import com.vithu.uscms.entities.User;
 import com.vithu.uscms.others.DBConnection;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
@@ -37,11 +39,12 @@ public class ProductManagementService {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
 					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`,\r\n"
-							+ "i.`id` as itemTypeId, i.`name` AS itemTypeName, p.`size`, p.`selling_price` AS salesPrice,\r\n"
-							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount\r\n"
+							+ "i.`id` AS itemTypeId, i.`name` AS itemTypeName, p.`size`, p.`selling_price` AS salesPrice,\r\n"
+							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount,u.name as addedBy\r\n"
 							+ "FROM `products` p\r\n" + "LEFT JOIN `pro_brands` b\r\n" + "ON p.`brand`=b.`id`\r\n"
 							+ "LEFT JOIN `pro_item_types` i\r\n" + "ON p.`pro_item_type`=i.`id`\r\n"
-							+ "WHERE p.`is_deleted`=FALSE;");
+							+ "LEFT JOIN `employees` e\r\n" + "ON e.`id`=p.`added_by`\r\n" + "LEFT JOIN `users` u\r\n"
+							+ "ON u.`id`=e.`user_id`\r\n" + "WHERE p.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<Product> productList = new ArrayList<Product>();
 			while (res.next()) {
@@ -57,6 +60,13 @@ public class ProductManagementService {
 				product.setLastPurchasePrice(res.getDouble("purchasePrice"));
 				product.setMinPrice(res.getDouble("minPrice"));
 
+				Employee addedBy=new Employee();
+				User user=new User();
+				user.setName(res.getString("addedBy"));
+				addedBy.setUser(user);
+				product.setAddedBy(addedBy);
+				
+				
 				Brand brand = new Brand();
 				brand.setId(res.getInt("brandId"));
 				brand.setName(res.getString("brandName"));
@@ -117,12 +127,13 @@ public class ProductManagementService {
 
 			// Add Vehicle Credentials
 			addStmt = newConn.prepareStatement(
-					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`) \r\n"
+					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`,`added_by`) \r\n"
 							+ "VALUES ('" + newProduct.getName() + "','" + newProduct.getBrand().getId() + "','"
 							+ newProduct.getCode() + "','" + newProduct.getDescription() + "','"
 							+ newProduct.getItemType().getId() + "','" + newProduct.getSize() + "','"
 							+ newProduct.getSelleingPrice() + "','" + newProduct.getLastPurchasePrice() + "', '"
-							+ newProduct.getMinPrice() + "', '" + newProduct.getDiscount() + "');",
+							+ newProduct.getMinPrice() + "', '" + newProduct.getDiscount() + "','"
+							+ newProduct.getAddedBy().getUser().getId() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addStmt.executeUpdate();
 

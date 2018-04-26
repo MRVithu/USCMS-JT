@@ -16,6 +16,8 @@ public class PurchaseOrder {
 	private Supplier supplier;
 	private Department dept;
 	private Boolean isClosed;
+	private String note;
+	private Employee addedBy;
 	private List<PurchaseOrderProduct> poProduct;
 
 	// *************************************************************
@@ -88,5 +90,21 @@ public class PurchaseOrder {
 	public void setDept(Department dept) {
 		this.dept = dept;
 	}
-	
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public Employee getAddedBy() {
+		return addedBy;
+	}
+
+	public void setAddedBy(Employee addedBy) {
+		this.addedBy = addedBy;
+	}
+
 }

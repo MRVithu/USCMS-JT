@@ -101,7 +101,7 @@ function searchProducts(productList)
 		$(".screen-overlay").show();
 		$("#product-grid").show();
 		$("#product-grid-table tbody").empty();
-		$(".trans-srch").animate({marginTop:"-70px"})
+		$(".trans-srch").animate({marginTop:"-10px"})
 
 		var printedRowCount = 0;
 		$.each(productList, function(pi,p){
