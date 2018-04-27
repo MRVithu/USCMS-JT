@@ -420,8 +420,6 @@
 						transObj.poDate = $("#pur-date").val();
 						transObj.note = $("#note").val();
 						transObj.products = productArray;
-						/* $("#transJson").val(JSON.stringify(transObj));
-						$("#transForm").submit(); */
 					
 						$.ajax({
 							

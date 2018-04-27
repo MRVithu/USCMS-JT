@@ -69,7 +69,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="4">Grand Total</th>
+								<th colspan="4"  style='text-align:center'>Grand Total</th>
 								<th class='number' id="grand-total"></th>
 							</tr>
 						</tfoot>
@@ -145,7 +145,7 @@
 				$.each(purchase.purProduct, function(i, pp) {
 					console.log(pp);
 					var htmlStr = "<tr>";
-					htmlStr += "<td >"+pp.product.name+"</td>";
+					htmlStr += "<td >"+pp.product.name+" | <i style='font-size:12px;'>"+pp.product.code+"</i></td>";
 					htmlStr += "<td class='number'>"+formatNumber(pp.unitPrice,2)+"</td>";
 					htmlStr += "<td class='number'>"+formatNumber(pp.qty,2)+"</td>";
 					htmlStr += "<td class='number'>"+formatNumber(pp.totDiscount,2)+"</td>";
