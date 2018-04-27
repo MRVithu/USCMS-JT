@@ -184,7 +184,7 @@ public class PurchaseManagementController {
 
 						returnResult = purchaseService.addPurchase(newPurchase);
 					} else {
-						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Supplier");
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Purchase Code can not be empty.");
 					}
 
 				} else {

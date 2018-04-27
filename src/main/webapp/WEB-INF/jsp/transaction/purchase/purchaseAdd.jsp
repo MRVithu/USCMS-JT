@@ -134,7 +134,7 @@
 					<!-- Total Amount -->
 					<div class="input-group">
 						<label class="input-group-addon large-input">Total</label> <input
-							type="text" readonly class="form-control large-input"
+							type="text" readonly class="form-control number large-input"
 							value="0.00" id="grand-total" /> <label
 							class="input-group-addon large-input">Rs.</label>
 					</div>
@@ -176,20 +176,20 @@
 						<div class="input-group">
 							<label class="input-group-addon">Quantity</label> <input
 								type="number" value="0" onchange="adjustPrices('qty')"
-								id="trans-qty" name="mobile" class="form-control field-wid"
+								id="trans-qty" name="mobile" class="form-control number field-wid"
 								placeholder=""> <label
 								class="input-group-addon small-addon">Units</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Purchase price</label> <input
 								type="number" value="0" onchange="adjustPrices('unit')"
-								id="trans-pp" name="name" class="form-control field-wid"
+								id="trans-pp" name="name" class="form-control number field-wid"
 								placeholder=""> <label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Selling Price</label> <input
-								type="number" value="0" class="form-control field-wid"
+								type="number" value="0" class="form-control number field-wid"
 								id="trans-sp" disabled /> <label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
@@ -197,7 +197,7 @@
 							<label class="input-group-addon special-input">Total</label> <input
 								type="number" value="0" onchange="adjustPrices('total')"
 								id="trans-total" name="contact"
-								class="form-control field-wid special-input" placeholder="">
+								class="form-control field-wid number special-input" placeholder="">
 							<label class="input-group-addon small-addon special-input">Rs.</label>
 						</div>
 					</div>
@@ -400,77 +400,76 @@
 	var clickTimeout = {};
 	function saveTransaction(e)
 	{
-			var clicks = parseInt($(e).attr("data-click"));
+		var clicks = parseInt($(e).attr("data-click"));
 
-			if(clicks == 1)
+		if(clicks == 1)
+		{
+			if(Object.keys(addedProductList).length > 0)
 			{
-				if(Object.keys(addedProductList).length > 0)
-				{
-					try{
-						var transObj = {};
-						var productArray = [];
-						for (const key of Object.keys(addedProductList)) {
-							var product = addedProductList[key];
-							productArray.push(product);
-						}
-	
-						transObj.code=$("#pur-code").val();
-						transObj.supplier = $("#supplier").val();
-						transObj.department = $("#department").val();
-						transObj.poDate = $("#pur-date").val();
-						transObj.note = $("#note").val();
-						transObj.products = productArray;
-					
-						$.ajax({
-							
-							type: 'POST',
-							url: 'http://localhost:8080/addPurchase.json?token=<%=session.getAttribute("Token")%>',
-							data: {data:JSON.stringify(transObj)},
-							success: function(res) {
-								console.log(res);
-								console.log(res.status);
-								$("#res-msg strong").html(res.msg);
-			
-								if (res.status == false) {
-									showErrorMsg("Please add some products before saving the purchase order");
-								} else if (res.status == true) {
-									showSuccessMsg("Purchase added successfully.");
-								}
-			
-								setTimeout(function() {
-									showErrorMsg("Please add some products before saving the purchase");
-									if (res.message == "SUCCESS"){
-										$("#modal").modal("hide");
-										window.location.reload(true);
-									}
-								}, 1000);
-							},
-							error: function(xhr, textStatus, errorThrown) {
-								console.log(xhr);
-								alert("error");
-								console.log(errorThrown);
+				try{
+					var transObj = {};
+					var productArray = [];
+					for (const key of Object.keys(addedProductList)) {
+						var product = addedProductList[key];
+						productArray.push(product);
+					}
+
+					transObj.code=$("#pur-code").val();
+					transObj.supplier = $("#supplier").val();
+					transObj.department = $("#department").val();
+					transObj.poDate = $("#pur-date").val();
+					transObj.note = $("#note").val();
+					transObj.products = productArray;
+				
+					$.ajax({
+						
+						type: 'POST',
+						url: 'http://localhost:8080/addPurchase.json?token=<%=session.getAttribute("Token")%>',
+						data: {data:JSON.stringify(transObj)},
+						success: function(res) {
+							console.log(res);
+							console.log(res.status);
+							$("#res-msg strong").html(res.msg);
+		
+							if (res.status == false) {
+								showErrorMsg(res.description);
+							} else if (res.status == true) {
+								showSuccessMsg(res.description);
 							}
-						});
-					}
-					catch(err){
-						alert(err);
-					}
+		
+							setTimeout(function() {
+								if (res.message == "SUCCESS"){
+									$("#modal").modal("hide");
+									window.location.reload(true);
+								}
+							}, 1000);
+						},
+						error: function(xhr, textStatus, errorThrown) {
+							console.log(xhr);
+							alert("error");
+							console.log(errorThrown);
+						}
+					});
 				}
-				else {
-					showErrorMsg("Please add some products before saving the purchase");
+				catch(err){
+					alert(err);
 				}
 			}
 			else {
-				clicks--;
-				$(e).attr("data-click", clicks);
-				$(e).val("Save (" + clicks + ")");
+				showErrorMsg("Please add some products before saving the purchase.");
 			}
+		}
+		else {
+			clicks--;
+			$(e).attr("data-click", clicks);
+			$(e).val("Save (" + clicks + ")");
+		}
 
-			clearTimeout(clickTimeout);
-			clickTimeout = setTimeout(function(){
-				$(e).attr("data-click", 3);
-				$(e).val("Save (" + 3 + ")");
-			}, 10000);
+		clearTimeout(clickTimeout);
+		clickTimeout = setTimeout(function(){
+			$(e).attr("data-click", 3);
+			$(e).val("Save (" + 3 + ")");
+		}, 10000);
 	}
 
 	$("#view-table tbody tr:first-child").trigger("click");

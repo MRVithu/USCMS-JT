@@ -15,7 +15,7 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<button id="btn-add" id="addProduct" class="btn btn-success">Add
-			New</button>
+			New Product</button>
 	</section>
 
 	<!-- Main content -->
@@ -25,7 +25,7 @@
 				class="table table-condensed table-bordered table-hover table-striped table-pad">
 				<thead>
 					<tr>
-						<th style="width:50px;"></th>
+						<th style="width: 50px;"></th>
 						<th>Name</th>
 						<th>Code</th>
 						<th>Brand</th>
@@ -36,11 +36,11 @@
 				<tbody>
 					<c:forEach items="${products.result}" var="product">
 						<tr>
-							<td style="width:50px;"><a  onclick="updateProduct(${product.id})">
-									<i class="fa fa-pencil-square-o"></i>
-							</a> <a class=" text-danger"
-								onclick="deleteProduct(${product.id})"> <i
-									class="fa fa-trash-o"></i>
+							<td style="width: 50px;"><a
+								onclick="updateProduct(${product.id})"> <i
+									class="fa fa-pencil-square-o"></i>
+							</a> <a class=" text-danger" onclick="deleteProduct(${product.id})">
+									<i class="fa fa-trash-o"></i>
 							</a></td>
 							<td onclick="singleView(${product.id})">${product.name}</td>
 							<td onclick="singleView(${product.id})">${product.code}</td>
@@ -103,23 +103,32 @@
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Size</label> <input type="text"
-								id="size" class="form-control " />
+								id="size" class="form-control " /><label
+								class="input-group-addon small-addon">Units</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Purchase Price</label> <input
-								type="text" id="pur-price" class="form-control " />
+								type="number" value="0" id="pur-price"
+								class="form-control number field-wid" /><label
+								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Sales Price</label> <input
-								type="text" id="sales-price" class="form-control " />
+								type="number" value="0" id="sales-price"
+								class="form-control number field-wid" /><label
+								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Min Price</label> <input
-								type="text" id="min-price" class="form-control " />
+								type="number" value="0" id="min-price"
+								class="form-control number field-wid" /><label
+								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Discount</label> <input
-								type="text" id="discount" class="form-control " />
+								type="number" value="0" id="discount"
+								class="form-control number field-wid" /><label
+								class="input-group-addon small-addon"><b>%</b></label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Description</label> <input

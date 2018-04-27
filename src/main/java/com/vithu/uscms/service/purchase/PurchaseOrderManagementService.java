@@ -182,7 +182,7 @@ public class PurchaseOrderManagementService {
 				addPOPStmt.executeUpdate();
 			}
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Purchase order Added Successfully");
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Purchase order Added Successfully.");
 
 		} catch (Exception e) {
 			e.printStackTrace();

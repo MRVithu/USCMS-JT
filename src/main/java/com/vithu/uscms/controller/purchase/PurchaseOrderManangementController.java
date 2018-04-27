@@ -218,7 +218,7 @@ public class PurchaseOrderManangementController {
 						
 						returnResult = purOrderService.addPurchaseOrder(addPurchaseOrder);
 					} else {
-						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Purchase order code can not be empty.");
 					}
 
 				} else {
