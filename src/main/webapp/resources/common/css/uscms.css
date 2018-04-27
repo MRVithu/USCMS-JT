@@ -3,7 +3,7 @@
 /**
  * @author M.Vithusanth
  * @CreatedOn 22th April 2018
- * @Purpose User Entity Class
+ * @Purpose Style sheet for all project
  */
 
 .modal-title
@@ -281,3 +281,10 @@ input[type=date].form-control
 	cursor:pointer;
 }
 
+.fa{
+	padding:0px;
+}
+
+table{
+	cursor: pointer;
+}

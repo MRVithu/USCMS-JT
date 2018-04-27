@@ -63,9 +63,9 @@
 						<thead>
 							<tr>
 								<th>Product</th>
-								<th class='number'>Exp. Price</th>
-								<th class='number'>Qty</th>
-								<th class='number'>Total</th>
+								<th>Exp. Price</th>
+								<th>Qty</th>
+								<th>Total</th>
 							</tr>
 						</thead>
 						<tbody id="po-product">
@@ -73,7 +73,7 @@
 						<tfoot>
 							<tr>
 								<th colspan="3">Grand Total</th>
-								<th id="grand-total"></th>
+								<th id="grand-total"  class='number'></th>
 							</tr>
 						</tfoot>
 					</table>
@@ -149,9 +149,9 @@
 					
 					var htmlStr = "<tr>";
 					htmlStr += "<td >"+pop.product.name+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.unitPrice,2)+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.qty,2)+"</td>";
-					htmlStr += "<td>"+formatNumber(pop.qty*pop.unitPrice,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.unitPrice,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.qty,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(pop.qty*pop.unitPrice,2)+"</td>";
 					htmlStr += "</tr>";
 					
 					$("#po-product").append(htmlStr);

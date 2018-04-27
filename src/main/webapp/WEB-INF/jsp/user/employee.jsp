@@ -15,10 +15,9 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<button data-toggle="modal" data-target="#add-edit-employee"
-			id="addEmployee" class="btn btn-success">Add New</button>
+			id="addEmployee" class="btn btn-success">Add New Employee</button>
 		<div class="box">
 			<div class="box-header">
-				<h3 class="box-title">Employee</h3>
 				<div class="" id="main-res-msg"
 					style="margin-top: 5px; display: none;">
 					<strong></strong>
@@ -29,7 +28,7 @@
 				<table id="employeeTable" class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th></th>
+							<th style="width:30px;"></th>
 							<th>Name</th>
 							<th>Mobile</th>
 							<th>Role</th>
@@ -40,12 +39,12 @@
 					<tbody>
 						<c:forEach items="${employees.result}" var="emp">
 							<tr onclick="">
-								<td><a class="btn" onclick="editEmployee(${emp.user.id})">
+								<td style="width:30px;"><a class="" onclick="editEmployee(${emp.user.id})">
 										<i class="fa fa-pencil-square-o"></i>
-								</a> <a class="btn text-danger"
+								</a> <a class=" text-danger"
 									onclick="deleteUserModal(${emp.user.id})"> <i
 										class="fa fa-trash-o"></i>
-								</a> ${emp.user.userName}</td>
+								</a></td>
 								<td onclick="singleView(${emp.user.id})">${emp.user.name}</td>
 								<td onclick="singleView(${emp.user.id})">${emp.user.mobile}</td>
 								<td onclick="singleView(${emp.user.id})">${emp.role}</td>
@@ -53,16 +52,6 @@
 							</tr>
 						</c:forEach>
 					</tbody>
-
-					<tfoot>
-						<tr>
-							<th></th>
-							<th>Name</th>
-							<th>Mobile</th>
-							<th>Role</th>
-							<th>Region</th>
-						</tr>
-					</tfoot>
 				</table>
 			</div>
 			<!-- /.box-body -->
@@ -220,13 +209,18 @@
 		submitOrupdate = "addEmployee";
 
 		$("#userId").val(0);
+		
+		
+		
 		$('#employeeTable').DataTable({
-			"paging" : true,
-			"lengthChange" : true,
-			"searching" : true,
-			"ordering" : true,
-			"info" : true,
-			"autoWidth" : false
+			"aoColumnDefs" : [ {
+				"bSortable" : false,
+				"aTargets" : [ 0 ]
+			}, {
+				"bSearchable" : false,
+				"aTargets" : [ 0 ]
+			} ],
+			"scrollX" : true
 		});
 	});
 

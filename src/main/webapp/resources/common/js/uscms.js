@@ -1,5 +1,8 @@
-//M.Vithusanth
-//common js
+/**
+ * @author M.Vithusanth
+ * @CreatedOn 22th April 2018
+ * @Purpose Script for all project
+ */
 
 /** ***************************************************************************** **/
 /** CHECK LOGIN FUNCTION											              **/

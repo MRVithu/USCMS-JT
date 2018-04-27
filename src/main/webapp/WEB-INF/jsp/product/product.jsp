@@ -25,25 +25,27 @@
 				class="table table-condensed table-bordered table-hover table-striped table-pad">
 				<thead>
 					<tr>
-						<th></th>
+						<th style="width:50px;"></th>
 						<th>Name</th>
 						<th>Code</th>
 						<th>Brand</th>
+						<th>Item Type</th>
 						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${products.result}" var="product">
 						<tr>
-							<td><a class="btn" onclick="updateProduct(${product.id})">
+							<td style="width:50px;"><a  onclick="updateProduct(${product.id})">
 									<i class="fa fa-pencil-square-o"></i>
-							</a> <a class="btn text-danger"
+							</a> <a class=" text-danger"
 								onclick="deleteProduct(${product.id})"> <i
 									class="fa fa-trash-o"></i>
 							</a></td>
 							<td onclick="singleView(${product.id})">${product.name}</td>
 							<td onclick="singleView(${product.id})">${product.code}</td>
 							<td onclick="singleView(${product.id})">${product.brand.name}</td>
+							<td onclick="singleView(${product.id})">${product.itemType.name}</td>
 							<td onclick="singleView(${product.id})">${product.description}</td>
 						</tr>
 					</c:forEach>
@@ -159,7 +161,7 @@
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
 				"bSortable" : false,
-				"aTargets" : [ 0, 3, 4 ]
+				"aTargets" : [ 0 ]
 			}, {
 				"bSearchable" : false,
 				"aTargets" : [ 0 ]
@@ -167,7 +169,7 @@
 			"scrollX" : true
 		});
 	});
-
+	
 	//Function for view single product
 	function singleView(id) {
 		fillDataToModal(id);
@@ -268,7 +270,7 @@
 				$.ajax({
 					
 					type: 'POST',
-					url: 'http://localhost:8080/'+method+'?token=<%= session.getAttribute("Token") %>',
+					url: 'http://localhost:8080/'+method+'?token=<%=session.getAttribute("Token")%>',
 					data: {data:JSON.stringify(product)},
 					success: function(res) {
 						console.log(res);

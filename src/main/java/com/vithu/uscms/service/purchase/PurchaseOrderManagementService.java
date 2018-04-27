@@ -155,7 +155,7 @@ public class PurchaseOrderManagementService {
 			// Add purchase order credentials
 			addPurchaseOrderStmt = newConn.prepareStatement(
 					"INSERT INTO `purchase_order`( `code`, `supplier`,`t_date`, `expected_date`, `dept`,`added_by`,`note` ) \r\n"
-							+ "VALUES ('" + newPurchaseOrder.getCode() + "','" + newPurchaseOrder.getSupplier().getUser().getId()
+							+ "VALUES ('" + newPurchaseOrder.getCode() + "','" + newPurchaseOrder.getSupplier().getId()
 							+ "','" + newPurchaseOrder.gettDate() + "','" + newPurchaseOrder.getExpectedDate() + "','"
 							+ newPurchaseOrder.getDept().getId() + "','"
 							+ newPurchaseOrder.getAddedBy().getUser().getId() + "','" + newPurchaseOrder.getNote()
