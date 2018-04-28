@@ -87,24 +87,26 @@
 					<li class="${current == 'itemType' ? 'active' : '' }"><a
 						href="/itemType.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Item Types</span></a></li>
-
-
 				</ul>
 			</li>
-
-			<li class="treeview"><a href="#"><i
-					class="fa fa-cart-arrow-down"></i> <span>Sales</span> <span
+			
+			<li
+				class="treeview ${current == 'sales' or current == 'salesAdd' or current== 'salesOrder'  ? 'active' : '' }">
+				<a href="#"><i class="fa  fa-cart-arrow-down"></i> <span>Sales</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span> </span></a></li>
-				</ul></li>
+					<li class="${current == 'sales' ? 'active' : '' }"><a
+						href="/sales.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Sales</span></a></li>
+
+					<li class="${current == 'brand' ? 'active' : '' }"><a
+						href="/salesOrder.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Sales Order</span></a></li>
+
+				</ul>
+			</li>
 
 			
 			<li

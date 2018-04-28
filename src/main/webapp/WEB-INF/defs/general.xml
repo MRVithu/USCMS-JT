@@ -120,5 +120,19 @@
 			value="/WEB-INF/jsp/transaction/purchase/purchaseAdd.jsp" />
 		<put-attribute name="current" value="purchaseAdd" />
 	</definition>
+	
+	<definition name="sales" extends="common">
+		<put-attribute name="title" value="USCMS Sales" />
+		<put-attribute name="containerbody"
+			value="/WEB-INF/jsp/transaction/sales/sales.jsp" />
+		<put-attribute name="current" value="sales" />
+	</definition>
 
+
+	<definition name="salesAdd" extends="common">
+		<put-attribute name="title" value="USCMS Sales Add" />
+		<put-attribute name="containerbody"
+			value="/WEB-INF/jsp/transaction/sales/SalesAdd.jsp" />
+		<put-attribute name="current" value="salesAdd" />
+	</definition>
 </tiles-definitions>

@@ -128,8 +128,6 @@
 		$(".selected-row").removeClass("selected-row");
 		$("#"+id).addClass("selected-row");
 
-		
-		
 		var grandTotal=0;
 		$("#po-product").empty();
 		$.each(purchases.result, function(i, purchase) {
@@ -160,36 +158,7 @@
 		});
 	}
 	
-	//Function for close existing purchase order
-	function closePurchaseOrder(id){
-		try{
-			$.ajax({
-		        url:'http://localhost:8080/closePurchaseOrder/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
-		        type: 'POST',
-		        data: { id:id },
-		        success: function (res) {
-		        	console.log(res );
-		            
-		            setTimeout(function() {
-						//$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-						//$("#res-msg strong").html("Fill all fields and hit Save");
-						if (res.message == "SUCCESS"){
-							window.location.reload(true);
-						}
-					}, 500);
-				},
-		        error: function (res) {
-		            alert("res");
-		        }
-		    });
-		}
-		catch(err){
-			alert(err);
-		}
-		return false;
-	}
 	
-
 	$(document).ready(function () {
 		$("#sidebar-style").addClass('sidebar-collapse');
 	});

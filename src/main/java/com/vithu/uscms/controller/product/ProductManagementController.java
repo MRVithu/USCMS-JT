@@ -140,6 +140,7 @@ public class ProductManagementController {
 						addProduct.setLastPurchasePrice(product.getDouble("purPrice"));
 						addProduct.setMinPrice(product.getDouble("minPrice"));
 						addProduct.setSelleingPrice(product.getDouble("salesPrice"));
+						addProduct.setSize(product.getString("size"));
 						addProduct.setAddedBy(currentUser.getEmployee());
 						
 						Brand brand =new Brand();
@@ -177,7 +178,7 @@ public class ProductManagementController {
 	@RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateProduct(@RequestParam("token") String token, HttpServletRequest request) {
-System.out.println("===========hi!! this is update ============");
+
 		Product updateProduct = new Product();
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
@@ -201,6 +202,7 @@ System.out.println("===========hi!! this is update ============");
 						updateProduct.setLastPurchasePrice(product.getDouble("purPrice"));
 						updateProduct.setMinPrice(product.getDouble("minPrice"));
 						updateProduct.setSelleingPrice(product.getDouble("salesPrice"));
+						updateProduct.setSize(product.getString("size"));
 						
 						Brand brand =new Brand();
 						brand.setId(product.getInt("brand"));

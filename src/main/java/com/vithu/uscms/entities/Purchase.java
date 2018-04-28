@@ -16,6 +16,8 @@ public class Purchase {
 	private String note;
 	private Employee addedBy;
 	private List<PurchaseProduct> purProduct;
+	private Payment pay;
+	
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -86,6 +88,14 @@ public class Purchase {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Payment getPay() {
+		return pay;
+	}
+
+	public void setPay(Payment pay) {
+		this.pay = pay;
 	}
 
 }

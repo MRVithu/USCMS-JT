@@ -227,6 +227,7 @@
 	$("#btn-add").on("click",function(){
 		method="addProduct.json";
 		clear();
+		$("#code").val("P");
 		$(".modal-title").html("Add Product");
 		$(".form-control").prop("readonly", false);
 		$(".form-control").prop("disabled", false);

@@ -1,42 +1,47 @@
+<!-- /** -->
+<!--  * @author M.Vithusanth -->
+<!--  * @Created On 28th April 2018 -->
+<!--  * @Purpose Sales  Page  -->
+<!--  */ -->
+
+<%@page import="com.vithu.uscms.entities.Sales"%>
+<%@page import="java.util.List"%>
+<%@page import="com.vithu.uscms.others.GenericResult"%>
+<%@ include file="../../../layouts/taglib.jsp"%>
+
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<button id="btn-add" id="addProduct" class="btn btn-success">Add
-			New</button>
+		<a
+			href="/salesAddView.html?token=<%=session.getAttribute("Token")%>"
+			class="btn btn-success">Add New Sales</a>
 	</section>
 
 	<!-- Main content -->
 	<section class="content">
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="box box-body box-success">
 					<table id="view-table"
 						class="table table-condensed table-bordered table-hover table-striped table-pad">
 						<thead>
 							<tr>
 								<th style='text-align: center'>#</th>
-								<th>Code</th>
-								<th>Supplier</th>
-								<th>Ordered</th>
-								<th>Expected</th>
-								<th style='text-align: center'>Status</th>
+								<th>Customer</th>
+								<th>Sold</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${purchaseOrders.result}" var="purchaseOrder">
-								<tr onclick="viewPOProduct(${purchaseOrder.id})">
+							<c:forEach items="${sales.result}" var="sale">
+								<tr onclick="viewSalesProduct(${sale.id})" id="${sale.id}">
 									<td></td>
-									<td>${purchaseOrder.code}</td>
-									<td>${purchaseOrder.code}</td>
-									<td>${purchaseOrder.code}</td>
-									<td>${purchaseOrder.code}</td>
-									<td style='text-align: center; position: relative;'>${!purchaseOrder.isClosed
-										? "<span class='label label-success'>Pending</span>" : "<span
-										class='label label-danger'>Closed</span>"}<i
-										class='arrow glyphicon glyphicon-arrow-right'></i>
-									</td>
+									<td>${sale.customer.user.name}</td>
+									<td>${sale.tDate}</td>
+									<td style='text-align: center; position: relative;'><i
+										class='arrow glyphicon glyphicon-arrow-right'></i></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -44,24 +49,25 @@
 				</div>
 			</div>
 
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="box box-body box-info" id="trans-details">
 					<table
 						class="table table-condensed table-hover table-striped table-bordered">
 						<thead>
 							<tr>
 								<th>Product</th>
-								<th class='number'>Exp. Price</th>
-								<th class='number'>Qty</th>
-								<th class='number'>Total</th>
+								<th>Unit Price</th>
+								<th>Qty</th>
+								<th>Discount</th>
+								<th>Total</th>
 							</tr>
 						</thead>
-						<tbody id="po-product">
+						<tbody id="s-product">
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="3">Grand Total</th>
-								<th id="grand-total"></th>
+								<th colspan="4" style='text-align: center'>Grand Total</th>
+								<th class='number' id="grand-total"></th>
 							</tr>
 						</tfoot>
 					</table>
@@ -69,18 +75,18 @@
 					<hr />
 
 					<div class="input-group">
+						<label class="input-group-addon">Sales Officer</label> <input
+							type="text" readonly class="form-control" id="s-officer" />
+					</div>
+
+					<div class="input-group">
 						<label class="input-group-addon">Added By</label> <input
-							type="text" readonly class="form-control" value="" />
+							type="text" readonly class="form-control" id="added-by" />
 					</div>
 
 					<div class="input-group">
 						<label class="input-group-addon">Department</label> <input
-							type="text" readonly class="form-control" value="" />
-					</div>
-
-					<div class="input-group">
-						<label class="input-group-addon">Note</label>
-						<textarea readonly rows="1" class="form-control"></textarea>
+							type="text" readonly class="form-control" id="dept-name" />
 					</div>
 
 					<hr />
@@ -103,8 +109,8 @@
 	src="<c:url value="/resources/plugins/datatables/dataTables.bootstrap.min.js" />"></script>
 
 <script>
-	var purchaseOrders = "";
-	purchaseOrders = ${purchaseOrders.resultString};
+	var sales = "";
+	sales = ${sales.resultString};
 
 	//Data table
 	$(function() {
@@ -114,61 +120,42 @@
 		});
 	});
 
-	//Function for view purchase order products
-	function viewPOProduct(id) {
+	//Function for view sales products
+	function viewSalesProduct(id) {
+		$(".selected-row").removeClass("selected-row");
+		$("#"+id).addClass("selected-row");
+
 		var grandTotal=0;
 		$("#po-product").empty();
-		$.each(purchaseOrders.result, function(i, po) {
-			if (po.id == id) {
-				$.each(po.poProduct, function(i, pop) {
+		$.each(sales.result, function(i, sale) {
+			if (sale.id == id) {
+				console.log(sale);
+				console.log(sale.dept.name);
+
+				$("#added-by").val(sale.addedBy.user.name);
+				$("#dept-name").val(sale.dept.name);
+				$("#s-officer").val(sale.salesOfficer.user.name);
+				
+				$.each(sale.salesProduct, function(i, sp) {
+					console.log(sp);
 					var htmlStr = "<tr>";
-					htmlStr += "<td >"+pop.product.name+"</td>";
-					htmlStr += "<td class='number'>"+formatNumber(pop.unitPrice,2)+"</td>";
-					htmlStr += "<td class='number'>"+formatNumber(pop.qty,2)+"</td>";
-					htmlStr += "<td class='number'>"+formatNumber(pop.qty*pop.unitPrice,2)+"</td>";
+					htmlStr += "<td >"+sp.product.name+" | <i style='font-size:12px;'>"+sp.product.code+"</i></td>";
+					htmlStr += "<td class='number'>"+formatNumber(sp.unitPrice,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(sp.qty,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(sp.totDiscount,2)+"</td>";
+					htmlStr += "<td class='number'>"+formatNumber(sp.qty*sp.unitPrice-sp.totDiscount,2)+"</td>";
 					htmlStr += "</tr>";
 					
-					$("#po-product").append(htmlStr);
-					grandTotal=grandTotal+(pop.qty*pop.unitPrice);
+					$("#s-product").append(htmlStr);
+					grandTotal=grandTotal+(sp.qty*sp.unitPrice-sp.totDiscount);
 				});
 				$("#grand-total").html(formatNumber(grandTotal,2));
-				
-				var htmlString="<input type='button' onclick='' id='btn-make-purchase class='btn btn-info app-button tbtn' value='Make as purchase' ></input>";
-				htmlString +="<input type='button' onclick='closePurchaseOrder("+id+")' id='btn-close' class='btn btn-danger app-button tbtn value='Close Order' ></input>";
-				$("#pop-table-footer").html(htmlString);
 			}
 		});
 	}
 	
-	//Function for close existing purchase order
-	function closePurchaseOrder(id){
-		try{
-			$.ajax({
-		        url:'http://localhost:8080/closePurchaseOrder/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
-		        type: 'POST',
-		        data: { id:id },
-		        success: function (res) {
-		        	console.log(res );
-		            
-		            setTimeout(function() {
-						//$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-						//$("#res-msg strong").html("Fill all fields and hit Save");
-						if (res.message == "SUCCESS"){
-							window.location.reload(true);
-						}
-					}, 500);
-				},
-		        error: function (res) {
-		            alert("res");
-		        }
-		    });
-		}
-		catch(err){
-			alert(err);
-		}
-		return false;
-	}
-
-	
+	$(document).ready(function () {
+		$("#sidebar-style").addClass('sidebar-collapse');
+	});
 	
 </script>

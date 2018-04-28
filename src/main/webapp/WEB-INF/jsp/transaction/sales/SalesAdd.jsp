@@ -1,11 +1,12 @@
 <!-- /** -->
 <!--  * @author M.Vithusanth -->
-<!--  * @Created On 27th April 2018 -->
-<!--  * @Purpose Purchase Order Add Page  -->
+<!--  * @Created On 28th April 2018 -->
+<!--  * @Purpose Sales Order Add Page  -->
 <!--  */ -->
 
 <%@page import="com.vithu.uscms.entities.Product"%>
-<%@page import="com.vithu.uscms.entities.Supplier"%>
+<%@page import="com.vithu.uscms.entities.Customer"%>
+<%@page import="com.vithu.uscms.entities.Employee"%>
 <%@page import="com.vithu.uscms.entities.Department"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vithu.uscms.others.GenericResult"%>
@@ -105,8 +106,8 @@
 
 								<!-- PO Date -->
 								<div class="input-group">
-									<label class="input-group-addon">Purchase Date</label> <input
-										type="date" class="form-control" id="pur-date" value="" />
+									<label class="input-group-addon">Sales Date</label> <input
+										type="date" class="form-control" id="sales-date" value="" />
 								</div>
 
 								<!-- Code -->
@@ -128,19 +129,24 @@
 
 								<!-- Supplier -->
 								<div class="input-group">
-									<label class="input-group-addon">Supplier</label> <select
+									<label class="input-group-addon">Customer</label> <select
 										class="form-control" id="supplier">
 										<!-- Dropdown List Option -->
-										<c:forEach items="${suppliers.result}" var="supplier">
-											<option value="${supplier.id}">${supplier.user.name}</option>
+										<c:forEach items="${customers.result}" var="customer">
+											<option value="${customer.id}">${customer.user.name}</option>
 										</c:forEach>
 									</select>
 								</div>
-
-								<!-- Note -->
+								
+								<!-- Sales Officer -->
 								<div class="input-group">
-									<label class="input-group-addon">Note</label> <input
-										type="text" class="form-control" id="note" />
+									<label class="input-group-addon">Sales Officer</label> <select
+										class="form-control" id="supplier">
+										<!-- Dropdown List Option -->
+										<c:forEach items="${employees.result}" var="employee">
+											<option value="${employee.id}">${employee.user.name}</option>
+										</c:forEach>
+									</select>
 								</div>
 
 								<!-- Total Discount -->

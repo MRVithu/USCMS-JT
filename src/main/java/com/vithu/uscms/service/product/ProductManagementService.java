@@ -133,7 +133,7 @@ public class ProductManagementService {
 							+ newProduct.getItemType().getId() + "','" + newProduct.getSize() + "','"
 							+ newProduct.getSelleingPrice() + "','" + newProduct.getLastPurchasePrice() + "', '"
 							+ newProduct.getMinPrice() + "', '" + newProduct.getDiscount() + "','"
-							+ newProduct.getAddedBy().getUser().getId() + "');",
+							+ newProduct.getAddedBy().getId() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addStmt.executeUpdate();
 

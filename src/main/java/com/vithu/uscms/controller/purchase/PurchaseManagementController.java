@@ -20,7 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.vithu.uscms.entities.Bank;
 import com.vithu.uscms.entities.Department;
+import com.vithu.uscms.entities.PayCash;
+import com.vithu.uscms.entities.PayCheque;
+import com.vithu.uscms.entities.PayCredit;
+import com.vithu.uscms.entities.Payment;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
 import com.vithu.uscms.entities.PurchaseOrder;
@@ -126,37 +131,19 @@ public class PurchaseManagementController {
 		return response;
 	}
 
-	// ADD NEW PURCHASE 
+	// ADD NEW PURCHASE
 	@RequestMapping(value = "/addPurchase", method = RequestMethod.POST)
 	@ResponseBody
 	public String addPurchaseOrder(@RequestParam("token") String token, HttpServletRequest request) {
 
 		Purchase newPurchase = new Purchase();
-		
+
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
 		System.out.println("ADD NEW PURCHASE");
 
 		try {
-			JSONObject purOrder = new JSONObject(request.getParameter("data"));
-
-			JSONArray purchaseProducts = purOrder.getJSONArray("products");
-			List<PurchaseProduct> purProductsList = new ArrayList<PurchaseProduct>();
-
-			for (int i = 0; i < purchaseProducts.length(); i++) {
-				PurchaseProduct purProduct = new PurchaseProduct();
-				
-				purProduct.setQty(purchaseProducts.getJSONObject(i).getDouble("quantity"));
-
-				Product product = new Product();
-				product.setId(purchaseProducts.getJSONObject(i).getInt("id"));
-				product.setName(purchaseProducts.getJSONObject(i).getString("name"));
-
-				purProduct.setProduct(product);
-				purProduct.setUnitPrice(purchaseProducts.getJSONObject(i).getDouble("purchasePrice"));
-
-				purProductsList.add(purProduct);
-			}
+			JSONObject purchase = new JSONObject(request.getParameter("data"));
 
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
@@ -164,27 +151,78 @@ public class PurchaseManagementController {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
 					// Validate Product Code
-					GenericResult validateResult = ValueValidator.validateText(purOrder.getString("code"), "Code");
+					GenericResult validateResult = ValueValidator.validateText(purchase.getString("code"), "Code");
 					if (validateResult.isStatus()) {
-						
-						newPurchase.setCode(purOrder.getString("code"));
-						newPurchase.settDate(purOrder.getString("poDate"));
-						newPurchase.setNote(purOrder.getString("note"));
+
+						// Set purchase products
+						JSONArray purchaseProducts = purchase.getJSONArray("products");
+						List<PurchaseProduct> purProductsList = new ArrayList<PurchaseProduct>();
+
+						for (int i = 0; i < purchaseProducts.length(); i++) {
+							PurchaseProduct purProduct = new PurchaseProduct();
+
+							purProduct.setQty(purchaseProducts.getJSONObject(i).getDouble("quantity"));
+
+							Product product = new Product();
+							product.setId(purchaseProducts.getJSONObject(i).getInt("id"));
+							product.setName(purchaseProducts.getJSONObject(i).getString("name"));
+
+							purProduct.setProduct(product);
+							purProduct.setUnitPrice(purchaseProducts.getJSONObject(i).getDouble("purchasePrice"));
+
+							purProductsList.add(purProduct);
+						}
+
+						// Set Pay Cheques
+						JSONArray payCheques = purchase.getJSONArray("payCheques");
+						List<PayCheque> payCheList = new ArrayList<PayCheque>();
+
+						for (int i = 0; i < payCheques.length(); i++) {
+							PayCheque payCheque = new PayCheque();
+
+							payCheque.setAmount(+payCheques.getJSONObject(i).getDouble("amount"));
+							payCheque.setNumber(payCheques.getJSONObject(i).getString("number"));
+							payCheque.setChequeDate(payCheques.getJSONObject(i).getString("date"));
+
+							Bank bank = new Bank();
+							bank.setBankName(payCheques.getJSONObject(i).getString("bank"));
+							payCheque.setBank(bank);
+System.out.println("**** bank name : "+payCheques.getJSONObject(i).getString("bank")+"****"+payCheques.getJSONObject(i).getDouble("amount"));
+							payCheList.add(payCheque);
+						}
+
+						newPurchase.setCode(purchase.getString("code"));
+						newPurchase.settDate(purchase.getString("poDate"));
+						newPurchase.setNote(purchase.getString("note"));
 
 						Department dept = new Department();
-						dept.setId(purOrder.getInt("department"));
+						dept.setId(purchase.getInt("department"));
 						newPurchase.setDept(dept);
 
 						Supplier supplier = new Supplier();
-						supplier.setId(purOrder.getInt("supplier"));
+						supplier.setId(purchase.getInt("supplier"));
 						newPurchase.setSupplier(supplier);
+
+						PayCash payCash = new PayCash();
+						payCash.setAmount(purchase.getDouble("payCash"));
+
+						PayCredit payCredit = new PayCredit();
+						payCredit.setAmount(purchase.getDouble("payCredit"));
+						
+						Payment pay = new Payment();
+						pay.setPayCheques(payCheList);
+						pay.setPayCash(payCash);
+						pay.setPayCredit(payCredit);
+						pay.setAmount(purchase.getDouble("payTotal"));
+						newPurchase.setPay(pay);
 
 						newPurchase.setPurProduct(purProductsList);
 						newPurchase.setAddedBy(currentUser.getEmployee());
 
 						returnResult = purchaseService.addPurchase(newPurchase);
 					} else {
-						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Purchase Code can not be empty.");
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY,
+								"Purchase Code can not be empty.");
 					}
 
 				} else {

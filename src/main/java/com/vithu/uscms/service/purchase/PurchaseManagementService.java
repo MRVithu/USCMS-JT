@@ -10,6 +10,7 @@ import java.util.List;
 import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Department;
 import com.vithu.uscms.entities.Employee;
+import com.vithu.uscms.entities.PayCheque;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
 import com.vithu.uscms.entities.PurchaseOrder;
@@ -79,7 +80,7 @@ public class PurchaseManagementService {
 
 				getPurProductsStmt = newConn.prepareStatement(
 						"SELECT  pp.`id`, p.`id` AS proId, p.`name` AS proName, p.`code` AS proCode, pp.`total_given`,\r\n"
-								+ "pp.`quantity`, pp.`unit_price`, pp.`total_discount`, pp.`total_given`, pp.`expiry_date`,\r\n"
+								+ "pp.`quantity`, pp.`unit_price`, pp.`total_discount`, pp.`total_given`,\r\n"
 								+ "pp.`selling_price`\r\n" + "FROM `purchase_products` pp\r\n"
 								+ "LEFT JOIN `products` p\r\n" + "ON p.`id`=pp.`product`\r\n" + "WHERE pp.`purchase`='"
 								+ res.getInt("id") + "';");
@@ -88,11 +89,10 @@ public class PurchaseManagementService {
 
 				while (result.next()) {
 					PurchaseProduct purProduct = new PurchaseProduct();
-					
+
 					purProduct.setId(result.getInt("proId"));
 					purProduct.setQty(result.getDouble("quantity"));
 					purProduct.setUnitPrice(result.getDouble("unit_price"));
-					purProduct.setExpDate(result.getString("expiry_date"));
 					purProduct.setTotDiscount(result.getDouble("total_discount"));
 					purProduct.setTotGiven(result.getDouble("total_given"));
 
@@ -122,21 +122,68 @@ public class PurchaseManagementService {
 		}
 
 	}
-	
 
-	// ADD PURCHASE  METHOD
+	// ADD PURCHASE METHOD
 	public GenericResult addPurchase(Purchase newPurchase) {
 		PreparedStatement addPurchaseStmt = null;
+		PreparedStatement addPayStmt = null;
+		PreparedStatement addPayCashStmt = null;
+		PreparedStatement addPayCreditStmt = null;
+		PreparedStatement addPayChequeStmt = null;
 
 		try {
 			int last_inserted_id = 0;
+			int lastPayId = 0;
 
 			newConn = conn.getCon();
 
+			// Add payment credentials
+			addPayStmt = newConn.prepareStatement(
+					"INSERT INTO `payments` (`t_date`, `total`, `added_by`, `dept`)\r\n" + "VALUE('"
+							+ newPurchase.gettDate() + "', '" + newPurchase.getPay().getAmount() + "', '"
+							+ newPurchase.getAddedBy().getId() + "', '" + newPurchase.getDept().getId() + "');",
+					Statement.RETURN_GENERATED_KEYS);
+			addPayStmt.executeUpdate();
+
+			// get the previous IDs
+			res = addPayStmt.getGeneratedKeys();
+			if (res.next()) {
+				lastPayId = res.getInt(1);
+			}
+
+			if (newPurchase.getPay().getPayCash().getAmount() > 0) {
+				// Add pay cash credentials
+				addPayCashStmt = newConn.prepareStatement("insert into `pay_cash` (`pay`, `amount`)\r\n" + "value('"
+						+ lastPayId + "', '" + newPurchase.getPay().getPayCash().getAmount() + "');");
+				addPayCashStmt.executeUpdate();
+			}
+
+			if (newPurchase.getPay().getPayCredit().getAmount() > 0) {
+				// Add pay credit credentials
+				addPayCreditStmt = newConn.prepareStatement("INSERT INTO `pay_credit` (`pay`, `amount`)\r\n" + "VALUE('"
+						+ lastPayId + "', '" + newPurchase.getPay().getPayCredit().getAmount() + "');");
+				addPayCreditStmt.executeUpdate();
+			}
+
+			// Add pay cheque Credentials
+			List<PayCheque> chequeList = new ArrayList<PayCheque>();
+			chequeList = newPurchase.getPay().getPayCheques();
+			for (PayCheque payCheque : chequeList) {
+
+				addPayChequeStmt = newConn.prepareStatement(
+						"INSERT INTO `pay_cheque` (`pay`, `number`, `bank`,`change_date`,`amount`)\r\n" + "VALUE ('"
+								+ lastPayId + "', '" + payCheque.getNumber() + "', '"
+								+ payCheque.getBank().getBankName() + "', '" + payCheque.getChequeDate() + "', '"
+								+ payCheque.getAmount() + "');");
+				addPayChequeStmt.executeUpdate();
+			}
+
 			// Add purchase credentials
 			addPurchaseStmt = newConn.prepareStatement(
-					"INSERT INTO `purchases`(`code`, `supplier`, `t_date`, `added_by`,`dept`)\r\n" + 
-					"VALUES('"+newPurchase.getCode()+"','"+newPurchase.getSupplier().getId()+"', '"+newPurchase.gettDate()+"', '"+newPurchase.getAddedBy().getId()+"', '"+newPurchase.getDept().getId()+"');",
+					"INSERT INTO `purchases`(`code`, `supplier`, `t_date`, `added_by`,`dept`, `pay`)\r\n" + "VALUES('"
+							+ newPurchase.getCode() + "','" + newPurchase.getSupplier().getId() + "', '"
+							+ newPurchase.gettDate() + "', '" + newPurchase.getAddedBy().getId() + "', '"
+							+ newPurchase.getDept().getId() + "' ,'" + lastPayId + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addPurchaseStmt.executeUpdate();
 
@@ -153,8 +200,9 @@ public class PurchaseManagementService {
 			for (PurchaseProduct purProduct : purProductsList) {
 				PreparedStatement addPOPStmt = null;
 				addPOPStmt = newConn.prepareStatement(
-						"insert into `purchase_products`(`purchase`, `product`, `quantity`, `unit_price`)\r\n" + 
-						"value ('"+last_inserted_id+"','"+purProduct.getProduct().getId()+"', '"+purProduct.getQty()+"', '"+purProduct.getUnitPrice()+"');");
+						"insert into `purchase_products`(`purchase`, `product`, `quantity`, `unit_price`)\r\n"
+								+ "value ('" + last_inserted_id + "','" + purProduct.getProduct().getId() + "', '"
+								+ purProduct.getQty() + "', '" + purProduct.getUnitPrice() + "');");
 				addPOPStmt.executeUpdate();
 			}
 

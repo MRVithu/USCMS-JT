@@ -10,7 +10,12 @@
 {
 	font-weight:bold;
 }
-
+.modal-body{
+	padding:0px 30px 0px 30px !important;
+}
+.modal-header{
+	padding:0px 15px 0px 15px !important;
+}
 .input-group
 {
 	margin-bottom:8px;
@@ -287,4 +292,12 @@ input[type=date].form-control
 
 table{
 	cursor: pointer;
+}
+
+th{
+	text-align:center;
+}
+
+.text-danger{
+	color:red;
 }
