@@ -39,9 +39,10 @@
 			<div class="col-md-6">
 				<div class="box box-body box-success">
 					<div class="input-group trans-srch">
-						<input type="text" id="trans-search-box" name="search-box"
-							class="form-control search-box" placeholder="Search Products">
-						<label class="input-group-addon trans-srch-label"><i
+						<input type="text" id="trans-search-box" autofocus
+							name="search-box" class="form-control search-box"
+							placeholder="Search Products"> <label
+							class="input-group-addon trans-srch-label"><i
 							class="glyphicon glyphicon-search"> </i></label> <label
 							class="input-group-addon trans-srch-label"
 							onclick="$('#trans-search-box').val('');$('#trans-search-box').trigger('change');"><i
@@ -111,8 +112,8 @@
 
 								<!-- Code -->
 								<div class="input-group">
-									<label class="input-group-addon">Purchase Code</label> <input
-										type="text" class="form-control" id="pur-code" value="" />
+									<label class="input-group-addon">Pur Code</label> <input 
+										type="text" class="form-control" id="pur-code" value="" disabled/>
 								</div>
 
 								<!-- Departments -->
@@ -154,8 +155,8 @@
 								<!-- Total Amount -->
 								<div class="input-group">
 									<label class="input-group-addon large-input">Total</label> <input
-										type="number" readonly class="form-control number large-input"
-										value="0.00" id="grand-total" /> <label
+										type="number" class="form-control number large-input"
+										value="0.00" id="grand-total" disabled/> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -172,9 +173,9 @@
 								<!-- Credit Amount -->
 								<div class="input-group">
 									<label class="input-group-addon large-input">Credit</label> <input
-										style="background-color: #fd5064" type="text" readonly
+										style="background-color: #fd5064" type="text" 
 										class="form-control number large-input" value="0.00"
-										id="credit-amount" /> <label
+										id="credit-amount" disabled/> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -190,8 +191,8 @@
 								<!-- Total Cheque Amount -->
 								<div class="input-group">
 									<label class="input-group-addon">Cheque Amount</label> <input
-										type="number" readonly class="form-control number"
-										value="0.00" id="tot-che-amount" /> <label
+										type="number" class="form-control number"
+										value="0.00" id="tot-che-amount" disabled/> <label
 										class="input-group-addon ">Rs.</label>
 								</div>
 
@@ -206,7 +207,7 @@
 											<div id="tabs-2-1" class="tab-pane fade in active">
 												<div class="row">
 													<div class="col-md-6">
-													
+
 														<!-- cheque Date -->
 														<div class="input-group">
 															<label class="input-group-addon">Cheque Date</label> <input
@@ -362,7 +363,10 @@
 <script>
 	var products = "";
 	products = ${products.resultString};
-
+	
+	var purchaseMaxId="";
+	purchaseMaxId = ${purchaseMaxId.result};
+	
 	$("#srch-bar-cont, #action-cont").css("visibility", "hidden");
 
 	var productList = [];
@@ -374,6 +378,9 @@
 
 	$(document).ready(function () {
 		$("#sidebar-style").addClass('sidebar-collapse');
+		
+		var code=getMaxId("PUR", purchaseMaxId.result);
+		$("#pur-code").val(code);
 		
 		productList = products.result;
 		productMap = getObjectMapFromList(productList, "id");

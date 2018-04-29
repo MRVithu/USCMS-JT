@@ -90,14 +90,14 @@ public class PurchaseManagementService {
 				while (result.next()) {
 					PurchaseProduct purProduct = new PurchaseProduct();
 
-					purProduct.setId(result.getInt("proId"));
+					purProduct.setId(result.getInt("id"));
 					purProduct.setQty(result.getDouble("quantity"));
 					purProduct.setUnitPrice(result.getDouble("unit_price"));
 					purProduct.setTotDiscount(result.getDouble("total_discount"));
 					purProduct.setTotGiven(result.getDouble("total_given"));
 
 					Product product = new Product();
-					product.setId(result.getInt("id"));
+					product.setId(result.getInt("proId"));
 					product.setName(result.getString("proName"));
 					product.setCode(result.getString("proCode"));
 					purProduct.setProduct(product);
@@ -219,6 +219,29 @@ public class PurchaseManagementService {
 				e2.printStackTrace();
 			}
 		}
+	}
+
+	// METHOD TO GET MAX PURCHASE ID
+	public GenericResult getMaxPurchaseId() {
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement("SELECT * FROM `purchases` ORDER BY id DESC LIMIT 0, 1;");
+			res = stmt.executeQuery();
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+
+			while (res.next()) {
+				rs.setResult(res.getInt("id"));
+			}
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", JsonFormer.form(rs));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+
 	}
 
 }

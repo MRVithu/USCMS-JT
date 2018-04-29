@@ -24,7 +24,7 @@
 				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 			</div>
 		</div>
-
+<%-- 
 		<!-- search form (Optional) -->
 		<form action="#" method="get" class="sidebar-form">
 			<div class="input-group">
@@ -38,12 +38,11 @@
 			</div>
 		</form>
 		<!-- /.search form -->
-
+ --%>
+ 
+ </br></hr>
 		<!-- Sidebar Menu -->
 		<ul class="sidebar-menu">
-			<li class="header ${current == 'home' ? 'active' : '' }"><a
-				href="/home.html"> <i class="fa fa-home"></i><span>Home</span></a></li>
-
 			<li
 				class="treeview ${current == 'employee' or current == 'customer' or current == 'supplier' ? 'active' : '' }">
 				<a href="#"><i class="fa fa-user"></i> <span>Users</span> <span
@@ -89,11 +88,11 @@
 							class="fa fa-circle-thin"></i><span> Item Types</span></a></li>
 				</ul>
 			</li>
-			
+
 			<li
 				class="treeview ${current == 'sales' or current == 'salesAdd' or current== 'salesOrder'  ? 'active' : '' }">
-				<a href="#"><i class="fa  fa-cart-arrow-down"></i> <span>Sales</span> <span
-					class="pull-right-container"> <i
+				<a href="#"><i class="fa  fa-cart-arrow-down"></i> <span>Sales</span>
+					<span class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
@@ -108,7 +107,7 @@
 				</ul>
 			</li>
 
-			
+
 			<li
 				class="treeview ${current == 'purchaseOrder' or current == 'purchase'   ? 'active' : '' }">
 				<a href="#"><i class="fa  fa-truck"></i> <span>Purchase</span> <span

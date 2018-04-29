@@ -88,12 +88,12 @@ public class PurchaseOrderManagementService {
 
 				while (result.next()) {
 					PurchaseOrderProduct poProduct = new PurchaseOrderProduct();
-					poProduct.setId(result.getInt("proId"));
+					poProduct.setId(result.getInt("id"));
 					poProduct.setQty(result.getDouble("quantity"));
 					poProduct.setUnitPrice(result.getDouble("ex_unit_price"));
 
 					Product product = new Product();
-					product.setId(result.getInt("id"));
+					product.setId(result.getInt("proId"));
 					product.setName(result.getString("proName"));
 					product.setCode(result.getString("proCode"));
 					poProduct.setProduct(product);
@@ -197,22 +197,21 @@ public class PurchaseOrderManagementService {
 		}
 	}
 
-	// METHOD TO GET MAX PURCHASE ID
+	// METHOD TO GET MAX PURCHASE ORDER ID
 	public GenericResult getMaxPurchaseOrderId() {
 		try {
 			newConn = conn.getCon();
-			stmt = newConn.prepareStatement("");
+			stmt = newConn.prepareStatement("SELECT * FROM `purchase_order` ORDER BY id DESC LIMIT 0, 1");
 			res = stmt.executeQuery();
-			List<PurchaseOrder> purchaseOrderList = new ArrayList<PurchaseOrder>();
+			
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+
 			while (res.next()) {
-
-				PurchaseOrder purOrder = new PurchaseOrder();
-
-				purOrder.setId(res.getInt("id"));
-				purchaseOrderList.add(purOrder);
+				rs.setResult(res.getInt("id"));
 			}
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", purchaseOrderList, "",
-					" ");
+			
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", JsonFormer.form(rs));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

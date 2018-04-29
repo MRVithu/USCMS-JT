@@ -40,9 +40,9 @@
 			<div class="col-md-6">
 				<div class="box box-body box-success">
 					<div class="input-group trans-srch">
-						<input type="text" id="trans-search-box" name="search-box"
-							class="form-control search-box" placeholder="Search Products">
-						<label class="input-group-addon trans-srch-label"><i
+						<input type="text" id="trans-search-box" autofocus
+							name="search-box" class="form-control search-box"
+							placeholder="Search Products"> <label class="input-group-addon trans-srch-label"><i
 							class="glyphicon glyphicon-search"> </i></label> <label
 							class="input-group-addon trans-srch-label"
 							onclick="$('#trans-search-box').val('');$('#trans-search-box').trigger('change');"><i
@@ -58,7 +58,7 @@
 									<th style='text-align: center'>#</th>
 									<th>Product</th>
 									<th class='number'>Selling Price</th>
-									<th class='number'>Purchase Price</th>
+									<th class='number'>Min Price</th>
 									<th class='number'>Quantity</th>
 									<th class='number'>Total</th>
 								</tr>
@@ -104,7 +104,7 @@
 						<div class="tab-content" id="dep-prop-body">
 							<div id="tabs-1" class="tab-pane fade in active">
 
-								<!-- PO Date -->
+								<!-- Sales Date -->
 								<div class="input-group">
 									<label class="input-group-addon">Sales Date</label> <input
 										type="date" class="form-control" id="sales-date" value="" />
@@ -112,8 +112,8 @@
 
 								<!-- Code -->
 								<div class="input-group">
-									<label class="input-group-addon">Purchase Code</label> <input
-										type="text" class="form-control" id="pur-code" value="" />
+									<label class="input-group-addon">Sales Code</label> <input 
+										type="text" class="form-control" id="sales-code" value="" disabled/>
 								</div>
 
 								<!-- Departments -->
@@ -130,7 +130,7 @@
 								<!-- Supplier -->
 								<div class="input-group">
 									<label class="input-group-addon">Customer</label> <select
-										class="form-control" id="supplier">
+										class="form-control" id="customer">
 										<!-- Dropdown List Option -->
 										<c:forEach items="${customers.result}" var="customer">
 											<option value="${customer.id}">${customer.user.name}</option>
@@ -141,7 +141,7 @@
 								<!-- Sales Officer -->
 								<div class="input-group">
 									<label class="input-group-addon">Sales Officer</label> <select
-										class="form-control" id="supplier">
+										class="form-control" id="sales-officer">
 										<!-- Dropdown List Option -->
 										<c:forEach items="${employees.result}" var="employee">
 											<option value="${employee.id}">${employee.user.name}</option>
@@ -160,8 +160,8 @@
 								<!-- Total Amount -->
 								<div class="input-group">
 									<label class="input-group-addon large-input">Total</label> <input
-										type="number" readonly class="form-control number large-input"
-										value="0.00" id="grand-total" /> <label
+										type="number"  class="form-control number large-input"
+										value="0.00" id="grand-total" disabled/> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -178,9 +178,9 @@
 								<!-- Credit Amount -->
 								<div class="input-group">
 									<label class="input-group-addon large-input">Credit</label> <input
-										style="background-color: #fd5064" type="text" readonly
+										style="background-color: #fd5064" type="text" 
 										class="form-control number large-input" value="0.00"
-										id="credit-amount" /> <label
+										id="credit-amount" disabled/> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -196,8 +196,8 @@
 								<!-- Total Cheque Amount -->
 								<div class="input-group">
 									<label class="input-group-addon">Cheque Amount</label> <input
-										type="number" readonly class="form-control number"
-										value="0.00" id="tot-che-amount" /> <label
+										type="number"  class="form-control number"
+										value="0.00" id="tot-che-amount" disabled/> <label
 										class="input-group-addon ">Rs.</label>
 								</div>
 
@@ -316,16 +316,16 @@
 								class="input-group-addon small-addon">Units</label>
 						</div>
 						<div class="input-group">
-							<label class="input-group-addon">Purchase price</label> <input
-								type="number" value="0" onchange="adjustPrices('unit')"
-								id="trans-pp" name="name" class="form-control number field-wid"
-								placeholder=""> <label
+							<label class="input-group-addon">Min price</label> <input
+								type="number" value="0" 
+								id="trans-mp" name="name" class="form-control number field-wid"
+								placeholder="" disabled> <label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Selling Price</label> <input
-								type="number" value="0" class="form-control number field-wid"
-								id="trans-sp" disabled /> <label
+								type="number" onchange="adjustPrices('unit')" value="0" class="form-control number field-wid"
+								id="trans-sp"  /> <label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
@@ -369,6 +369,9 @@
 	var products = "";
 	products = ${products.resultString};
 
+	var salesMaxId="";
+	salesMaxId = ${salesMaxId.result};
+	
 	$("#srch-bar-cont, #action-cont").css("visibility", "hidden");
 
 	var productList = [];
@@ -380,6 +383,9 @@
 
 	$(document).ready(function () {
 		$("#sidebar-style").addClass('sidebar-collapse');
+
+		var code=getMaxId("SALE", salesMaxId.result);
+		$("#sales-code").val(code);
 		
 		productList = products.result;
 		productMap = getObjectMapFromList(productList, "id");
@@ -405,7 +411,7 @@
 		var prodId = 0;
 		var prodName = "";
 		var sp = 0;
-		var pp = 0;
+		var mp = 0;
 		var qty = 0;
 		var total = 0;
 
@@ -418,7 +424,7 @@
 			var product = addedProductList[pid];
 			prodName = product.name;
 			sp = product.selleingPrice;
-			pp = product.lastPurchasePrice;
+			mp = product.minPrice;
 			qty = product.quantity;
 			total = product.total;
 			prodId = product.id;
@@ -430,17 +436,18 @@
 			var product = productMap[pid];
 			prodName = product.name + " - " + product.code;
 			sp = product.selleingPrice;
-			pp = product.lastPurchasePrice;
+			mp = product.minPrice;
 			qty = 1.00;
-			total = pp;
+			total = sp;
 			prodId = product.id;
-			$("#etype").val("A");
+			console.log(product);
+			$("#etype").val("A");			
 		}
 
 		$("#prod-id").val(prodId);
 		$("#trans-product").val(prodName);
 		$("#trans-sp").val(parseFloat(sp + "").toFixed(2));
-		$("#trans-pp").val(parseFloat(pp + "").toFixed(2));
+		$("#trans-mp").val(parseFloat(mp + "").toFixed(2));
 		$("#trans-qty").val(parseFloat(qty + "").toFixed(2));
 		$("#trans-total").val(parseFloat(total + "").toFixed(2));
 
@@ -457,18 +464,16 @@
 		$("#trans-search-box").focus();
 	}
 
-	function addProductToTheList()
-	{
+	function addProductToTheList(){
 		var product = {};
 		var pid = "";
 
-		if($("#etype").val() == "A")
-		{
+		if($("#etype").val() == "A"){
 			product = {};
 			product.id = $("#prod-id").val();
 			product.name = $("#trans-product").val();
 			product.sellingPrice = parseFloat($("#trans-sp").val()).toFixed(2);
-			product.purchasePrice = parseFloat($("#trans-pp").val()).toFixed(2);
+			product.minPrice = parseFloat($("#trans-mp").val()).toFixed(2);
 			product.quantity = parseFloat($("#trans-qty").val()).toFixed(2);
 			product.total = parseFloat($("#trans-total").val()).toFixed(2);
 			var pid = "P" + (++productIndex);
@@ -480,7 +485,7 @@
 			product = addedProductList[pid];
 			product.name = $("#trans-product").val();
 			product.sellingPrice = parseFloat($("#trans-sp").val()).toFixed(2);
-			product.purchasePrice = parseFloat($("#trans-pp").val()).toFixed(2);
+			product.minPrice = parseFloat($("#trans-mp").val()).toFixed(2);
 			product.quantity = parseFloat($("#trans-qty").val()).toFixed(2);
 			product.total = parseFloat($("#trans-total").val()).toFixed(2);
 		}
@@ -489,8 +494,7 @@
 			$("#trans-search-box").focus();
 	}
 
-	function refreshAddedProductList()
-	{
+	function refreshAddedProductList(){
 		$("#trans-product-cont").html("");
 		var counter = 0;
 		var total = 0;
@@ -501,7 +505,7 @@
 											+ "<td>" + (counter + 1) + "</td>"
 											+ "<td>" + product.name + "</td>"
 											+ "<td class='number'>" + product.sellingPrice + "</td>"
-											+ "<td class='number'>" + product.purchasePrice + "</td>"
+											+ "<td class='number'>" + product.minPrice + "</td>"
 											+ "<td class='number'>" + product.quantity + "</td>"
 											+ "<td class='number'>" + product.total + "</td>"
 										+ "</tr>";
@@ -514,19 +518,17 @@
 		adjustPayment();
 	}
 
-	function adjustPrices(code)
-	{
-		if(code == "unit" || code == "qty")
-		{
-			var up = $("#trans-pp").val();
+	function adjustPrices(code){
+
+		if(code == "unit" || code == "qty"){
+			var sp = $("#trans-sp").val();
 			var qty = $("#trans-qty").val();
 			var tot = 0;
 
-			try{ tot = (parseFloat(up)*parseFloat(qty)).toFixed(2); tot = isNaN(tot) ? 0.00 : tot }catch(e){}
+			try{ tot = (parseFloat(sp)*parseFloat(qty)).toFixed(2); tot = isNaN(tot) ? 0.00 : tot }catch(e){}
 			$("#trans-total").val(tot);
 		}
-		else if(code == "total")
-		{
+		else if(code == "total"){
 			var tot = $("#trans-total").val();
 			var qty = $("#trans-qty").val();
 			var up = 0;
@@ -620,11 +622,11 @@
 						chequeArray.push(cheque);
 					}
 					
-					transObj.code=$("#pur-code").val();
-					transObj.supplier = $("#supplier").val();
+					transObj.code=$("#sales-code").val();
+					transObj.customer = $("#customer").val();
+					transObj.salesOfficer=$("#sales-officer").val();
 					transObj.department = $("#department").val();
-					transObj.poDate = $("#pur-date").val();
-					transObj.note = $("#note").val();
+					transObj.salesDate = $("#sales-date").val();
 					transObj.payCash = $("#paid").val();
 					transObj.payCredit = $("#credit-amount").val();
 					transObj.payTotal =  parseFloat($("#credit-amount").val())+parseFloat($("#paid").val())+parseFloat($("#tot-che-amount").val());
@@ -636,7 +638,7 @@
 					$.ajax({
 						
 						type: 'POST',
-						url: 'http://localhost:8080/addPurchase.json?token=<%=session.getAttribute("Token")%>',
+						url: 'http://localhost:8080/addSales.json?token=<%=session.getAttribute("Token")%>',
 						data: {data:JSON.stringify(transObj)},
 						success: function(res) {
 							console.log(res);
@@ -668,7 +670,7 @@
 				}
 			}
 			else {
-				showErrorMsg("Please add some products before saving the purchase.");
+				showErrorMsg("Please add some products before saving the sales.");
 			}
 		}
 		else {

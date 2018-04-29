@@ -9,15 +9,10 @@ package com.vithu.uscms.others;
 public class GenericResult
 {
     private boolean status;
-
     private String message;
-
     private String description;
-
     private Object result;
-    
     private String requestedFormat;
-    
     private String resultString;
 
     // *************************************************************

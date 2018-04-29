@@ -99,9 +99,7 @@ public class PurchaseManagementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-
-					ProductManagementService proService = new ProductManagementService();
-					returnResult = proService.getAllProducts();
+					returnResult = purchaseService.getMaxPurchaseId();
 
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
@@ -110,6 +108,10 @@ public class PurchaseManagementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
+
+		ProductManagementService proService = new ProductManagementService();
+		mandatoryResult = proService.getAllProducts();
+		model.addAttribute("products", mandatoryResult);
 
 		SupplierManagementService supplierService = new SupplierManagementService();
 		mandatoryResult = supplierService.getAllSuppliers();
@@ -125,7 +127,7 @@ public class PurchaseManagementController {
 			response = "jsonview";
 		} else {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("products", returnResult);
+			model.addAttribute("purchaseMaxId", returnResult);
 			response = "purchaseAdd";
 		}
 		return response;
@@ -187,7 +189,6 @@ public class PurchaseManagementController {
 							Bank bank = new Bank();
 							bank.setBankName(payCheques.getJSONObject(i).getString("bank"));
 							payCheque.setBank(bank);
-System.out.println("**** bank name : "+payCheques.getJSONObject(i).getString("bank")+"****"+payCheques.getJSONObject(i).getDouble("amount"));
 							payCheList.add(payCheque);
 						}
 
@@ -208,7 +209,7 @@ System.out.println("**** bank name : "+payCheques.getJSONObject(i).getString("ba
 
 						PayCredit payCredit = new PayCredit();
 						payCredit.setAmount(purchase.getDouble("payCredit"));
-						
+
 						Payment pay = new Payment();
 						pay.setPayCheques(payCheList);
 						pay.setPayCash(payCash);

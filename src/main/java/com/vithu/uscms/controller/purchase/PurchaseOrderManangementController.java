@@ -71,8 +71,7 @@ public class PurchaseOrderManangementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
-		
-		
+
 		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);
@@ -129,9 +128,7 @@ public class PurchaseOrderManangementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-
-					ProductManagementService proService = new ProductManagementService();
-					returnResult = proService.getAllProducts();
+					returnResult = purOrderService.getMaxPurchaseOrderId();
 
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
@@ -140,6 +137,10 @@ public class PurchaseOrderManangementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
+
+		ProductManagementService proService = new ProductManagementService();
+		mandatoryResult = proService.getAllProducts();
+		model.addAttribute("products", mandatoryResult);
 
 		SupplierManagementService supplierService = new SupplierManagementService();
 		mandatoryResult = supplierService.getAllSuppliers();
@@ -155,7 +156,7 @@ public class PurchaseOrderManangementController {
 			response = "jsonview";
 		} else {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("products", returnResult);
+			model.addAttribute("purchaseOrderMaxId", returnResult);
 			response = "purchaseOrderAdd";
 		}
 		return response;
@@ -170,10 +171,9 @@ public class PurchaseOrderManangementController {
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
 		System.out.println("ADD NEW PURCHASE ORDER");
-		
+
 		try {
 			JSONObject purOrder = new JSONObject(request.getParameter("data"));
-
 
 			JSONArray purchaseOrderProducts = purOrder.getJSONArray("products");
 			List<PurchaseOrderProduct> poProductList = new ArrayList<PurchaseOrderProduct>();
@@ -181,17 +181,17 @@ public class PurchaseOrderManangementController {
 			for (int i = 0; i < purchaseOrderProducts.length(); i++) {
 				PurchaseOrderProduct poProduct = new PurchaseOrderProduct();
 				poProduct.setQty(purchaseOrderProducts.getJSONObject(i).getDouble("quantity"));
-				
-				Product product=new Product();
+
+				Product product = new Product();
 				product.setId(purchaseOrderProducts.getJSONObject(i).getInt("id"));
 				product.setName(purchaseOrderProducts.getJSONObject(i).getString("name"));
-				
+
 				poProduct.setProduct(product);
 				poProduct.setUnitPrice(purchaseOrderProducts.getJSONObject(i).getDouble("purchasePrice"));
-				
+
 				poProductList.add(poProduct);
 			}
-			
+
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
@@ -204,21 +204,22 @@ public class PurchaseOrderManangementController {
 						addPurchaseOrder.settDate(purOrder.getString("poDate"));
 						addPurchaseOrder.setExpectedDate(purOrder.getString("exDate"));
 						addPurchaseOrder.setNote(purOrder.getString("note"));
-						
-						Department dept =new Department();
+
+						Department dept = new Department();
 						dept.setId(purOrder.getInt("department"));
 						addPurchaseOrder.setDept(dept);
-						
-						Supplier supplier= new Supplier();
+
+						Supplier supplier = new Supplier();
 						supplier.setId(purOrder.getInt("supplier"));
 						addPurchaseOrder.setSupplier(supplier);
-						
+
 						addPurchaseOrder.setPoProduct(poProductList);
 						addPurchaseOrder.setAddedBy(currentUser.getEmployee());
-						
+
 						returnResult = purOrderService.addPurchaseOrder(addPurchaseOrder);
 					} else {
-						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Purchase order code can not be empty.");
+						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY,
+								"Purchase order code can not be empty.");
 					}
 
 				} else {

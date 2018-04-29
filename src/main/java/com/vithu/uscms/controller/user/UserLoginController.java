@@ -87,7 +87,6 @@ public class UserLoginController {
 	@RequestMapping(value = "/doLogout")
 	public String logout(HttpServletRequest request, Model model, @RequestParam("token") String token,
 			HttpSession sesssion) {
-		System.out.println("fuck");
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "");
 

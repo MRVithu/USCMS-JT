@@ -15,7 +15,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
-	
+
 	<div class="alert alert-success alert-dismissable"
 		style="display: none; margin: 5px 20px" id="succAlert">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -39,9 +39,10 @@
 			<div class="col-md-7">
 				<div class="box box-body box-success">
 					<div class="input-group trans-srch">
-						<input type="text" id="trans-search-box" name="search-box"
-							class="form-control search-box" placeholder="Search Products">
-						<label class="input-group-addon trans-srch-label"><i
+						<input type="text" id="trans-search-box" autofocus
+							name="search-box" class="form-control search-box"
+							placeholder="Search Products"> <label
+							class="input-group-addon trans-srch-label"><i
 							class="glyphicon glyphicon-search"> </i></label> <label
 							class="input-group-addon trans-srch-label"
 							onclick="$('#trans-search-box').val('');$('#trans-search-box').trigger('change');"><i
@@ -100,8 +101,8 @@
 
 					<!-- Code -->
 					<div class="input-group">
-						<label class="input-group-addon">PO Code</label> <input
-							type="text" class="form-control" id="po-code" value="" />
+						<label class="input-group-addon">PO Code</label> <input 
+							type="text" class="form-control" id="po-code" value="" disabled/>
 					</div>
 
 					<!-- Departments -->
@@ -140,8 +141,8 @@
 					<!-- Total Amount -->
 					<div class="input-group">
 						<label class="input-group-addon large-input">Total</label> <input
-							type="text" readonly class="form-control number large-input"
-							value="0.00" id="grand-total" /> <label
+							type="text"  class="form-control number large-input"
+							value="0.00" id="grand-total" disabled/> <label
 							class="input-group-addon large-input">Rs.</label>
 					</div>
 
@@ -182,8 +183,8 @@
 						<div class="input-group">
 							<label class="input-group-addon">Quantity</label> <input
 								type="number" value="0" onchange="adjustPrices('qty')"
-								id="trans-qty" name="mobile" class="form-control number field-wid"
-								placeholder=""> <label
+								id="trans-qty" name="mobile"
+								class="form-control number field-wid" placeholder=""> <label
 								class="input-group-addon small-addon">Units</label>
 						</div>
 						<div class="input-group">
@@ -203,8 +204,9 @@
 							<label class="input-group-addon special-input">Total</label> <input
 								type="number" value="0" onchange="adjustPrices('total')"
 								id="trans-total" name="contact"
-								class="form-control number field-wid special-input" placeholder="">
-							<label class="input-group-addon small-addon special-input">Rs.</label>
+								class="form-control number field-wid special-input"
+								placeholder=""> <label
+								class="input-group-addon small-addon special-input">Rs.</label>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -238,17 +240,23 @@
 <script>
 	var products = "";
 	products = ${products.resultString};
-
+	
+	var purchaseOrderMax="";
+	purchaseOrderMax = ${purchaseOrderMaxId.result};
+	
 	$("#srch-bar-cont, #action-cont").css("visibility", "hidden");
 
 	var productList = [];
 	var productMap = {}; //will be made fom the list
 	var addedProductList = []; //products added for transactions
 	var productIndex = 0;
-
+	
 	$(document).ready(function () {
 		$("#sidebar-style").addClass('sidebar-collapse');
 		
+		var code=getMaxId("PO", purchaseOrderMax.result);
+		$("#po-code").val(code);
+
 		productList = products.result;
 		productMap = getObjectMapFromList(productList, "id");
 

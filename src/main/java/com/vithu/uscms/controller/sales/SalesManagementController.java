@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vithu.uscms.entities.Bank;
+import com.vithu.uscms.entities.Customer;
 import com.vithu.uscms.entities.Department;
+import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.PayCash;
 import com.vithu.uscms.entities.PayCheque;
 import com.vithu.uscms.entities.PayCredit;
@@ -24,6 +26,8 @@ import com.vithu.uscms.entities.Payment;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
 import com.vithu.uscms.entities.PurchaseProduct;
+import com.vithu.uscms.entities.Sales;
+import com.vithu.uscms.entities.SalesProduct;
 import com.vithu.uscms.entities.Supplier;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
@@ -100,9 +104,7 @@ public class SalesManagementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-
-					ProductManagementService proService = new ProductManagementService();
-					returnResult = proService.getAllProducts();
+					returnResult = salesService.getMaxSalesId();
 
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
@@ -112,10 +114,14 @@ public class SalesManagementController {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
 
+		ProductManagementService proService = new ProductManagementService();
+		mandatoryResult = proService.getAllProducts();
+		model.addAttribute("products", mandatoryResult);
+
 		CustomerManagementService customerService = new CustomerManagementService();
 		mandatoryResult = customerService.getAllCustomers();
 		model.addAttribute("customers", mandatoryResult);
-		
+
 		EmployeeManagementService empService = new EmployeeManagementService();
 		mandatoryResult = empService.getAllUser();
 		model.addAttribute("employees", mandatoryResult);
@@ -130,57 +136,56 @@ public class SalesManagementController {
 			response = "jsonview";
 		} else {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
-			model.addAttribute("products", returnResult);
+			model.addAttribute("salesMaxId", returnResult);
 			response = "salesAdd";
 		}
 		return response;
 	}
 
-	/*
-	// ADD NEW PURCHASE
-	@RequestMapping(value = "/addPurchase", method = RequestMethod.POST)
+	// ADD NEW Sales
+	@RequestMapping(value = "/addSales", method = RequestMethod.POST)
 	@ResponseBody
 	public String addPurchaseOrder(@RequestParam("token") String token, HttpServletRequest request) {
 
-		Purchase newPurchase = new Purchase();
+		Sales newSales = new Sales();
 
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
-		System.out.println("ADD NEW PURCHASE");
+		System.out.println("ADD NEW SALES");
 
 		try {
-			JSONObject purchase = new JSONObject(request.getParameter("data"));
+			JSONObject sales = new JSONObject(request.getParameter("data"));
 
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
-					// Validate Product Code
-					GenericResult validateResult = ValueValidator.validateText(purchase.getString("code"), "Code");
+					// Validate Sales Code
+					GenericResult validateResult = ValueValidator.validateText(sales.getString("code"), "Code");
 					if (validateResult.isStatus()) {
 
-						// Set purchase products
-						JSONArray purchaseProducts = purchase.getJSONArray("products");
-						List<PurchaseProduct> purProductsList = new ArrayList<PurchaseProduct>();
+						// Set sales products
+						JSONArray salesProducts = sales.getJSONArray("products");
+						List<SalesProduct> salesProductsList = new ArrayList<SalesProduct>();
 
-						for (int i = 0; i < purchaseProducts.length(); i++) {
-							PurchaseProduct purProduct = new PurchaseProduct();
+						for (int i = 0; i < salesProducts.length(); i++) {
+							SalesProduct salesProduct = new SalesProduct();
 
-							purProduct.setQty(purchaseProducts.getJSONObject(i).getDouble("quantity"));
+							salesProduct.setQty(salesProducts.getJSONObject(i).getDouble("quantity"));
 
 							Product product = new Product();
-							product.setId(purchaseProducts.getJSONObject(i).getInt("id"));
-							product.setName(purchaseProducts.getJSONObject(i).getString("name"));
+							product.setId(salesProducts.getJSONObject(i).getInt("id"));
+							product.setName(salesProducts.getJSONObject(i).getString("name"));
 
-							purProduct.setProduct(product);
-							purProduct.setUnitPrice(purchaseProducts.getJSONObject(i).getDouble("purchasePrice"));
+							salesProduct.setProduct(product);
+							salesProduct.setUnitPrice(salesProducts.getJSONObject(i).getDouble("sellingPrice"));
 
-							purProductsList.add(purProduct);
+							salesProductsList.add(salesProduct);
 						}
 
 						// Set Pay Cheques
-						JSONArray payCheques = purchase.getJSONArray("payCheques");
+						JSONArray payCheques = sales.getJSONArray("payCheques");
 						List<PayCheque> payCheList = new ArrayList<PayCheque>();
 
 						for (int i = 0; i < payCheques.length(); i++) {
@@ -193,42 +198,45 @@ public class SalesManagementController {
 							Bank bank = new Bank();
 							bank.setBankName(payCheques.getJSONObject(i).getString("bank"));
 							payCheque.setBank(bank);
-System.out.println("**** bank name : "+payCheques.getJSONObject(i).getString("bank")+"****"+payCheques.getJSONObject(i).getDouble("amount"));
+
 							payCheList.add(payCheque);
 						}
 
-						newPurchase.setCode(purchase.getString("code"));
-						newPurchase.settDate(purchase.getString("poDate"));
-						newPurchase.setNote(purchase.getString("note"));
+						newSales.setCode(sales.getString("code"));
+						newSales.settDate(sales.getString("salesDate"));
 
 						Department dept = new Department();
-						dept.setId(purchase.getInt("department"));
-						newPurchase.setDept(dept);
+						dept.setId(sales.getInt("department"));
+						newSales.setDept(dept);
 
-						Supplier supplier = new Supplier();
-						supplier.setId(purchase.getInt("supplier"));
-						newPurchase.setSupplier(supplier);
+						Customer customer = new Customer();
+						customer.setId(sales.getInt("customer"));
+						newSales.setCustomer(customer);
+
+						Employee so = new Employee();
+						so.setId(sales.getInt("salesOfficer"));
+						newSales.setSalesOfficer(so);
 
 						PayCash payCash = new PayCash();
-						payCash.setAmount(purchase.getDouble("payCash"));
+						payCash.setAmount(sales.getDouble("payCash"));
 
 						PayCredit payCredit = new PayCredit();
-						payCredit.setAmount(purchase.getDouble("payCredit"));
-						
+						payCredit.setAmount(sales.getDouble("payCredit"));
+
 						Payment pay = new Payment();
 						pay.setPayCheques(payCheList);
 						pay.setPayCash(payCash);
 						pay.setPayCredit(payCredit);
-						pay.setAmount(purchase.getDouble("payTotal"));
-						newPurchase.setPay(pay);
+						pay.setAmount(sales.getDouble("payTotal"));
+						newSales.setPay(pay);
 
-						newPurchase.setPurProduct(purProductsList);
-						newPurchase.setAddedBy(currentUser.getEmployee());
+						newSales.setSalesProduct(salesProductsList);
+						newSales.setAddedBy(currentUser.getEmployee());
 
-						returnResult = purchaseService.addPurchase(newPurchase);
+						returnResult = salesService.addSales(newSales);
 					} else {
 						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY,
-								"Purchase Code can not be empty.");
+								"Sales Code can not be empty.");
 					}
 
 				} else {
@@ -248,5 +256,5 @@ System.out.println("**** bank name : "+payCheques.getJSONObject(i).getString("ba
 		}
 		return response;
 	}
-*/
+
 }

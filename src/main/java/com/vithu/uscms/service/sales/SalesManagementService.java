@@ -48,7 +48,7 @@ public class SalesManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"select s.`id`, s.`t_date`, u.`name` as customer, us.`name` as salesOfficer, ua.`name` as addedBy, d.`name` as dept\r\n"
+					"select s.`id`,s.`code`, s.`t_date`, u.`name` as customer, us.`name` as salesOfficer, ua.`name` as addedBy, d.`name` as dept\r\n"
 							+ "from `sales` s\r\n" + "left join `customers` c\r\n" + "on s.`customer`=c.`id`\r\n"
 							+ "	left join `users` u\r\n" + "	on c.`user_id`=u.`id`\r\n"
 							+ "left join `employees` so\r\n" + "on s.`sales_officer`=so.`id`\r\n"
@@ -65,7 +65,7 @@ public class SalesManagementService {
 				Sales sales = new Sales();
 
 				sales.setId(res.getInt("id"));
-//				sales.setCode(res.getString("code"));
+				sales.setCode(res.getString("code"));
 				sales.settDate(res.getString("t_date"));
 
 				Department dept = new Department();
@@ -83,7 +83,7 @@ public class SalesManagementService {
 				user2.setName(res.getString("salesOfficer"));
 				so.setUser(user2);
 				sales.setSalesOfficer(so);
-				
+
 				Customer customer = new Customer();
 				User user3 = new User();
 				user3.setName(res.getString("customer"));
@@ -91,9 +91,9 @@ public class SalesManagementService {
 				sales.setCustomer(customer);
 
 				getSalesProductsStmt = newConn.prepareStatement(
-						"select so.`id`, p.`id` as proId, p.`name` as proName, p.`code` as proCode, so.`quantity`, so.`unit_price`, so.`total_discount` \r\n"
-								+ "from `sale_products` so\r\n" + "left join `products` p\r\n"
-								+ "on so.`product`=p.`id`\r\n" + "");
+						"SELECT so.`id`, p.`id` AS proId, p.`name` AS proName, p.`code` AS proCode, so.`quantity`, so.`unit_price`, so.`total_discount` \r\n"
+								+ "FROM `sale_products` so\r\n" + "LEFT JOIN `products` p\r\n"
+								+ "ON so.`product`=p.`id`\r\n" + "WHERE so.`sale`='" + res.getInt("id") + "';");
 				result = getSalesProductsStmt.executeQuery();
 
 				List<SalesProduct> salesProductList = new ArrayList<SalesProduct>();
@@ -101,13 +101,13 @@ public class SalesManagementService {
 				while (result.next()) {
 					SalesProduct salesProduct = new SalesProduct();
 
-					salesProduct.setId(result.getInt("proId"));
+					salesProduct.setId(result.getInt("id"));
 					salesProduct.setQty(result.getDouble("quantity"));
 					salesProduct.setUnitPrice(result.getDouble("unit_price"));
 					salesProduct.setTotDiscount(result.getDouble("total_discount"));
 
 					Product product = new Product();
-					product.setId(result.getInt("id"));
+					product.setId(result.getInt("proId"));
 					product.setName(result.getString("proName"));
 					product.setCode(result.getString("proCode"));
 					salesProduct.setProduct(product);
@@ -134,8 +134,8 @@ public class SalesManagementService {
 	}
 
 	// ADD SALES METHOD
-	public GenericResult addSales(Sales newPurchase) {
-		PreparedStatement addPurchaseStmt = null;
+	public GenericResult addSales(Sales newSales) {
+		PreparedStatement addSalesStmt = null;
 		PreparedStatement addPayStmt = null;
 		PreparedStatement addPayCashStmt = null;
 		PreparedStatement addPayCreditStmt = null;
@@ -150,8 +150,8 @@ public class SalesManagementService {
 			// Add payment credentials
 			addPayStmt = newConn.prepareStatement(
 					"INSERT INTO `payments` (`t_date`, `total`, `added_by`, `dept`)\r\n" + "VALUE('"
-							+ newPurchase.gettDate() + "', '" + newPurchase.getPay().getAmount() + "', '"
-							+ newPurchase.getAddedBy().getId() + "', '" + newPurchase.getDept().getId() + "');",
+							+ newSales.gettDate() + "', '" + newSales.getPay().getAmount() + "', '"
+							+ newSales.getAddedBy().getId() + "', '" + newSales.getDept().getId() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addPayStmt.executeUpdate();
 
@@ -161,23 +161,23 @@ public class SalesManagementService {
 				lastPayId = res.getInt(1);
 			}
 
-			if (newPurchase.getPay().getPayCash().getAmount() > 0) {
+			if (newSales.getPay().getPayCash().getAmount() > 0) {
 				// Add pay cash credentials
 				addPayCashStmt = newConn.prepareStatement("insert into `pay_cash` (`pay`, `amount`)\r\n" + "value('"
-						+ lastPayId + "', '" + newPurchase.getPay().getPayCash().getAmount() + "');");
+						+ lastPayId + "', '" + newSales.getPay().getPayCash().getAmount() + "');");
 				addPayCashStmt.executeUpdate();
 			}
 
-			if (newPurchase.getPay().getPayCredit().getAmount() > 0) {
+			if (newSales.getPay().getPayCredit().getAmount() > 0) {
 				// Add pay credit credentials
 				addPayCreditStmt = newConn.prepareStatement("INSERT INTO `pay_credit` (`pay`, `amount`)\r\n" + "VALUE('"
-						+ lastPayId + "', '" + newPurchase.getPay().getPayCredit().getAmount() + "');");
+						+ lastPayId + "', '" + newSales.getPay().getPayCredit().getAmount() + "');");
 				addPayCreditStmt.executeUpdate();
 			}
 
 			// Add pay cheque Credentials
 			List<PayCheque> chequeList = new ArrayList<PayCheque>();
-			chequeList = newPurchase.getPay().getPayCheques();
+			chequeList = newSales.getPay().getPayCheques();
 			for (PayCheque payCheque : chequeList) {
 
 				addPayChequeStmt = newConn.prepareStatement(
@@ -188,47 +188,73 @@ public class SalesManagementService {
 				addPayChequeStmt.executeUpdate();
 			}
 
-			// Add purchase credentials
-			addPurchaseStmt = newConn.prepareStatement(
-					"INSERT INTO `purchases`(`code`, `supplier`, `t_date`, `added_by`,`dept`, `pay`)\r\n" + "VALUES('"
-							+ newPurchase.getCode() + "','', '" + newPurchase.gettDate() + "', '"
-							+ newPurchase.getAddedBy().getId() + "', '" + newPurchase.getDept().getId() + "' ,'"
-							+ lastPayId + "');",
+			// Add sales credentials
+			addSalesStmt = newConn.prepareStatement(
+					"INSERT INTO `sales` (`pay`, `code`, `customer`, `t_date`, `sales_officer`, `added_by`, `dept`) VALUE('"
+							+ lastPayId + "','"+newSales.getCode()+"', '" + newSales.getCustomer().getId() + "', '" + newSales.gettDate()
+							+ "', '" + newSales.getSalesOfficer().getId() + "', '" + newSales.getAddedBy().getId()
+							+ "', '" + newSales.getDept().getId() + "');",
 					Statement.RETURN_GENERATED_KEYS);
-			addPurchaseStmt.executeUpdate();
+			addSalesStmt.executeUpdate();
 
 			// get the previous IDs
-			res = addPurchaseStmt.getGeneratedKeys();
+			res = addSalesStmt.getGeneratedKeys();
 			if (res.next()) {
 				last_inserted_id = res.getInt(1);
 			}
 
-			// Add Purchase Product Credentials
-			List<PurchaseProduct> purProductsList = new ArrayList<PurchaseProduct>();
-			// purProductsList = newPurchase.getPurProduct();
+			// Add Sales Product Credentials
+			List<SalesProduct> salesProductsList = new ArrayList<SalesProduct>();
+			salesProductsList = newSales.getSalesProduct();
 
-			for (PurchaseProduct purProduct : purProductsList) {
-				PreparedStatement addPOPStmt = null;
-				addPOPStmt = newConn.prepareStatement(
-						"insert into `purchase_products`(`purchase`, `product`, `quantity`, `unit_price`)\r\n"
-								+ "value ('" + last_inserted_id + "','" + purProduct.getProduct().getId() + "', '"
-								+ purProduct.getQty() + "', '" + purProduct.getUnitPrice() + "');");
-				addPOPStmt.executeUpdate();
+			for (SalesProduct salesProduct : salesProductsList) {
+				PreparedStatement addSPStmt = null;
+				System.out.println();
+
+				addSPStmt = newConn.prepareStatement(
+						"INSERT INTO `sale_products` (`sale`, `product`, `quantity`, `unit_price`) VALUE('"
+								+ last_inserted_id + "', '" + salesProduct.getProduct().getId() + "', '"
+								+ salesProduct.getQty() + "', '" + salesProduct.getUnitPrice() + "'); ");
+				addSPStmt.executeUpdate();
 			}
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Purchase Added Successfully.");
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Sales Added Successfully.");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
 		} finally {
 			try {
-				addPurchaseStmt.close();
+				addSalesStmt.close();
 				conn.closeCon();
 			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
 		}
+	}
+
+	// METHOD TO GET MAX SALES ID
+	public GenericResult getMaxSalesId() {
+		PreparedStatement stmt = null;
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement("SELECT * FROM `sales` ORDER BY id DESC LIMIT 0, 1;");
+			res = stmt.executeQuery();
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+
+			while (res.next()) {
+				rs.setResult(res.getInt("id"));
+			}
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", JsonFormer.form(rs));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+
 	}
 
 }

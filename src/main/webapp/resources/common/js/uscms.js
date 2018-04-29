@@ -211,3 +211,19 @@ function showInfoMsg(msg)
 	$("#infoMsg").fadeIn();
 	$("#infoAlert").fadeIn();
 }
+
+
+function getMaxId(type, id){
+	var code=""
+	var maxId=0;
+	if(isNaN(id)){
+		maxId=1;
+		maxId++;
+	}
+	else if(id<10){
+		maxId=id;
+		maxId++;
+		code=type+"0000"+maxId;
+	}
+	return code;
+}

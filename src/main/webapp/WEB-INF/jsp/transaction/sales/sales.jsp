@@ -29,6 +29,7 @@
 						<thead>
 							<tr>
 								<th style='text-align: center'>#</th>
+								<th>Sales Code</th>
 								<th>Customer</th>
 								<th>Sold</th>
 								<th></th>
@@ -38,6 +39,7 @@
 							<c:forEach items="${sales.result}" var="sale">
 								<tr onclick="viewSalesProduct(${sale.id})" id="${sale.id}">
 									<td></td>
+									<td>${sale.code}</td>
 									<td>${sale.customer.user.name}</td>
 									<td>${sale.tDate}</td>
 									<td style='text-align: center; position: relative;'><i
@@ -126,7 +128,7 @@
 		$("#"+id).addClass("selected-row");
 
 		var grandTotal=0;
-		$("#po-product").empty();
+		$("#s-product").empty();
 		$.each(sales.result, function(i, sale) {
 			if (sale.id == id) {
 				console.log(sale);
