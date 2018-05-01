@@ -112,8 +112,9 @@
 
 								<!-- Code -->
 								<div class="input-group">
-									<label class="input-group-addon">Pur Code</label> <input 
-										type="text" class="form-control" id="pur-code" value="" disabled/>
+									<label class="input-group-addon">Pur Code</label> <input
+										type="text" class="form-control" id="pur-code" value=""
+										disabled />
 								</div>
 
 								<!-- Departments -->
@@ -156,7 +157,7 @@
 								<div class="input-group">
 									<label class="input-group-addon large-input">Total</label> <input
 										type="number" class="form-control number large-input"
-										value="0.00" id="grand-total" disabled/> <label
+										value="0.00" id="grand-total" disabled /> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -173,9 +174,9 @@
 								<!-- Credit Amount -->
 								<div class="input-group">
 									<label class="input-group-addon large-input">Credit</label> <input
-										style="background-color: #fd5064" type="text" 
+										style="background-color: #fd5064" type="text"
 										class="form-control number large-input" value="0.00"
-										id="credit-amount" disabled/> <label
+										id="credit-amount" disabled /> <label
 										class="input-group-addon large-input">Rs.</label>
 								</div>
 
@@ -191,8 +192,8 @@
 								<!-- Total Cheque Amount -->
 								<div class="input-group">
 									<label class="input-group-addon">Cheque Amount</label> <input
-										type="number" class="form-control number"
-										value="0.00" id="tot-che-amount" disabled/> <label
+										type="number" class="form-control number" value="0.00"
+										id="tot-che-amount" disabled /> <label
 										class="input-group-addon ">Rs.</label>
 								</div>
 

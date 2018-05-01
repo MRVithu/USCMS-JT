@@ -113,14 +113,14 @@
 			value="/WEB-INF/jsp/transaction/purchase/purchase.jsp" />
 		<put-attribute name="current" value="purchase" />
 	</definition>
-	
+
 	<definition name="purchaseAdd" extends="common">
 		<put-attribute name="title" value="USCMS Purchase Add" />
 		<put-attribute name="containerbody"
 			value="/WEB-INF/jsp/transaction/purchase/purchaseAdd.jsp" />
 		<put-attribute name="current" value="purchaseAdd" />
 	</definition>
-	
+
 	<definition name="sales" extends="common">
 		<put-attribute name="title" value="USCMS Sales" />
 		<put-attribute name="containerbody"

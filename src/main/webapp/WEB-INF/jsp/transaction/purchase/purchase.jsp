@@ -43,8 +43,7 @@
 									<td>${purchase.supplier.user.name}</td>
 									<td>${purchase.tDate}</td>
 									<td style='text-align: center; position: relative;'><i
-										class='arrow glyphicon glyphicon-arrow-right'></i>
-									</td>
+										class='arrow glyphicon glyphicon-arrow-right'></i></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -69,7 +68,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="4"  style='text-align:center'>Grand Total</th>
+								<th colspan="4" style='text-align: center'>Grand Total</th>
 								<th class='number' id="grand-total"></th>
 							</tr>
 						</tfoot>

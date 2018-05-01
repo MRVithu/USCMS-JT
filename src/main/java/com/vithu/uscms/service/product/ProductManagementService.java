@@ -17,7 +17,6 @@ import com.vithu.uscms.entities.Brand;
 import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.ItemType;
 import com.vithu.uscms.entities.Product;
-import com.vithu.uscms.entities.ProductType;
 import com.vithu.uscms.entities.User;
 import com.vithu.uscms.others.DBConnection;
 import com.vithu.uscms.others.GenericResult;

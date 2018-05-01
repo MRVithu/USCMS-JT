@@ -1,7 +1,5 @@
 package com.vithu.uscms.entities;
 
-import java.util.List;
-
 /**
  * @author M.Vithusanth
  * @CreatedOn 28th April 2018

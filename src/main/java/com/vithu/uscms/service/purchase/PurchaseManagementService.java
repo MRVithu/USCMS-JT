@@ -13,8 +13,6 @@ import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.PayCheque;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
-import com.vithu.uscms.entities.PurchaseOrder;
-import com.vithu.uscms.entities.PurchaseOrderProduct;
 import com.vithu.uscms.entities.PurchaseProduct;
 import com.vithu.uscms.entities.Supplier;
 import com.vithu.uscms.entities.User;
