@@ -64,7 +64,7 @@
 
 		<!-- Modal content-->
 		<div class="modal-content">
-			<form role="form" method="post" onsubmit="return update(this);">
+			<form id="productFrom" onsubmit="return update(this);">
 				<div class="modal-header">
 					<button type="button" class="close" onclick="clear()">×</button>
 					<h4 class="modal-title">View Product</h4>
@@ -77,15 +77,15 @@
 						<input type="hidden" id="pro-id" />
 						<div class="input-group">
 							<label class="input-group-addon">Code</label> <input type="text"
-								id="code" class="form-control " />
+								id="code" name="code" class="form-control " />
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Name</label> <input type="text"
-								id="name" class="form-control " />
+								id="name" name="name" class="form-control " />
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon ">Brand</label> <select
-								id="brand" class="form-control type" name="brand">
+								id="brand" name="brand" class="form-control type" name="brand">
 								<!-- Dropdown List Option -->
 								<c:forEach items="${brands.result}" var="brand">
 									<option value="${brand.id}">${brand.name}</option>
@@ -94,7 +94,8 @@
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon ">Item Type</label> <select
-								id="item-type" class="form-control type" name="item">
+								id="item-type" name="itemType" class="form-control type"
+								name="item">
 								<!-- Dropdown List Option -->
 								<c:forEach items="${itemTypes.result}" var="itemType">
 									<option value="${itemType.id}">${itemType.name}</option>
@@ -103,41 +104,49 @@
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Size</label> <input type="text"
-								id="size" class="form-control " /><label
+								id="size" name="size" class="form-control " /><label
 								class="input-group-addon small-addon">Units</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Purchase Price</label> <input
-								type="number" value="0" id="pur-price"
+								type="number" name="purPrice" value="0" id="pur-price"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Sales Price</label> <input
-								type="number" value="0" id="sales-price"
+								type="number" name="salesPrice" value="0" id="sales-price"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Min Price</label> <input
-								type="number" value="0" id="min-price"
+								type="number" value="0" name="minPrice" id="min-price"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Discount</label> <input
-								type="number" value="0" id="discount"
+								type="number" value="0" id="discount" name="discount"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon"><b>%</b></label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Description</label> <input
-								type="text" id="description" class="form-control " />
+								type="text" id="description" name="description"
+								class="form-control " />
 						</div>
 						<div class="input-group" id="added-by-div">
 							<label class="input-group-addon">Added By</label> <input
 								type="text" id="added-by" class="form-control " />
 						</div>
+						<div class="input-group">
+							<label class="input-group-addon">Pro-Image :</label> <input
+								name="image" id="image" type="file" class="form-control" />
+						</div>
+						<img id="previewing" class="previewing"
+							src='<c:url value="/resources/dist/img/noimage.png" />' /> <span
+							style="color: red;"></span>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -167,6 +176,8 @@
 
 	//Data table
 	$(function() {
+		console.log(<%= session.getAttribute("currUser") %>);
+		
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
 				"bSortable" : false,
@@ -277,11 +288,20 @@
 				
 				console.log(product);
 				console.log(method);
+				
+				// {data:JSON.stringify(product)}
+				
+				var frmData = new FormData(form);
+				frmData.append("kkkkkkkk", "lllllllllll");
+				console.log(frmData);
 				$.ajax({
 					
 					type: 'POST',
 					url: 'http://localhost:8080/'+method+'?token=<%=session.getAttribute("Token")%>',
-					data: {data:JSON.stringify(product)},
+					data: frmData,
+			  	 	contentType: false,
+			  	 	cache: false, 						// To unable request pages to be cached
+					processData: false,
 					success: function(res) {
 						console.log(res);
 						console.log(res.status);
@@ -350,4 +370,35 @@
 		$("#discount").val("");
 		$("#description").val("");
   	}
+	
+	// IMAGE HANDLING & PREVIEW
+    // Function to preview image after validation
+    $(function() {
+        $("#image").change(function() {
+            $("#image").empty(); 					// To remove the previous error message
+            var file = this.files[0];
+            var imagefile = file.type;
+            var match = ["image/jpeg", "image/png", "image/jpg"];
+            if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
+            	 $("#image").css("background-color", "red");
+                 $("#image").css("color", "white");
+                 $("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
+ 				 $("#res-msg strong").html("Please upload valid image file");
+                 $('.previewing').attr('src', '/resources/dist/img/notvalidimage.png');
+                return false;
+            } else {
+                var reader = new FileReader();
+                reader.onload = imageIsLoadedfront;
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+	
+    function imageIsLoadedfront(e) {
+    	$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
+		$("#res-msg strong").html("Fill all fields and hit Save");
+        $("#image").css("background-color", "green");
+        $("#image").css("color", "white");
+        $('.previewing').attr('src', e.target.result);
+    };
 </script>

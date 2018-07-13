@@ -18,6 +18,7 @@ public class Product {
 	private Double discount;
 	private String size;
 	private Employee addedBy;
+	private String imgUrl;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -26,6 +27,14 @@ public class Product {
 	// *************************************************************
 	// ** GETTERS AND SETTERS
 	// *************************************************************
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 
 	public Integer getId() {
 		return id;

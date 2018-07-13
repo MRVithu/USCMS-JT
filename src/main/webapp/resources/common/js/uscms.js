@@ -20,7 +20,7 @@ $(document).ready(function() {
 			$("#hidePurposeFooterBtn").css("display", "block");
 			$("#modal-title").html(" ");
 			$("#conMsg").modal('hide');
-			window.location.href = "/directlogin";
+			//window.location.href = "/directlogin";
 		}, 1500);
 	}
 });

@@ -1,21 +1,17 @@
-<!-- 
-  * @author M.Vithusanth
-  * @CreatedOn 20th April 2018
-  * @Purpose login Page  
- -->
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@page import="com.vithu.uscms.session.CurrentUser"%>
 <%@ include file="../../layouts/taglib.jsp"%>
 
+
+
 <div id="res-message"></div>
-</br>
-<form form role="form" method="post" onsubmit="return logIn(this);">
+<hr>
+<form  role="form" method="post" onsubmit="return logIn(this);">
 	<div class="form-group has-feedback">
 		<input type="text" name="username" id="user-name" class="form-control"
 			placeholder="username" /> <span
-			class="glyphicon glyphicon-user form-control-feedback"></span>
+			class="glyphicon glyphicon-envelope form-control-feedback"></span>
 	</div>
 	<div class="form-group has-feedback">
 		<input type="password" name="password" id="password"
@@ -25,7 +21,7 @@
 	<div class="row">
 		<!-- /.col -->
 		<div class="col-xs-4">
-			<input style="width:307px" class="btn btn-primary  app-button tbtn" name="submit"
+			<input class="btn btn-primary btn-block btn-flat" name="submit"
 				type="submit" value="Sign In" />
 		</div>
 		<!-- /.col -->
@@ -33,7 +29,6 @@
 </form>
 
 <script>
-
 	function logIn(form) {
 		try {
 			if ($("#user-name").val().trim() == "") {
@@ -55,7 +50,6 @@
 						res = JSON.parse(res)
 						console.log(res);
 						console.log(res.status);
-
 						if (res.status == false) {
 							$("#res-message").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
 							$("#res-message").html(res.description);
@@ -63,7 +57,6 @@
 							$("#res-message").addClass("alert-success").removeClass("alert-info").removeClass("alert-danger");
 							$("#res-message").html(res.description);
 						}
-
 						setTimeout(function() {
 							$("#res-message").removeClass("alert-success").addClass("alert-info").removeClass("alert-danger");
 							$("#res-message").html("Fill all fields and hit Save");

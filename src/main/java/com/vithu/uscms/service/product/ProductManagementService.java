@@ -83,7 +83,7 @@ public class ProductManagementService {
 			rs.setStatus(true);
 			rs.setResult(productList);
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "retriveed successfully", productList,
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", productList,
 					JsonFormer.form(rs), " ");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -136,7 +136,7 @@ public class ProductManagementService {
 					Statement.RETURN_GENERATED_KEYS);
 			addStmt.executeUpdate();
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Vehicle Added Successfully");
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Product Added Successfully");
 
 		} catch (Exception e) {
 			e.printStackTrace();

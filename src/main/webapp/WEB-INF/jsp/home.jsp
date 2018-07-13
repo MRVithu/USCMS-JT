@@ -1,8 +1,3 @@
-<!-- /** -->
-<!--  * @author M.Vithusanth -->
-<!--  * @CreatedOn 21th April 2018 -->
-<!--  * @Purpose for Dashboard -->
-<!--  */ -->
 
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -28,3 +23,12 @@
 		</div>
 	</section>
 </div>
+
+
+<script>
+	var logger="";
+	logger="<%=session.getAttribute("logger")%>";
+	console.log(logger);
+</script>
+
+

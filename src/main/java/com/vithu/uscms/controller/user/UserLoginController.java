@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vithu.uscms.entities.User;
+import com.vithu.uscms.others.DataEncryption;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.JsonFormer;
 import com.vithu.uscms.others.MessageConstant;
@@ -21,25 +22,25 @@ import com.vithu.uscms.others.ValueValidator;
 import com.vithu.uscms.service.user.UserLoginService;
 import com.vithu.uscms.session.CurrentUser;
 import com.vithu.uscms.session.TokenManager;
-
-
 /**
  * @author M.Vithusanth
- * @CreatedOn 20th April 2018
- * @Purpose  Controller for users to login
+ * @CreatedOn 202th April 2018
+ * @Purpose Controller for users to login
  */
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @Controller
 public class UserLoginController {
 
 	String responseResult = "";
 
 	private UserLoginService ulService = new UserLoginService();
-
+	private DataEncryption deService = new DataEncryption();
 	// FOR JSP LOGIN REDIRECT
 	@RequestMapping("/directlogin")
 	public String login() {
+		
+		System.out.println("psw : "+ deService.encrptyMe("111"));
 		return "login";
 	}
 
@@ -52,9 +53,8 @@ public class UserLoginController {
 
 		try {
 			JSONObject user = new JSONObject(request.getParameter("data"));
-//			System.out.println("obj" + user);
-//			System.out.println("name" + user.getString("userName"));
-			
+			System.out.println("obj" + user);
+			System.out.println("name" + user.getString("userName"));
 			// Validate userName
 			if (ValueValidator.validateText(user.getString("userName"), "Name").isStatus() == false) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Name");
@@ -87,6 +87,7 @@ public class UserLoginController {
 	@RequestMapping(value = "/doLogout")
 	public String logout(HttpServletRequest request, Model model, @RequestParam("token") String token,
 			HttpSession sesssion) {
+		System.out.println("fuck");
 		String mediaType = URLFormatter.getMediaType(request);
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "");
 

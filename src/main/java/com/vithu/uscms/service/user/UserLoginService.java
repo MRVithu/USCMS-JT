@@ -21,7 +21,7 @@ import com.vithu.uscms.session.TokenManager;
 
 /**
  * @author M.Vithusanth
- * @CreatedOn 20th April 2018
+ * @CreatedOn 202th April 2018
  * @Purpose Service for users to login
  */
 
@@ -124,7 +124,7 @@ public class UserLoginService {
 				currUser.setToken(token);
 				// ASSIGN CURRENT USER'S ENCRYPTED VALUE TO TOKEN
 				currUser.setToken(Encrypter.encrypt(JsonFormer.form(currUser)));
-				 System.out.println(currUser.getToken());
+				// System.out.println(currUser.getToken());
 				// System.out.println("decrypted----:"+Encrypter.decrypt( currUser.getToken()));
 				// System.out.println("currentuser----:"+JsonFormer.deForm(Encrypter.decrypt(currUser.getToken())));
 				return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Succesfully logged in.", currUser);

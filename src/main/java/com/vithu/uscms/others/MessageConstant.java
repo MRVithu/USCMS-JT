@@ -12,4 +12,5 @@ public class MessageConstant {
 	public static final String MSG_NO_AUTH= "YOU HAVE NO AUTHORITY";
 	public static final String MSG_INVALID_TOKEN = "INVALID TOKEN";
 	public static final String MSG_NOT_NUMBER = "NOT NUMBER";
+	public static final String UPLOAD_PATH = "NOT NUMBER";
 }

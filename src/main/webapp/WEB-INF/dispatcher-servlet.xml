@@ -6,6 +6,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+<!-- 	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> -->
+<!-- 		<property name="maxUploadSize" value="100000000"/> -->
+<!-- 	</bean> -->
+
 	<context:component-scan base-package="com.vithu.uscms.controller" />
 
 	<bean id="tilesConfigurer"
@@ -27,4 +31,6 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:annotation-driven />
 
+	
+	
 </beans>

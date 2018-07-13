@@ -39,7 +39,7 @@
 
 </head>
 
-<body id="sidebar-style" class="hold-transition skin-purple sidebar-mini">
+<body id="sidebar-style" class="hold-transition skin-blue sidebar-mini">
 	 
 	<!-- REQUIRED JS SCRIPTS -->
 	<!-- jQuery 2.2.3 -->

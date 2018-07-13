@@ -1,5 +1,8 @@
 package com.vithu.uscms.controller.product;
 
+import java.io.File;
+import java.nio.file.Files;
+
 /**
  * @author M.Vithusanth
  * @CreatedOn 21th April 2018
@@ -7,11 +10,12 @@ package com.vithu.uscms.controller.product;
  */
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.Part;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +43,11 @@ public class ProductManagementController {
 
 	private String response;
 
-	// VIEW CUSTOMER
+	// UPLOADED PATH
+	public File uploadFolder = new File(MessageConstant.UPLOAD_PATH + "products/");
+
+	// VIEW PRODUCT
+	@CrossOrigin(origins = "http://127.0.0.1")
 	@RequestMapping("/product")
 	public String viewProduct(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 		CurrentUser currentUser = TokenManager.validateToken(token);
@@ -48,16 +56,16 @@ public class ProductManagementController {
 		GenericResult mandatoryResult = new GenericResult(false, MessageConstant.MSG_FAILED, " ", " ");
 
 		try {
-			if (currentUser == null) {
-				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
-			} else if (currentUser != null) {
-				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+//			if (currentUser == null) {
+//				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+//			} else if (currentUser != null) {
+//				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
 					returnResult = proService.getAllProducts();
-				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
-				}
-			}
+//				} else {
+//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+//				}
+//			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
@@ -114,46 +122,87 @@ public class ProductManagementController {
 	}
 
 	// ADD NEW PRODUCT
+	@CrossOrigin
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	@ResponseBody
-	public String addVehicle(@RequestParam("token") String token, HttpServletRequest request) {
+	public String addProduct(@RequestParam("token") String token, HttpServletRequest request) {
 
 		Product addProduct = new Product();
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
-		System.out.println("ADD NEW PRODUCT");
+
 		try {
-			JSONObject product = new JSONObject(request.getParameter("data"));
-			
+
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
 					// Validate Product Code
-					GenericResult validateResult = ValueValidator.validateText(product.getString("code"), "Code");
-					if (validateResult.isStatus()) {
-						addProduct.setCode(product.getString("code"));
-						addProduct.setName(product.getString("name"));
-						addProduct.setDescription(product.getString("description"));
-						addProduct.setDiscount(product.getDouble("discount"));
-						addProduct.setLastPurchasePrice(product.getDouble("purPrice"));
-						addProduct.setMinPrice(product.getDouble("minPrice"));
-						addProduct.setSelleingPrice(product.getDouble("salesPrice"));
-						addProduct.setSize(product.getString("size"));
+					GenericResult validateCode = ValueValidator.validateText(request.getParameter("code"), "Code");
+					if (validateCode.isStatus()) {
+
+						addProduct.setCode(request.getParameter("code"));
+						addProduct.setName(request.getParameter("name"));
+						addProduct.setDescription(request.getParameter("description"));
+
+						GenericResult validateDiscount = ValueValidator
+								.validateTextForNumbers(request.getParameter("discount"), "discount");
+						if (validateDiscount.isStatus()) {
+							addProduct.setDiscount(Double.parseDouble(request.getParameter("discount")));
+						} else {
+							addProduct.setDiscount(0.00);
+						}
+
+						GenericResult validateSalesPrice = ValueValidator
+								.validateTextForNumbers(request.getParameter("salesPrice"), "salesPrice");
+						if (validateSalesPrice.isStatus()) {
+							addProduct.setSelleingPrice(Double.parseDouble(request.getParameter("salesPrice")));
+						} else {
+							addProduct.setSelleingPrice(0.00);
+						}
+
+						GenericResult validateMinPrice = ValueValidator
+								.validateTextForNumbers(request.getParameter("minPrice"), "minPrice");
+						if (validateMinPrice.isStatus()) {
+							addProduct.setMinPrice(Double.parseDouble(request.getParameter("minPrice")));
+						} else {
+							addProduct.setMinPrice(0.00);
+						}
+
+						GenericResult validatePurPrice = ValueValidator
+								.validateTextForNumbers(request.getParameter("purPrice"), "purPrice");
+						if (validatePurPrice.isStatus()) {
+							addProduct.setLastPurchasePrice(Double.parseDouble(request.getParameter("purPrice")));
+						} else {
+							addProduct.setLastPurchasePrice(0.00);
+						}
+
+						addProduct.setSize(request.getParameter("size"));
 						addProduct.setAddedBy(currentUser.getEmployee());
-						
-						Brand brand =new Brand();
-						brand.setId(product.getInt("brand"));
+
+						Brand brand = new Brand();
+						brand.setId(Integer.parseInt(request.getParameter("brand")));
 						addProduct.setBrand(brand);
-						
+
 						ItemType itemType = new ItemType();
-						itemType.setId(product.getInt("itemType"));
+						itemType.setId(Integer.parseInt(request.getParameter("itemType")));
 						addProduct.setItemType(itemType);
-						
+
+						// Save file on system
+						/*
+						 * Part filePart = request.getPart("image"); if (filePart != null) {
+						 * System.out.println(filePart.getContentType() + "---------ccccccccccccccc");
+						 * System.out.println(filePart.getName() + "-----------------------------"); if
+						 * (filePart.getName().isEmpty() == false) { String fileName =
+						 * filePart.getName(); File file = new File(uploadFolder, fileName);
+						 * Files.copy(filePart.getInputStream(), file.toPath());
+						 * System.out.println(fileName); addProduct.setImgUrl(fileName); } }
+						 */
 						returnResult = proService.addProduct(addProduct);
+
 					} else {
-						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
+						returnResult = new GenericResult(false, "Code " + MessageConstant.MSG_EMPTY, "Code");
 					}
 
 				} else {
@@ -161,7 +210,9 @@ public class ProductManagementController {
 				}
 				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
@@ -182,10 +233,10 @@ public class ProductManagementController {
 		Product updateProduct = new Product();
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");
 		CurrentUser currentUser = TokenManager.validateToken(token);
-		
+
 		try {
 			JSONObject product = new JSONObject(request.getParameter("data"));
-			
+
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
@@ -203,15 +254,15 @@ public class ProductManagementController {
 						updateProduct.setMinPrice(product.getDouble("minPrice"));
 						updateProduct.setSelleingPrice(product.getDouble("salesPrice"));
 						updateProduct.setSize(product.getString("size"));
-						
-						Brand brand =new Brand();
+
+						Brand brand = new Brand();
 						brand.setId(product.getInt("brand"));
 						updateProduct.setBrand(brand);
-						
+
 						ItemType itemType = new ItemType();
 						itemType.setId(product.getInt("itemType"));
 						updateProduct.setItemType(itemType);
-					
+
 						returnResult = proService.updateProduct(updateProduct);
 					} else {
 						returnResult = new GenericResult(false, MessageConstant.MSG_EMPTY, "Code");
