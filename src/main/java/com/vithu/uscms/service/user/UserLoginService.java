@@ -50,7 +50,7 @@ public class UserLoginService {
 			newConn = conn.getCon();
 			// Check logger
 			searchStmt = newConn.prepareStatement(
-					"SELECT COUNT(*) AS total , u.password, u.id AS uid, e.id AS eid, u.name AS NAME, u.mobile, u.email, u.user_name, e.nic, e.contact, r.name AS region, e.address, e.dob, o.name AS role, e.region_id AS rid\r\n"
+					"SELECT COUNT(*) AS total , u.password, u.id AS uid, e.id AS eid, u.name AS NAME,u.added_on , u.mobile, u.email, u.user_name, e.nic, e.contact, r.name AS region, e.address, e.dob, o.name AS role, e.region_id AS rid\r\n"
 							+ "FROM users u\r\n" + "LEFT JOIN employees e ON u.id = e.user_id\r\n"
 							+ "LEFT JOIN customers c ON  u.id = c.user_id\r\n"
 							+ "LEFT JOIN regions r ON e.region_id = r.id\r\n"
@@ -64,6 +64,8 @@ public class UserLoginService {
 			while (rs.next()) {
 
 				if (rs.getString("password") != null) {
+					System.out.println(logger.getPassword() + "-------------------------");
+					System.out.println( rs.getString("password"));
 					boolean matchedPassword = deService.checkDataMatch(logger.getPassword(), rs.getString("password"));
 
 					if (matchedPassword) {
@@ -74,12 +76,19 @@ public class UserLoginService {
 						user.setMobile(rs.getString("mobile"));
 						user.setName(rs.getString("name"));
 						user.setUserName(rs.getString("user_name"));
+						user.setAddedOn(rs.getString("added_on"));
 
 						Employee employee = new Employee();
 						employee.setId(rs.getInt("eid"));
 						employee.setAddress(rs.getString("address"));
 						employee.setContact(rs.getString("contact"));
-						employee.setDob(rs.getDate("dob").toString());
+						System.out.println(rs.getString("user_name"));
+						if( rs.getDate("dob") != null) {
+							employee.setDob(rs.getDate("dob").toString());
+						}
+						else {
+							employee.setDob("");
+						}					
 						employee.setNic(rs.getString("nic"));
 						employee.setRegionId(rs.getInt("rid"));
 						employee.setRegion(rs.getString("region"));

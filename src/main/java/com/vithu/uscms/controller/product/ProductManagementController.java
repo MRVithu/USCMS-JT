@@ -285,5 +285,23 @@ public class ProductManagementController {
 		}
 		return response;
 	}
+	
+	// VIEW PRODUCT FOR CLIENTS
+		@CrossOrigin(origins = "http://127.0.0.1")
+		@ResponseBody
+		@RequestMapping("/productFC")
+		public String viewProductForClients(@RequestParam("token") String token, HttpServletRequest request) {
+			GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "", "");
+			
+			try {
+				returnResult = proService.getAllProducts();
+				response = JsonFormer.form(returnResult);
+
+			} catch (Exception e) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+			}
+			
+			return response;
+		}
 
 }

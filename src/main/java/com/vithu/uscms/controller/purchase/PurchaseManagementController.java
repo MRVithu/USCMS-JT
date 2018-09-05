@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +44,7 @@ import com.vithu.uscms.session.AuthorityConstant;
 import com.vithu.uscms.session.CurrentUser;
 import com.vithu.uscms.session.TokenManager;
 
+@CrossOrigin
 @Controller
 public class PurchaseManagementController {
 	private PurchaseManagementService purchaseService = new PurchaseManagementService();

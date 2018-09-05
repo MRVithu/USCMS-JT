@@ -20,7 +20,7 @@ $(document).ready(function() {
 			$("#hidePurposeFooterBtn").css("display", "block");
 			$("#modal-title").html(" ");
 			$("#conMsg").modal('hide');
-			//window.location.href = "/directlogin";
+			window.location.href = "/directlogin";
 		}, 1500);
 	}
 });
@@ -190,7 +190,7 @@ function getMaxId(type, id) {
 	if (isNaN(id)) {
 		maxId = 1;
 		maxId++;
-	} else if (id < 10) {
+	} else {
 		maxId = id;
 		maxId++;
 		code = type + "0000" + maxId;

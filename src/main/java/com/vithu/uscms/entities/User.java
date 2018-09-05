@@ -13,10 +13,12 @@ public class User {
 	private String email;
 	private String userName;
 	private String password;
+	private String addedOn;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
 	// *************************************************************
+
 
 	// *************************************************************
 	// ** GETTERS AND SETTERS
@@ -68,4 +70,12 @@ public class User {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	public String getAddedOn() {
+		return addedOn;
+	}
+
+	public void setAddedOn(String addedOn) {
+		this.addedOn = addedOn;
+	}
+
 }

@@ -368,9 +368,10 @@
 <script>
 	var products = "";
 	products = ${products.resultString};
-
+	
 	var salesMaxId="";
 	salesMaxId = ${salesMaxId.result};
+	
 	
 	$("#srch-bar-cont, #action-cont").css("visibility", "hidden");
 
@@ -382,6 +383,8 @@
 	var chequeId = 0;
 
 	$(document).ready(function () {
+		printDate();
+		
 		$("#sidebar-style").addClass('sidebar-collapse');
 
 		var code=getMaxId("SALE", salesMaxId.result);
@@ -403,6 +406,8 @@
 		$("#product-grid-table tbody tr td").on("click", function(){
 			showProductModal($(this).parent().attr("data-id"), false);
 		});
+		
+		
 	});
 
 	//this method will be called from commons.js - searchProduct function
@@ -640,6 +645,9 @@
 						type: 'POST',
 						url: 'http://localhost:8080/addSales.json?token=<%=session.getAttribute("Token")%>',
 						data: {data:JSON.stringify(transObj)},
+						 headers : {
+						     'Access-Control-Allow-Origin' : '*'
+						    },
 						success: function(res) {
 							console.log(res);
 							console.log(res.status);
@@ -687,4 +695,22 @@
 	}
 
 	$("#view-table tbody tr:first-child").trigger("click");
+	
+	function printDate(){
+		var d = new Date();
+        var todayDate = "";
+        if((d.getMonth()+1) < 10){
+             todayDate = d.getFullYear() + "-0" + (d.getMonth()+1) + "-" + d.getDate();
+        }
+        else{
+             todayDate = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+        }
+
+     
+
+        alert(d);
+        alert(todayDate);
+        $('#sales-date').val(d);
+        //$('#check-out').val(tomorrowDate);
+	}
 </script>

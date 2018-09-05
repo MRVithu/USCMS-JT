@@ -27,7 +27,7 @@
 
 <script>
 	var logger="";
-	logger="<%=session.getAttribute("logger")%>";
+	logger="<%=session.getAttribute("USER-NAME")%>";
 	console.log(logger);
 </script>
 

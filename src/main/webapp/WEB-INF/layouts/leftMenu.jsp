@@ -18,8 +18,9 @@
 				<img src="<c:url value="/resources/dist/img/vithu.jpg" />"
 					class="img-circle" alt="User Image">
 			</div>
+			
 			<div class="pull-left info">
-				<p>Alexander Pierce</p>
+				<p><%=session.getAttribute("USER-NAME")%></p>
 				<!-- Status -->
 				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 			</div>
@@ -40,7 +41,7 @@
 		<!-- /.search form -->
  --%>
  
- </br></hr>
+<hr>
 		<!-- Sidebar Menu -->
 		<ul class="sidebar-menu">
 			<li

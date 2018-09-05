@@ -212,10 +212,11 @@ public class SalesManagementService {
 								+ salesProduct.getQty() + "', '" + salesProduct.getUnitPrice() + "'); ");
 				addSPStmt.executeUpdate();
 			}
-
+System.out.println("success");
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Sales Added Successfully.");
 
 		} catch (Exception e) {
+			System.out.println("failed");
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
 		} finally {

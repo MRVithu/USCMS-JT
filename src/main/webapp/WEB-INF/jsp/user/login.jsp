@@ -42,7 +42,7 @@
 				console.log(user);
 				$.ajax({
 					type : 'POST',
-					url : 'http://localhost:8080/doLogin',
+					url : 'http://127.0.0.1:8080/doLogin',
 					data : {
 						data : JSON.stringify(user)
 					},

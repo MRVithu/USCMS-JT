@@ -49,7 +49,7 @@
 					data-toggle="dropdown"> <!-- The user image in the navbar--> <img
 						src="<c:url value="/resources/dist/img/vithu.jpg" />"
 						class="user-image" alt="User Image"> <!-- hidden-xs hides the username on small devices so only the image appears. -->
-						<span class="hidden-xs">Alexander Pierce</span>
+						<span class="hidden-xs"><%=session.getAttribute("USER-NAME")%></span>
 				</a>
 					<ul class="dropdown-menu">
 						<!-- The user image in the menu -->
@@ -58,8 +58,8 @@
 							class="img-circle" alt="User Image">
 
 							<p>
-								Alexander Pierce - Web Developer <small>Member since
-									Nov. 2012</small>
+								<%=session.getAttribute("NAME")%> 
+								<small>Member since	<%=session.getAttribute("Register-Date")%> </small>
 							</p></li>
 						<!-- Menu Body -->
 						<li class="user-body">
@@ -89,8 +89,7 @@
 				</li>
 
 				<!-- Control Sidebar Toggle Button -->
-				<li><a href="#" data-toggle="control-sidebar"><i
-						class="fa fa-gears"></i></a></li>
+			
 			</ul>
 		</div>
 	</nav>
