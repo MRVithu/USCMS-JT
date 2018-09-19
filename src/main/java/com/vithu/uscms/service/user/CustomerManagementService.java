@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -177,6 +178,35 @@ public class CustomerManagementService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+	}
+	
+	public int getTodayRegisteredCustomers() {
+
+		PreparedStatement gettodayCustomerStmt = null;
+		Integer todayCustomers = 0;
+
+		try {
+			newConn = conn.getCon();
+			gettodayCustomerStmt = newConn.prepareStatement(
+					"SELECT COUNT(u.id) AS todayCustomer\r\n" + 
+					"FROM `customers` c\r\n" + 
+					"LEFT JOIN `users` u\r\n" + 
+					"ON u.`id`=c.`user_id`\r\n" + 
+					"WHERE u.`added_on`=CURDATE();");
+			res = gettodayCustomerStmt.executeQuery();
+
+			while (res.next()) {
+				todayCustomers = res.getInt("todayCustomer");
+			}
+			
+
+			return todayCustomers;
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
 		}
 	}
 }

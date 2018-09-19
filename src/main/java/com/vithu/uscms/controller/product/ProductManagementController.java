@@ -93,7 +93,7 @@ public class ProductManagementController {
 	// DISABLE Product
 	@RequestMapping(value = "/deleteProduct/{id}")
 	@ResponseBody
-	public String deleteVehicle(@RequestParam("token") String token, HttpServletRequest request, Model model,
+	public String deleteProduct(@RequestParam("token") String token, HttpServletRequest request, Model model,
 			@PathVariable String id) {
 
 		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "");

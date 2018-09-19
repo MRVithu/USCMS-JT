@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>vithu.uscms.jt</groupId>
-  <artifactId>USCMS-JT</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>vithu.uscms.jt</groupId>
+	<artifactId>USCMS-JT</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
 		<org.springframework.version>5.0.2.RELEASE</org.springframework.version>
 		<apache.tiles>3.0.7</apache.tiles>
 		<spring.security.version>5.0.1.RELEASE</spring.security.version>
@@ -244,6 +245,7 @@
 			<version>1.9.13</version>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>
@@ -257,11 +259,13 @@
 					<target>9</target>
 				</configuration>
 			</plugin>
+			<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.4.8.v20171121</version>
+				<version>9.4.10.v20180503</version>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

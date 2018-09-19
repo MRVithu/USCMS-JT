@@ -219,5 +219,34 @@ public class PurchaseOrderManagementService {
 		}
 
 	}
+	
+	public int getTodayPurchaseOrders() {
+
+		PreparedStatement getTodayPurchaseOrdersStmt = null;
+		Integer todayPurchaseOrders = 0;
+
+		try {
+			newConn = conn.getCon();
+			getTodayPurchaseOrdersStmt = newConn.prepareStatement(
+					"select count(id) As todayPurchaseOrders\r\n" + 
+					"from `purchase_order`\r\n" + 
+					"WHERE `t_date`=CURDATE();");
+			res = getTodayPurchaseOrdersStmt.executeQuery();
+
+			
+
+			while (res.next()) {
+				todayPurchaseOrders = res.getInt("todayPurchaseOrders");
+			}
+			
+
+			return todayPurchaseOrders;
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
 }

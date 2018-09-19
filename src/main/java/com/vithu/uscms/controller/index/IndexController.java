@@ -22,14 +22,5 @@ public class IndexController {
 	    return "hello";
 	}
 	
-	@RequestMapping("/home")
-	public String home() {
-	    return "home";
-	}
-	
-	@RequestMapping("vehicles/vehicle")
-	public String vehicle() {
-	    return "vehicle";
-	}
 	
 }

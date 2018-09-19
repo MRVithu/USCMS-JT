@@ -124,7 +124,7 @@ public class ProductManagementService {
 		try {
 			newConn = conn.getCon();
 
-			// Add Vehicle Credentials
+			// Add Product Credentials
 			addStmt = newConn.prepareStatement(
 					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`,`added_by`) \r\n"
 							+ "VALUES ('" + newProduct.getName() + "','" + newProduct.getBrand().getId() + "','"

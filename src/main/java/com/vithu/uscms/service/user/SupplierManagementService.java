@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -178,6 +179,43 @@ public class SupplierManagementService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+	}
+	
+	public int getTodayRegisteredSuppliers() {
+
+		PreparedStatement gettodaySupllierStmt = null;
+
+		try {
+			newConn = conn.getCon();
+			gettodaySupllierStmt = newConn.prepareStatement(
+					"select count(u.id) as todaySupplier\r\n" + 
+					"from `suppliers` s\r\n" + 
+					"left join `users` u\r\n" + 
+					"on u.`id`=s.`user_id`\r\n" + 
+					"where u.`added_on`=CURDATE();");
+			res = gettodaySupllierStmt.executeQuery();
+
+			 HashMap<String, Integer> hm=new HashMap<String, Integer>();  
+			 Integer todaySupplier = 0;
+			while (res.next()) {
+				todaySupplier = res.getInt("todaySupplier");
+				hm.put("todaySupplier", res.getInt("todaySupplier"));
+				System.out.println("id : " + res.getInt("todaySupplier"));
+			}
+			return todaySupplier;
+			
+//			GenericResult rs = new GenericResult();
+//			rs.setStatus(true);
+//			rs.setResult(hm);
+
+//			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", hm,
+//					JsonFormer.form(rs), " ");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+//			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+			return 0;
 		}
 	}
 }
