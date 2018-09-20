@@ -68,9 +68,6 @@
 				<div class="modal-header">
 					<button type="button" class="close" onclick="clear()">×</button>
 					<h4 class="modal-title">View Product</h4>
-					<div class="alert alert-info" id="res-msg" style="margin-top: 5px;">
-						<strong>fill all and hit save.</strong>
-					</div>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -270,9 +267,9 @@
 		try
 		{
 			if ($("#code").val().trim() == ""){
-				$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-				$("#res-msg strong").html("Product code can not be empty");
+				alertMessage(res.description, "Product code can not be empty");
 			}else{
+				alert($("#code").val());
 				var product = {};
 				product.id=$("#pro-id").val();
 				product.name=$("#name").val();
@@ -308,16 +305,12 @@
 						$("#res-msg strong").html(res.msg);
 	
 						if (res.status == false) {
-							$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-							$("#res-msg strong").html(res.description);
+							alertMessage(res.description, 'error');
 						} else if (res.status == true) {
-							$("#res-msg").removeClass("alert-danger").removeClass("alert-info").addClass("alert-success");
-							$("#res-msg strong").html(res.description);
+							alertMessage(res.description, 'error');
 						}
 	
 						setTimeout(function() {
-							$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-							$("#res-msg strong").html("Fill all fields and hit Save");
 							if (res.message == "SUCCESS"){
 								$("#modal").modal("hide");
 								window.location.reload(true);

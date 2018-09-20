@@ -45,6 +45,8 @@
 	<!-- jQuery 2.2.3 -->
 	<script src="<c:url value="/resources/plugins/jQuery/jquery-2.2.3.min.js" />"></script>
 	<script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
+	<!-- notify -->
+	<script src="<c:url value="/resources/dist/js/notify.js" />"></script>	
 	<!-- AdminLTE App -->
 	<script src="<c:url value="/resources/dist/js/app.min.js" />"></script>	
 	<!-- Common JS -->

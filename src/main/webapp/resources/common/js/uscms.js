@@ -153,37 +153,6 @@ $("input[type=number]").on("focus", function() {
 });
 
 
-function showSuccessMsg(msg) {
-	$("#succMsg").html(msg)
-	$("#errAlert").hide();
-	$("#infoAlert").hide();
-	$("#succAlert").fadeIn();
-
-	setTimeout(function() {
-		$("#succAlert").fadeOut();
-	}, 5000);
-}
-
-function showErrorMsg(msg) {
-	$("#errMsg").html(msg)
-	$("#succAlert").hide();
-	$("#infoAlert").hide();
-	$("#errAlert").fadeIn();
-
-	setTimeout(function() {
-		$("#errAlert").fadeOut();
-	}, 5000);
-}
-
-function showInfoMsg(msg) {
-	$("#infoMsg").html(msg);
-	$("#succAlert").hide();
-	$("#errAlert").hide();
-	$("#infoMsg").fadeIn();
-	$("#infoAlert").fadeIn();
-}
-
-
 function getMaxId(type, id) {
 	var code = ""
 	var maxId = 0;
@@ -196,4 +165,18 @@ function getMaxId(type, id) {
 		code = type + "0000" + maxId;
 	}
 	return code;
+}
+
+
+function alertMessage(msg, type) {
+	$.notify(msg, {
+		clickToHide : true,
+		globalPosition : 'top right',
+		style : 'bootstrap',
+		className : type,
+		showAnimation : 'slideDown',
+		showDuration : 400,
+		hideAnimation : 'slideUp',
+		hideDuration : 200
+	});
 }

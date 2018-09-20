@@ -9,6 +9,7 @@ public class ProductType {
 	private Integer id;
 	private String name;
 	private String description;
+	private Employee addedBy;
 	
 
 	// *************************************************************
@@ -37,6 +38,12 @@ public class ProductType {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Employee getAddedBy() {
+		return addedBy;
+	}
+	public void setAddedBy(Employee addedBy) {
+		this.addedBy = addedBy;
 	}
 
 }

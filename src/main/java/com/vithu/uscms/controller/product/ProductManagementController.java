@@ -63,7 +63,7 @@ public class ProductManagementController {
 
 					returnResult = proService.getAllProducts();
 //				} else {
-//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+//					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 //				}
 //			}
 		} catch (Exception e) {
@@ -107,7 +107,7 @@ public class ProductManagementController {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_VEHICLE) != null) {
 					returnResult = proService.deleteProduct(Integer.parseInt(id));
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 			}
 		} catch (Exception e) {
@@ -202,11 +202,11 @@ public class ProductManagementController {
 						returnResult = proService.addProduct(addProduct);
 
 					} else {
-						returnResult = new GenericResult(false, "Code " + MessageConstant.MSG_EMPTY, "Code");
+						returnResult = new GenericResult(false, "Code " + MessageConstant.MSG_EMPTY, "Code cannot be empty.");
 					}
 
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			}
@@ -243,7 +243,7 @@ public class ProductManagementController {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
 					// Validate Product Code
-					GenericResult validateResult = ValueValidator.validateText(product.getString("code"), "Code");
+					GenericResult validateResult = ValueValidator.validateText(product.getString("code"), "Code cannot be empty.");
 					if (validateResult.isStatus()) {
 						updateProduct.setId(product.getInt("id"));
 						updateProduct.setCode(product.getString("code"));
@@ -269,7 +269,7 @@ public class ProductManagementController {
 					}
 
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			}

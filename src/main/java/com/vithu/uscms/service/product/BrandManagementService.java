@@ -63,11 +63,12 @@ public class BrandManagementService {
 		PreparedStatement deleteStmt = null;
 		try {
 			newConn = conn.getCon();
-			deleteStmt = newConn
-					.prepareStatement("UPDATE `pro_brands` SET `is_deleted` = TRUE WHERE `id` = '" + id + "';");
+			
+			deleteStmt = newConn.prepareStatement("UPDATE `pro_brands` SET `is_deleted` = TRUE WHERE `id` = '" + id + "';");
+			
 			deleteStmt.executeUpdate();
 
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "");
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Disable Successfully");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,8 +91,8 @@ public class BrandManagementService {
 			newConn = conn.getCon();
 
 			// Add Brand Credentials
-			addStmt = newConn.prepareStatement("INSERT INTO `pro_brands` (`name`, `description`) VALUE ('"
-					+ newBrand.getName() + "', '" + newBrand.getDescription() + "');");
+			addStmt = newConn.prepareStatement("INSERT INTO `pro_brands` (`name`, `description`, `added_by`) VALUE ('"
+					+ newBrand.getName() + "', '" + newBrand.getDescription() + "', '"+newBrand.getAddedBy().getId()+"');");
 			addStmt.executeUpdate();
 
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Brand Added Successfully");

@@ -10,6 +10,7 @@ public class ItemType {
 	private String name;
 	private String description;
 	private ProductType proType;
+	private Employee addedBy;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -49,6 +50,14 @@ public class ItemType {
 
 	public void setProType(ProductType proType) {
 		this.proType = proType;
+	}
+
+	public Employee getAddedBy() {
+		return addedBy;
+	}
+
+	public void setAddedBy(Employee addedBy) {
+		this.addedBy = addedBy;
 	}
 
 }

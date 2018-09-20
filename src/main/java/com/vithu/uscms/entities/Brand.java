@@ -9,6 +9,7 @@ public class Brand {
 	private Integer id;
 	private String name;
 	private String description;
+	private Employee addedBy;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -40,6 +41,14 @@ public class Brand {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Employee getAddedBy() {
+		return addedBy;
+	}
+
+	public void setAddedBy(Employee addedBy) {
+		this.addedBy = addedBy;
 	}
 
 }

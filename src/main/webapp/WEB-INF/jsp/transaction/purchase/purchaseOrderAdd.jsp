@@ -15,24 +15,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
-
-	<div class="alert alert-success alert-dismissable"
-		style="display: none; margin: 5px 20px" id="succAlert">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong id="succMsg"></strong>
-	</div>
-
-	<div class="alert alert-danger alert-dismissable"
-		style="display: none; margin: 5px 20px" id="errAlert">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong id="errMsg"></strong>
-	</div>
-
-	<div class="alert alert-info alert-dismissable"
-		style="display: none; margin: 5px 20px" id="infoAlert">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong id="infoMsg"></strong>
-	</div>
+	
 	<!-- Main content -->
 	<section class="content">
 		<div class="row">
@@ -444,12 +427,12 @@
 						success: function(res) {
 							console.log(res);
 							console.log(res.status);
-							$("#res-msg strong").html(res.msg);
+							
 		
 							if (res.status == false) {
-								showErrorMsg(res.description);
+								alertMessage(res.description, 'error');
 							} else if (res.status == true) {
-								showSuccessMsg(res.description);
+								alertMessage(res.description, 'success');
 							}
 		
 							setTimeout(function() {
@@ -471,7 +454,7 @@
 				}
 			}
 			else {
-				showErrorMsg("Please add some products before saving the purchase order.");
+				alertMessage("Please add some products before saving the purchase order.", 'error');
 			}
 		}
 		else {

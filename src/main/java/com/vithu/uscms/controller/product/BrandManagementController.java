@@ -29,7 +29,7 @@ import com.vithu.uscms.session.TokenManager;
 /**
  * @author M.Vithusanth
  * @CreatedOn 21th April 2018
- * @Purpose  Controller for Add/Edit/Delete/View Single/View All Brands
+ * @Purpose Controller for Add/Edit/Delete/View Single/View All Brands
  */
 
 @Controller
@@ -44,33 +44,30 @@ public class BrandManagementController {
 	public String viewBrand(@RequestParam("token") String token, HttpServletRequest request, Model model) {
 		CurrentUser currentUser = TokenManager.validateToken(token);
 		String mediaType = URLFormatter.getMediaType(request);
-		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "","","","");
-		
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "", "");
+
 		try {
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-			
-						returnResult = brandService.getAllBrands();
+
+					returnResult = brandService.getAllBrands();
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 			}
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
-		
-		if(URLFormatter.MEDIA_JSON.equals(mediaType))
-		{
+
+		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			System.out.println("hi json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);
 			response = "jsonview";
-			System.out.println("**************"+response);
-		}
-		else
-		{
+			System.out.println("**************" + response);
+		} else {
 			System.out.println("hi not json");
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
 			model.addAttribute("brands", returnResult);
@@ -78,7 +75,7 @@ public class BrandManagementController {
 		}
 		return response;
 	}
-	
+
 	// DISABLE BRAND
 	@CrossOrigin
 	@RequestMapping(value = "/deleteBrand/{id}")
@@ -97,7 +94,7 @@ public class BrandManagementController {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_VEHICLE) != null) {
 					returnResult = brandService.deleteBrand(Integer.parseInt(id));
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 			}
 		} catch (Exception e) {
@@ -111,7 +108,7 @@ public class BrandManagementController {
 		return response;
 	}
 
-	// ADD NEW PRODUCT
+	// ADD NEW BRAND
 	@CrossOrigin
 	@RequestMapping(value = "/addBrand", method = RequestMethod.POST)
 	@ResponseBody
@@ -127,24 +124,24 @@ public class BrandManagementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-					
+
 					JSONObject brand = new JSONObject(request.getParameter("data"));
-					
+
 					// Validate Brand Name
 					GenericResult validateCode = ValueValidator.validateText(brand.getString("name"), "Name");
 					if (validateCode.isStatus()) {
 
 						addBrand.setName(brand.getString("name"));
 						addBrand.setDescription(brand.getString("description"));
-
-												returnResult = brandService.addBrand(addBrand);
+						addBrand.setAddedBy(currentUser.getEmployee());
+						returnResult = brandService.addBrand(addBrand);
 
 					} else {
-						returnResult = new GenericResult(false, "Name " + MessageConstant.MSG_EMPTY, "Name");
+						returnResult = new GenericResult(false, "Name " + MessageConstant.MSG_EMPTY, "Name cannot be empty:");
 					}
 
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			}
@@ -179,9 +176,9 @@ public class BrandManagementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-					
+
 					JSONObject brand = new JSONObject(request.getParameter("data"));
-					
+
 					// Validate Brand Name
 					GenericResult validateCode = ValueValidator.validateText(brand.getString("name"), "Name");
 					if (validateCode.isStatus()) {
@@ -189,18 +186,18 @@ public class BrandManagementController {
 						updateBrand.setName(brand.getString("name"));
 						updateBrand.setDescription(brand.getString("description"));
 
-												returnResult = brandService.updateBrand(updateBrand);
+						returnResult = brandService.updateBrand(updateBrand);
 
 					} else {
-						returnResult = new GenericResult(false, "Name " + MessageConstant.MSG_EMPTY, "Name");
+						returnResult = new GenericResult(false, "Name " + MessageConstant.MSG_EMPTY, "Name cannot be empty.");
 					}
 
 				} else {
-					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");
 				}
 				returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			}
-				
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
