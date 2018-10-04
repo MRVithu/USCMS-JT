@@ -66,7 +66,6 @@
 		<div class="modal-content">
 			<form id="productFrom" onsubmit="return update(this);">
 				<div class="modal-header">
-					<button type="button" class="close" onclick="clear()">×</button>
 					<h4 class="modal-title">View Product</h4>
 				</div>
 				<div class="modal-body">
