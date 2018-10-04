@@ -43,7 +43,7 @@ public class SupplierManagementService {
 			res = stmt.executeQuery();
 			List<Supplier> supplierList = new ArrayList<Supplier>();
 			while (res.next()) {
-				System.out.println("id : " + res.getInt("id"));
+//				System.out.println("id : " + res.getInt("id"));
 				User user = new User();
 				user.setId(res.getInt("id"));
 				user.setName(res.getString("name"));

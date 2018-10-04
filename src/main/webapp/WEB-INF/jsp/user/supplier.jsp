@@ -90,7 +90,10 @@
 
 <script>
 	var suppliers = "";
-	suppliers = ${suppliers.resultString};
+	if(${suppliers.resultString} != ""){
+		suppliers = ${suppliers.resultString};
+	}
+	
 
 	//Data table
 	$(function() {

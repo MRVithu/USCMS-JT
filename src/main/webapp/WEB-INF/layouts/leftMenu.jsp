@@ -20,7 +20,7 @@
 			</div>
 			
 			<div class="pull-left info">
-				<p><%=session.getAttribute("USER-NAME")%></p>
+				<p><%=session.getAttribute("ROLE")%></p>
 				<!-- Status -->
 				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 			</div>
@@ -45,7 +45,7 @@
 		<!-- Sidebar Menu -->
 		<ul class="sidebar-menu">
 			<li
-				class="treeview ${current == 'employee' or current == 'customer' or current == 'supplier' ? 'active' : '' }">
+				class="treeview ${current == 'employee' or current == 'customer' or current == 'supplier' ? 'active' : '' }  ">
 				<a href="#"><i class="fa fa-user"></i> <span>Users</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
@@ -66,7 +66,7 @@
 			</li>
 
 			<li
-				class="treeview ${current == 'brand' or current == 'product' or current== 'productType' or current== 'itemType'  ? 'active' : '' }">
+				class='treeview <%=session.getAttribute("ROLE") == "Admin" ?  "hidden":"hi"%> '>
 				<a href="#"><i class="fa  fa-link"></i> <span>Product</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
@@ -169,3 +169,4 @@
 
 	<!-- /.sidebar -->
 </aside>
+

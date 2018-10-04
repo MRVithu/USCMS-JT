@@ -1,7 +1,5 @@
 package com.vithu.uscms.service.user;
 
-
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +9,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.vithu.uscms.entities.Employee;
-import com.vithu.uscms.entities.Region;
 import com.vithu.uscms.entities.User;
 import com.vithu.uscms.entities.UserRole;
 import com.vithu.uscms.others.DBConnection;
@@ -47,15 +44,11 @@ public class EmployeeManagementService {
 
 			// Add user crediantials
 			addUserStmt = newConn.prepareStatement(
-					"INSERT INTO users( name, mobile, is_deleted, password, email, user_name, access_token) VALUES (?,?,?,?,?,?,?);",
+					"INSERT INTO `users`( `name`, `mobile`, `password`, `email`, `user_name`, `access_token`) VALUES ('"
+							+ newEmployee.getUser().getName() + "' ,'" + newEmployee.getUser().getMobile() + "', '"
+							+ newEmployee.getUser().getPassword() + "', '" + newEmployee.getUser().getEmail() + "','"
+							+ newEmployee.getUser().getUserName() + "', '" + tm.getToken() + "');",
 					Statement.RETURN_GENERATED_KEYS);
-			addUserStmt.setString(1, newEmployee.getUser().getName());
-			addUserStmt.setString(2, newEmployee.getUser().getMobile());
-			addUserStmt.setBoolean(3, false);
-			addUserStmt.setString(4, newEmployee.getUser().getPassword());
-			addUserStmt.setString(5, newEmployee.getUser().getEmail());
-			addUserStmt.setString(6, newEmployee.getUser().getUserName());
-			addUserStmt.setString(7,  tm.getToken());
 			addUserStmt.executeUpdate();
 
 			// get the previous IDs
@@ -66,16 +59,12 @@ public class EmployeeManagementService {
 
 			// Add employee with both user and employee Credentials
 			addEmployeeStmt = newConn.prepareStatement(
-					"INSERT INTO employees( nic, contact, added_by, region_id, address, dob, role_id, user_id ) VALUES (?,?,?,?,?,?,?,?);",
+					"INSERT INTO employees( `nic`, `contact`, `added_by`, `address`, `dob`, `role_id`, `user_id` ) VALUES ('"
+							+ newEmployee.getNic() + "', '" + newEmployee.getContact() + "', '"
+							+ newEmployee.getAddedBy() + "','" + newEmployee.getAddress() + "', '"
+							+ newEmployee.getDob() + "', '" + newEmployee.getroleId() + "', '" + last_inserted_id
+							+ "');",
 					Statement.RETURN_GENERATED_KEYS);
-			addEmployeeStmt.setString(1, newEmployee.getNic());
-			addEmployeeStmt.setString(2, newEmployee.getContact());
-			addEmployeeStmt.setInt(3, newEmployee.getAddedBy());
-			addEmployeeStmt.setInt(4, newEmployee.getRegionId());
-			addEmployeeStmt.setString(5, newEmployee.getAddress());
-			addEmployeeStmt.setDate(6, java.sql.Date.valueOf(newEmployee.getDob()));
-			addEmployeeStmt.setInt(7, newEmployee.getroleId());
-			addEmployeeStmt.setInt(8, last_inserted_id);
 			addEmployeeStmt.executeUpdate();
 
 			// get the previous ID
@@ -85,28 +74,17 @@ public class EmployeeManagementService {
 			}
 
 			// Get authorities & Save employee_id with authority emp_authority table
-			getAllAuthoritiesForRole = newConn.prepareStatement("SELECT NAME FROM authority a\r\n"
-					+ "LEFT JOIN role_authority r ON r.`authority_id`= a.id\r\n" + "WHERE role_id =?;");
-			getAllAuthoritiesForRole.setInt(1, newEmployee.getroleId());
+			getAllAuthoritiesForRole = newConn.prepareStatement("SELECT `name` \r\n" + "FROM `authority` a\r\n"
+					+ "LEFT JOIN `role_authority` r \r\n" + "ON r.`authority_id`= a.`id`\r\n" + "WHERE `role_id` = '"
+					+ newEmployee.getroleId() + "';");
 			rs = getAllAuthoritiesForRole.executeQuery();
 
 			while (rs.next()) {
 				addEmployeeAuthority = newConn
-						.prepareStatement("INSERT INTO emp_authority(emp_id, authority ) VALUES(?,?);");
-				addEmployeeAuthority.setInt(1, last_inserted_id);
-				addEmployeeAuthority.setString(2, rs.getString("name"));
+						.prepareStatement("INSERT INTO `emp_authority`(`emp_id`, `authority` ) VALUES('"
+								+ last_inserted_id + "','" + rs.getString("name") + "');");
 				addEmployeeAuthority.executeUpdate();
 			}
-			
-			
-			// save activity
-
-			/**
-			 * query table addQueryStmt = newConn.prepareStatement("INSERT INTO queries(
-			 * query_ran_by, query_sql ) VALUES (?,?);"); addQueryStmt.setInt(1,
-			 * newEmployee.getId()); addQueryStmt.setString(2, sql);
-			 * addQueryStmt.executeUpdate();
-			 */
 
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "New Employee Added Successfully");
 
@@ -133,33 +111,30 @@ public class EmployeeManagementService {
 
 			newConn = conn.getCon();
 			getEmployeeStmt = newConn.prepareStatement(
-					"SELECT e.id AS eid, u.mobile, u.user_name, e.region_id, e.*, u.name, u.email, u.id AS uid, r.name AS region, w.name AS role, u.password AS empPassword, e.role_id \r\n"
-							+ "FROM `employees` e LEFT JOIN `users` u ON e.user_id = u.id \r\n"
-							+ "LEFT JOIN `roles` w ON e.user_id = w.id\r\n"
-							+ "LEFT JOIN `regions` r ON r.id = region_id WHERE u.is_deleted = 'false';");
+					"select e.`id` as empId, r.`id` as roleId, r.`name` as role, u.`id` as uId, u.`name`, u.`mobile`, u.`email`, u.`user_name` as userName,\r\n"
+							+ "e.`nic`, e.`contact`, e.`address`, e.`dob`\r\n" + "from `employees` e\r\n"
+							+ "left join `users` u\r\n" + "on u.`id`=e.`user_id`\r\n" + "left join `roles` r\r\n"
+							+ "on e.`role_id` = r.`id`\r\n" + "where u.`is_deleted` = false");
 
 			rs = getEmployeeStmt.executeQuery();
 			List<Employee> employeeList = new ArrayList<Employee>();
 			while (rs.next()) {
 				User user = new User();
-				user.setId(rs.getInt("uid"));
+				user.setId(rs.getInt("uId"));
 				user.setName(rs.getString("name"));
 				user.setMobile(rs.getString("mobile"));
 				user.setEmail(rs.getString("email"));
-				user.setUserName(rs.getString("user_name"));
-				user.setPassword(rs.getString("empPassword"));
+				user.setUserName(rs.getString("userName"));
 
 				Employee employee = new Employee();
 				employee.setUser(user);
-				employee.setId(rs.getInt("eid"));
+				employee.setId(rs.getInt("empId"));
 				employee.setRole(rs.getString("role"));
 				employee.setDob(rs.getDate("dob").toString());
 				employee.setNic(rs.getString("nic"));
 				employee.setContact(rs.getString("contact"));
 				employee.setAddress(rs.getString("address"));
-				employee.setRegionId(rs.getInt("region_id"));
-				employee.setRoleId(rs.getInt("role_id"));
-				employee.setRegion(rs.getString("region"));
+				employee.setRoleId(rs.getInt("roleId"));
 				employeeList.add(employee);
 			}
 
@@ -210,7 +185,7 @@ public class EmployeeManagementService {
 		}
 	}
 
-	// VIEW SINGLE VIEW EMPLOYEE METHOD
+	// VIEW SINGLE EMPLOYEE
 	public GenericResult getSingleUser(int eid) {
 		PreparedStatement getSingleViewStmt = null;
 		try {
@@ -232,7 +207,6 @@ public class EmployeeManagementService {
 				employee.setContact(rs.getString("contact"));
 				employee.setAddress(rs.getString("address"));
 				employee.setDob(rs.getDate("dob").toString());
-				employee.setRegionId(rs.getInt("region_id"));
 
 			}
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retrieved Successfully", employee);
@@ -254,45 +228,51 @@ public class EmployeeManagementService {
 
 		PreparedStatement updateUserStmt = null;
 		PreparedStatement updateEmployeeStmt = null;
-		// PreparedStatement addQueryStmt = null;;
+		PreparedStatement getAllAuthoritiesForRole = null;
+		PreparedStatement addEmployeeAuthority = null;
+		PreparedStatement deleteAuthStmt = null;
 
 		try {
 			newConn = conn.getCon();
 
 			// Add user crediantials
-			updateUserStmt = newConn.prepareStatement(
-					"UPDATE users SET user_name =? , name=? , mobile=?, is_deleted=false, password=?, email=? WHERE id = ?;");
-			updateUserStmt.setString(1, employee.getUser().getUserName());
-			updateUserStmt.setString(2, employee.getUser().getName());
-			updateUserStmt.setString(3, employee.getUser().getMobile());
-			updateUserStmt.setString(5, employee.getUser().getPassword());
-			updateUserStmt.setString(6, employee.getUser().getEmail());
-			updateUserStmt.setInt(7, employee.getUser().getId());
+			updateUserStmt = newConn.prepareStatement("UPDATE users SET user_name ='" + employee.getUser().getUserName()
+					+ "' , name='" + employee.getUser().getName() + "' , mobile='" + employee.getUser().getMobile()
+					+ "',  password='" + employee.getUser().getPassword() + "', email='" + employee.getUser().getEmail()
+					+ "' WHERE id = '" + employee.getUser().getId() + "';");
+			System.out.println("updateUserStmt-------"+updateUserStmt);
 			updateUserStmt.executeUpdate();
 
 			// Add employee with both user and employee Credentials
 			updateEmployeeStmt = newConn.prepareStatement(
-					"UPDATE employees SET nic =?, contact=?, added_by=?, region_id=?, address=?, dob=?, role_id=? WHERE user_id=?;",
+					"UPDATE employees SET nic ='" + employee.getNic() + "', contact='" + employee.getContact()
+							+ "', added_by='" + employee.getAddedBy() + "',  address='" + employee.getAddress()
+							+ "', dob='" + java.sql.Date.valueOf(employee.getDob()) + "', role_id='"
+							+ employee.getroleId() + "' WHERE user_id='" + employee.getId() + "';",
 					Statement.RETURN_GENERATED_KEYS);
-			updateEmployeeStmt.setString(1, employee.getNic());
-			updateEmployeeStmt.setString(2, employee.getContact());
-			updateEmployeeStmt.setInt(3, employee.getAddedBy());
-			updateEmployeeStmt.setInt(4, employee.getRegionId());
-			updateEmployeeStmt.setString(5, employee.getAddress());
-			updateEmployeeStmt.setDate(6, java.sql.Date.valueOf(employee.getDob()));
-			updateEmployeeStmt.setInt(7, employee.getroleId());
-			updateEmployeeStmt.setInt(8, employee.getId());
+			System.out.println("updateEmployeeStmt-------"+updateEmployeeStmt);
 			updateEmployeeStmt.executeUpdate();
+			
+			deleteAuthStmt = newConn.prepareStatement("DELETE FROM `emp_authority` WHERE `emp_id` ='"+employee.getId()+"';");
+			System.out.println("deleteAuthStmt-------"+deleteAuthStmt);
+			deleteAuthStmt.executeUpdate();
+			
+			
+			// Get authorities & Save employee_id with authority emp_authority table
+			getAllAuthoritiesForRole = newConn.prepareStatement("SELECT `name` \r\n" + "FROM `authority` a\r\n"
+					+ "LEFT JOIN `role_authority` r \r\n" + "ON r.`authority_id`= a.`id`\r\n" + "WHERE `role_id` = '"
+					+ employee.getroleId() + "';");
+			System.out.println("getAllAuthoritiesForRole-------"+getAllAuthoritiesForRole);
+			rs = getAllAuthoritiesForRole.executeQuery();
 
-			// save activity
+			while (rs.next()) {
+				addEmployeeAuthority = newConn
+						.prepareStatement("INSERT INTO `emp_authority`(`emp_id`, `authority` ) VALUES('"
+								+ employee.getId() + "','" + rs.getString("name") + "');");
+				addEmployeeAuthority.executeUpdate();
+			}
 
-			/**
-			 * query table addQueryStmt = newConn.prepareStatement("INSERT INTO queries(
-			 * query_ran_by, query_sql ) VALUES (?,?);"); addQueryStmt.setInt(1,
-			 * newEmployee.getId()); addQueryStmt.setString(2, sql);
-			 * addQueryStmt.executeUpdate();
-			 */
-
+			
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Employee updated Successfully");
 
 		} catch (Exception e) {
@@ -302,35 +282,6 @@ public class EmployeeManagementService {
 			try {
 				updateEmployeeStmt.close();
 				updateUserStmt.close();
-				conn.closeCon();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	// GET ALL REGION
-	public GenericResult getAllRegion() {
-		PreparedStatement getRegionStmt = null;
-		try {
-			newConn = conn.getCon();
-			getRegionStmt = newConn.prepareStatement("Select id, name from regions;");
-			rs = getRegionStmt.executeQuery();
-			List<Region> regionlist = new ArrayList<Region>();
-			while (rs.next()) {
-				Region region = new Region();
-				region.setId(rs.getInt("id"));
-				region.setName(rs.getString("name"));
-				regionlist.add(region);
-			}
-
-			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retrieved Successfully", regionlist);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
-		} finally {
-			try {
-				getRegionStmt.close();
 				conn.closeCon();
 			} catch (Exception e) {
 				e.printStackTrace();

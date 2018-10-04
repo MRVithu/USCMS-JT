@@ -26,21 +26,6 @@ $(document).ready(function() {
 });
 
 
-/** ***************************************************************************** **/
-/** ALERT MESSAGE FUNCTIONS												          **/
-/** ***************************************************************************** **/
-function alertMessage(aMes) {
-	if (aMes == info) {
-		$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-		$("#res-msg strong").html("Fill all fields and hit Save");
-	} else if (aMes == danger) {
-		$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-	} else if (aMes == success) {
-		$("#res-msg").removeClass("alert-info").removeClass("alert-danger").addClass("alert-success");
-	}
-	return false;
-}
-
 
 function formatNumber(value, decimal = 0) {
 	try {
@@ -167,6 +152,11 @@ function getMaxId(type, id) {
 	return code;
 }
 
+
+
+/** ***************************************************************************** **/
+/** ALERT MESSAGE FUNCTIONS												          **/
+/** ***************************************************************************** **/
 
 function alertMessage(msg, type) {
 	$.notify(msg, {

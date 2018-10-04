@@ -13,8 +13,16 @@
 	padding: 0px 30px 0px 30px !important;
 }
 
-.modal-header {
-	padding: 0px 15px 0px 15px !important;
+.modal-header  {
+	padding: 0px 5px 0px 5px !important;
+}
+
+.modal-content{
+	border-radius:8px;
+}
+
+.modal-footer{
+	padding:2px 15px 3px 15px !important;
 }
 
 .input-group {
@@ -298,4 +306,8 @@ th {
 	left:0 !important;
 	margin:0 !important;
 	width:100%;
+}
+
+.hidden{
+	display:none;
 }

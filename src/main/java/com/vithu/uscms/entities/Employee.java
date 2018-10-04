@@ -16,11 +16,9 @@ public class Employee {
         private String role;
         private String contact;
         private int addedBy;
-        private int regionId;
         private int roleId;
 		private String address;
         private String region;
-        private List<UserAuthority> authorityList;
         
         //*************************************************************
         //** CONSTRUCTORS
@@ -41,11 +39,9 @@ public class Employee {
 			this.role = role;
 			this.contact = contact;
 			this.addedBy = addedBy;
-			this.regionId = regionId;
 			this.roleId = roleId;
 			this.address = address;
 			this.region = region;
-			this.authorityList = authorityList;
 		}
 
 		//*************************************************************
@@ -66,14 +62,6 @@ public class Employee {
 		public void setRoleId(int roleId) {
 			this.roleId = roleId;
 		}
-		
-		public int getRegionId() {
-			return regionId;
-		}
-
-    	public void setRegionId(int regionId) {
-    		this.regionId = regionId;
-    	}
         
         public String getRegion() {
 			return region;
@@ -83,13 +71,7 @@ public class Employee {
 			this.region = region;
 		}
         
-        public List<UserAuthority> getAuthorityList() {
-			return authorityList;
-		}
-
-		public void setAuthorityList(List<UserAuthority> authorityList) {
-			this.authorityList = authorityList;
-		}     
+             
         public int getAddedBy() {
                 return addedBy;
         }

@@ -5,7 +5,6 @@
 
 
 
-<div id="res-message"></div>
 <hr>
 <form  role="form" method="post" onsubmit="return logIn(this);">
 	<div class="form-group has-feedback">
@@ -20,21 +19,21 @@
 	</div>
 	<div class="row">
 		<!-- /.col -->
-		<div class="col-xs-4">
-			<input class="btn btn-primary btn-block btn-flat" name="submit"
-				type="submit" value="Sign In" />
+		<div >
+			<input class="btn btn-primary btn-block " style="width:325px;margin:0px 15px 0px 15px; background-color:#80007094;" name="submit"
+				type="submit" value="Sign In"  />
 		</div>
 		<!-- /.col -->
 	</div>
 </form>
-
+	
 <script>
 	function logIn(form) {
 		try {
 			if ($("#user-name").val().trim() == "") {
-				$("#res-message").html("User name can not be empty");
+				alertMessage("User name can not be empty", 'error');
 			} else if ($("#password").val().trim() == "") {
-				$("#res-message").html("Password can not be empty");
+				alertMessage("Password can not be empty", 'error');
 			} else {
 				var user = {};
 				user.userName = $("#user-name").val();
@@ -51,15 +50,11 @@
 						console.log(res);
 						console.log(res.status);
 						if (res.status == false) {
-							$("#res-message").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-							$("#res-message").html(res.description);
+							alertMessage(res.description, 'error');
 						} else if (res.status == true) {
-							$("#res-message").addClass("alert-success").removeClass("alert-info").removeClass("alert-danger");
-							$("#res-message").html(res.description);
+							alertMessage(res.description, 'success');
 						}
 						setTimeout(function() {
-							$("#res-message").removeClass("alert-success").addClass("alert-info").removeClass("alert-danger");
-							$("#res-message").html("Fill all fields and hit Save");
 							if (res.status == true) {
 								window.location.href = "/home";
 							}
@@ -76,5 +71,22 @@
 			alert(err);
 		}
 		return false;
+	}
+	
+	/** ***************************************************************************** **/
+	/** ALERT MESSAGE FUNCTIONS												          **/
+	/** ***************************************************************************** **/
+
+	function alertMessage(msg, type) {
+		$.notify(msg, {
+			clickToHide : true,
+			globalPosition : 'top right',
+			style : 'bootstrap',
+			className : type,
+			showAnimation : 'slideDown',
+			showDuration : 400,
+			hideAnimation : 'slideUp',
+			hideDuration : 200
+		});
 	}
 </script>

@@ -19,19 +19,8 @@ public class AuthorityConstant {
 	public static final String AUTH_VIEW_EMPLOYEE = "CAN_VIEW_EMPLOYEE";
 	public static final String AUTH_DELETE_EMPLOYEE = "CAN_DELETE_EMPLOYEE";
 	
-	// Vehicle Constant
-	public static final String AUTH_VIEW_VEHICLE = "CAN_VIEW_EMPLOYEE";
-	public static final String AUTH_ADD_VEHICLE = "CAN_ADD_VEHICLE";
-	public static final String AUTH_EDIT_VEHICLE = "CAN_EDIT_VEHICLE";
+
 	
-	// Route Constant
-	public static final String AUTH_VIEW_ROUTE = "CAN_VIEW_ROUTE";
-	public static final String AUTH_ADD_ROUTE = "CAN_ADD_ROUTE";
-	public static final String AUTH_EDIT_ROUTE = "CAN_EDIT_ROUTE";
 	
-	// Booking Constant
-	public static final String AUTH_VIEW_BOOKING = "CAN_VIEW_BOOKINGS";
-	
-	// Trip constant
-	public static final String AUTH_VIEW_TRIP = "CAN_VIEW_TRIPS";
+
 }

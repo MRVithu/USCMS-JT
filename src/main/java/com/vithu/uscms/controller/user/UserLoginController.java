@@ -36,7 +36,7 @@ public class UserLoginController {
 	// FOR JSP LOGIN REDIRECT
 	@RequestMapping("/directlogin")
 	public String login() {
-		System.out.println(deService.encrptyMe("1234"));
+		System.out.println("-----"+deService.encrptyMe("admin"));
 		return "login";
 	}
 
@@ -76,6 +76,7 @@ public class UserLoginController {
 			sesssion.setAttribute("USER-NAME", ((CurrentUser) returnResult.getResult()).getEmployee().getUser().getUserName());
 			sesssion.setAttribute("NAME", ((CurrentUser) returnResult.getResult()).getEmployee().getUser().getName());
 			sesssion.setAttribute("Register-Date", ((CurrentUser) returnResult.getResult()).getEmployee().getUser().getAddedOn());
+			sesssion.setAttribute("ROLE", ((CurrentUser) returnResult.getResult()).getEmployee().getRole());
 		}
 		return responseResult;
 	}

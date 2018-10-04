@@ -43,7 +43,7 @@ public class SupplierManagementController {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-			
+		
 						returnResult = supService.getAllSuppliers();
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");

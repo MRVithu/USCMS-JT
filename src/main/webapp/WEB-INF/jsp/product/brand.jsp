@@ -49,7 +49,6 @@
 
 
 <!-- modal -->
-<!-- add new employee Modal -->
 <div class="modal fade" id="modal" role="dialog">
 	<div class="modal-dialog">
 
@@ -59,9 +58,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" onclick="clear()">×</button>
 					<h4 class="modal-title">View Brand</h4>
-					<div class="alert alert-info" id="res-msg" style="margin-top: 5px;">
-						<strong>fill all and hit save.</strong>
-					</div>
+					
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -134,9 +131,14 @@
 		$("#modal").modal("show");
 	}
 	
+	function deleteBrand(id){
+		$("#del-item-id").val(id);
+		$("#del-modal").modal("show");
+	}
 
 	//Function for delete existing product
-	function deleteBrand(id){
+	function confirmDelelte(){
+		var id = $("#del-item-id").val();
 		try{
 			$.ajax({
 		        url:'http://localhost:8080/deleteBrand/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
@@ -144,14 +146,18 @@
 		        data: { id:id },
 		        success: function (res) {
 		        	console.log(res );
-		            
+		        	
+		        	if (res.status == false) {
+						alertMessage(res.description, 'error');
+					} else if (res.status == true) {
+						alertMessage(res.description, 'success');
+					}
+
 		            setTimeout(function() {
-						//$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-						//$("#res-msg strong").html("Fill all fields and hit Save");
-						if (res.message == "SUCCESS"){
+						if (res.status == true){
 							window.location.reload(true);
 						}
-					}, 500);
+					}, 600);
 				},
 		        error: function (res) {
 		            alert("res");
@@ -197,8 +203,8 @@
 		try
 		{
 			if ($("#name").val().trim() == ""){
-				$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-				$("#res-msg strong").html("Brand name can not be empty");
+				alertMessage("Brand name can not be empty", "error");
+				
 			}else{
 				var brand = {};
 				brand.id=$("#pro-id").val();
@@ -214,18 +220,14 @@
 						console.log(res);
 						console.log(res.status);
 						$("#res-msg strong").html(res.msg);
-	
+						
 						if (res.status == false) {
-							$("#res-msg").removeClass("alert-success").removeClass("alert-info").addClass("alert-danger");
-							$("#res-msg strong").html(res.description);
+							alertMessage(res.description, 'error');
 						} else if (res.status == true) {
-							$("#res-msg").removeClass("alert-danger").removeClass("alert-info").addClass("alert-success");
-							$("#res-msg strong").html(res.description);
+							alertMessage(res.description, 'success');
 						}
 	
 						setTimeout(function() {
-							$("#res-msg").removeClass("alert-success").removeClass("alert-danger").addClass("alert-info");
-							$("#res-msg strong").html("Fill all fields and hit Save");
 							if (res.message == "SUCCESS"){
 								$("#modal").modal("hide");
 								window.location.reload(true);

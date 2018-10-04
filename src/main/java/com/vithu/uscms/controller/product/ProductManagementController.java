@@ -104,7 +104,7 @@ public class ProductManagementController {
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
-				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_VEHICLE) != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 					returnResult = proService.deleteProduct(Integer.parseInt(id));
 				} else {
 					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "You have not authority to do thi task.");

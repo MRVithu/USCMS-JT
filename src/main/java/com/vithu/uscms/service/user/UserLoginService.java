@@ -50,12 +50,12 @@ public class UserLoginService {
 			newConn = conn.getCon();
 			// Check logger
 			searchStmt = newConn.prepareStatement(
-					"SELECT COUNT(*) AS total , u.password, u.id AS uid, e.id AS eid, u.name AS NAME,u.added_on , u.mobile, u.email, u.user_name, e.nic, e.contact, r.name AS region, e.address, e.dob, o.name AS role, e.region_id AS rid\r\n"
+					"SELECT COUNT(*) AS total , u.password, u.id AS uid, e.id AS eid, u.name AS NAME,u.added_on , u.mobile, u.email, u.user_name, e.nic, e.contact,  e.address, e.dob, o.name AS role\r\n"
 							+ "FROM users u\r\n" + "LEFT JOIN employees e ON u.id = e.user_id\r\n"
 							+ "LEFT JOIN customers c ON  u.id = c.user_id\r\n"
-							+ "LEFT JOIN regions r ON e.region_id = r.id\r\n"
 							+ "LEFT JOIN roles o ON e.role_id = o.id\r\n"
 							+ "WHERE u.user_name = ? AND u.is_deleted = ?;");
+			
 			searchStmt.setString(1, logger.getUserName());
 			// searchStmt.setString(2, logger.getPassword());
 			searchStmt.setBoolean(2, false);
@@ -90,8 +90,6 @@ public class UserLoginService {
 							employee.setDob("");
 						}					
 						employee.setNic(rs.getString("nic"));
-						employee.setRegionId(rs.getInt("rid"));
-						employee.setRegion(rs.getString("region"));
 						employee.setRole(rs.getString("role"));
 						employee.setUser(user);
 						currUser.setEmployee(employee);
