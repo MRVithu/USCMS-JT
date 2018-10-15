@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.vithu.uscms.others.GenericResult;
 import com.vithu.uscms.others.MessageConstant;
 import com.vithu.uscms.others.URLFormatter;
+import com.vithu.uscms.service.purchase.PurchaseManagementService;
 import com.vithu.uscms.service.purchase.PurchaseOrderManagementService;
 import com.vithu.uscms.service.sales.SalesManagementService;
 import com.vithu.uscms.service.user.CustomerManagementService;
@@ -59,6 +60,13 @@ public class HomeManagementController {
 
 		System.out.println(mandatoryResult.getResultString());
 		model.addAttribute("sales", mandatoryResult);
+		
+		mandatoryResult = salesService.getSalesAmountDayBy();
+		model.addAttribute("salesAmountDayBy", mandatoryResult);
+		
+		PurchaseManagementService purService = new PurchaseManagementService();
+		mandatoryResult = purService.getPurAmountDayBy();
+		model.addAttribute("purAmountDayBy", mandatoryResult);
 		
 		SupplierManagementService supplierService = new SupplierManagementService();
 		todayRegisteredSuppliers = supplierService.getTodayRegisteredSuppliers();

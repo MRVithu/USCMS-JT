@@ -48,7 +48,7 @@
 					success : function(res) {
 						res = JSON.parse(res)
 						console.log(res);
-						console.log(res.status);
+						console.log(<%= session.getAttribute("hi") %>);
 						if (res.status == false) {
 							alertMessage(res.description, 'error');
 						} else if (res.status == true) {
@@ -56,7 +56,7 @@
 						}
 						setTimeout(function() {
 							if (res.status == true) {
-								window.location.href = "/home";
+								//window.location.href = "/home";
 							}
 						}, 500);
 					},

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Brand;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.others.DBConnection;
@@ -59,7 +58,7 @@ public class BrandManagementService {
 	}
 
 	// METHORD TO DISABLE BRAND
-	public GenericResult deleteBrand(int id) {
+	public GenericResult deleteBrand(int id) throws ClassNotFoundException {
 		PreparedStatement deleteStmt = null;
 		try {
 			newConn = conn.getCon();

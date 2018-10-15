@@ -67,7 +67,7 @@ public class ItemTypeManagementService {
 	}
 
 	// METHORD TO DISABLE ITEM TYPES
-	public GenericResult deleteItemType(int id) {
+	public GenericResult deleteItemType(int id) throws ClassNotFoundException {
 		PreparedStatement deleteStmt = null;
 		try {
 			newConn = conn.getCon();

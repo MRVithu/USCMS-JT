@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +42,7 @@ public class UserLoginController {
 	}
 
 	// CALL LOGIN METHOD
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(value = "/doLogin", method = RequestMethod.POST)
 	public String login(HttpServletRequest request, Model model, HttpSession sesssion) {
@@ -72,6 +74,7 @@ public class UserLoginController {
 			e.printStackTrace();
 		}
 		if (returnResult.isStatus() == true) {
+			System.out.println("hi"+((CurrentUser) returnResult.getResult()).getToken());
 			sesssion.setAttribute("Token", ((CurrentUser) returnResult.getResult()).getToken());
 			sesssion.setAttribute("USER-NAME", ((CurrentUser) returnResult.getResult()).getEmployee().getUser().getUserName());
 			sesssion.setAttribute("NAME", ((CurrentUser) returnResult.getResult()).getEmployee().getUser().getName());

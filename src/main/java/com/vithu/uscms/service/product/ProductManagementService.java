@@ -94,7 +94,7 @@ public class ProductManagementService {
 	}
 
 	// METHORD TO DISABLE PRODUCT
-	public GenericResult deleteProduct(int id) {
+	public GenericResult deleteProduct(int id) throws ClassNotFoundException {
 		PreparedStatement deleteStmt = null;
 		try {
 			newConn = conn.getCon();

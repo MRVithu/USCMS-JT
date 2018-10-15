@@ -73,7 +73,7 @@ public class SupplierManagementService {
 	}
 
 	// METHORD TO DISABLE CUSTOMER
-	public GenericResult deleteCustomer(String id) {
+	public GenericResult deleteCustomer(String id) throws ClassNotFoundException {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement("UPDATE `users` SET `is_deleted` = TRUE WHERE `id` =" + id);
@@ -89,7 +89,7 @@ public class SupplierManagementService {
 	}
 
 	// METHOD TO ADD CUSTOMER
-	public GenericResult addCustomer(Supplier newCustomer) {
+	public GenericResult addCustomer(Supplier newCustomer) throws ClassNotFoundException {
 		try {
 			int lastInsertedId = 0;
 			newConn = conn.getCon();
@@ -123,7 +123,7 @@ public class SupplierManagementService {
 	}
 
 	// METHOD TO EDIT CUSTOMER
-	public GenericResult editCustomer(String id, Supplier newCustomer) {
+	public GenericResult editCustomer(String id, Supplier newCustomer) throws ClassNotFoundException {
 		try {
 			newConn = conn.getCon();
 
@@ -149,7 +149,7 @@ public class SupplierManagementService {
 	}
 
 	// METHOD TO VIEW SINGLE CUSTOMER
-	public GenericResult getSingleCustomer(int id) {
+	public GenericResult getSingleCustomer(int id) throws ClassNotFoundException {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(

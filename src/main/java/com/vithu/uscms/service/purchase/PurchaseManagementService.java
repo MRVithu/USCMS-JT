@@ -11,6 +11,7 @@ import com.mysql.jdbc.Statement;
 import com.vithu.uscms.entities.Department;
 import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.PayCheque;
+import com.vithu.uscms.entities.Payment;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
 import com.vithu.uscms.entities.PurchaseProduct;
@@ -242,4 +243,41 @@ public class PurchaseManagementService {
 
 	}
 
+	
+	public GenericResult getPurAmountDayBy() {
+
+		PreparedStatement stmt = null;
+
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement(
+					"SELECT s.`t_date`, SUM(p.`total`) AS amount\r\n" + 
+					"FROM `purchases` s\r\n" + 
+					"LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + 
+					"GROUP BY s.`t_date`");
+			res = stmt.executeQuery();
+
+			List<Payment> purList = new ArrayList<Payment>();
+			while (res.next()) {
+				System.out.println("id : " + res.getString("t_date"));
+
+				Payment pay = new Payment();
+				pay.setAmount(res.getDouble("amount"));
+				pay.settDate(res.getString("t_date"));
+
+				purList.add(pay);
+			}
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+			rs.setResult(purList);
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", purList,
+					JsonFormer.form(rs), " ");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}		
+	}
 }

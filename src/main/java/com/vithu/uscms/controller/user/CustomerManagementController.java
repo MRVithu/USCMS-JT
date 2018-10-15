@@ -70,7 +70,7 @@ public class CustomerManagementController {
 	// DISABLE CUSTOMER
 	@RequestMapping("/disableCustomer")
 	@ResponseBody
-	public String disableCustomer(@RequestParam("token") String token, @RequestParam("id") String id) {
+	public String disableCustomer(@RequestParam("token") String token, @RequestParam("id") String id) throws ClassNotFoundException {
 		
 		  CurrentUser currentUser = TokenManager.validateToken( token ); 
 		  if (  currentUser.getAuthorityMap().get( AuthorityConstant.AUTH_VIEW_CUSTOMER ) != null ) {		 

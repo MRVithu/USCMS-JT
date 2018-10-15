@@ -19,12 +19,13 @@ public class DBConnection {
 	static final String USER = "root";
 	static final String PASS = "";
 		   
-	private static Connection conn = DBConnection.startConnection();
+	private static Connection conn = null;
 	
 	//Initialize a connectionss
-	public static Connection startConnection() {
+	public static Connection startConnection() throws ClassNotFoundException {
 		Connection conn = null;
 		try {
+			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -33,7 +34,7 @@ public class DBConnection {
 	}
 
 	//return a connection
-	public Connection getCon() throws SQLException {
+	public Connection getCon() throws SQLException, ClassNotFoundException {
 		conn = DBConnection.startConnection();
 		return conn;  
 	}

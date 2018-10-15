@@ -158,7 +158,7 @@ public class UserLoginService {
 	}
 
 	// LOGOUT METHOD
-	public GenericResult dologout(int user_id) {
+	public GenericResult dologout(int user_id) throws ClassNotFoundException {
 		PreparedStatement logoutStmt = null;
 		try {
 			newConn = conn.getCon();

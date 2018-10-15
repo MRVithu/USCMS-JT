@@ -120,7 +120,7 @@ public class PurchaseOrderManagementService {
 	}
 
 	// METHORD TO CLOSE PURCHASE ORDER
-	public GenericResult closepurchaseOrder(int id) {
+	public GenericResult closepurchaseOrder(int id) throws ClassNotFoundException {
 		PreparedStatement Stmt = null;
 		try {
 			newConn = conn.getCon();
