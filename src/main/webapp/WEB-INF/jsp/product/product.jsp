@@ -196,6 +196,7 @@
 			backdrop : 'static',
 			keyboard : false
 		});
+		$("#image").hide();
 		$("#reset-btn").hide();
 		$("#submit-btn").hide();
 		$("#modal").modal("show");
@@ -205,7 +206,7 @@
 	function deleteProduct(id){
 		try{
 			$.ajax({
-		        url:'http://localhost:8080/deleteProduct/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
+		        url:'http://127.0.0.1:8080/deleteProduct/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
 		        type: 'POST',
 		        data: { id:id },
 		        success: function (res) {
