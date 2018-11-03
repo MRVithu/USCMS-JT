@@ -56,7 +56,7 @@
 						<div class="table-grid" id="product-grid">
 							<table id="product-grid-table"
 								class="table table-condensed table-bordered table-hover table-striped table-pad">
-								<thead>
+								<thead style="background-color:#ccc">
 									<tr>
 										<th style='text-align: center'>#</th>
 										<th>Product</th>
@@ -66,7 +66,7 @@
 										<th class='number'>Selling price</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody style="background-color:#eee">
 
 								</tbody>
 							</table>

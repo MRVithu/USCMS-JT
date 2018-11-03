@@ -14,7 +14,7 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<button id="btn-add" id="addProduct" class="btn btn-success">Add
-			New Item Type</button>
+			New Employee</button>
 	</section>
 
 	<!-- Main content -->

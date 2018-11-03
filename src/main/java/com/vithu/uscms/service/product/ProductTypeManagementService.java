@@ -59,7 +59,7 @@ public class ProductTypeManagementService {
 	}
 
 	// METHORD TO DISABLE PRODUCT TYPE
-	public GenericResult deleteProType(int id) {
+	public GenericResult deleteProType(int id) throws ClassNotFoundException {
 		PreparedStatement deleteStmt = null;
 		try {
 			newConn = conn.getCon();

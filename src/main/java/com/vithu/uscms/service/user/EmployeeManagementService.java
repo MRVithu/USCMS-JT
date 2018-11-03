@@ -42,7 +42,7 @@ public class EmployeeManagementService {
 
 			newConn = conn.getCon();
 
-			// Add user crediantials
+			// Add user details
 			addUserStmt = newConn.prepareStatement(
 					"INSERT INTO `users`( `name`, `mobile`, `password`, `email`, `user_name`, `access_token`) VALUES ('"
 							+ newEmployee.getUser().getName() + "' ,'" + newEmployee.getUser().getMobile() + "', '"

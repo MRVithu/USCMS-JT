@@ -14,6 +14,7 @@ import com.vithu.uscms.entities.Employee;
 import com.vithu.uscms.entities.PayCheque;
 import com.vithu.uscms.entities.Payment;
 import com.vithu.uscms.entities.Product;
+import com.vithu.uscms.entities.Report;
 import com.vithu.uscms.entities.Sales;
 import com.vithu.uscms.entities.SalesProduct;
 import com.vithu.uscms.entities.User;
@@ -261,22 +262,23 @@ System.out.println("success");
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT s.`t_date`, SUM(p.`total`) AS amount\r\n" + 
+					"SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n" + 
 					"FROM `sales` s\r\n" + 
 					"LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + 
-					"GROUP BY s.`t_date`\r\n" + 
+					"GROUP BY s.`t_date`" + 
 					"");
 			res = stmt.executeQuery();
 
-			List<Payment> salesList = new ArrayList<Payment>();
+			List<Report> salesList = new ArrayList<Report>();
 			while (res.next()) {
 				System.out.println("id : " + res.getString("t_date"));
 
-				Payment pay = new Payment();
-				pay.setAmount(res.getDouble("amount"));
-				pay.settDate(res.getString("t_date"));
+				Report re = new Report();
+				re.setAmount(res.getDouble("amount"));
+				re.settDate(res.getString("t_date"));
+				re.setQty(res.getInt("qty"));
 
-				salesList.add(pay);
+				salesList.add(re);
 			}
 
 			GenericResult rs = new GenericResult();

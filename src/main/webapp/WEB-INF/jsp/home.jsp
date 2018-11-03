@@ -25,7 +25,7 @@
 	<section class="content">
 		<!-- Small boxes (Stat box) -->
 		<div class="row">
-			<div class="col-lg-3 col-xs-6">
+			<div class="col-lg-4 col-xs-6">
 				<!-- small box -->
 				<div class="small-box bg-aqua">
 					<div class="inner">
@@ -40,26 +40,8 @@
 						class="fa fa-arrow-circle-right"></i></a>
 				</div>
 			</div>
-			<!-- ./col -->
-			<div class="col-lg-3 col-xs-6">
-				<!-- small box -->
-				<div class="small-box bg-green">
-					<div class="inner">
-						<h3>
-							53<sup style="font-size: 20px">%</sup>
-						</h3>
-
-						<p>Bounce Rate</p>
-					</div>
-					<div class="icon">
-						<i class="ion ion-stats-bars"></i>
-					</div>
-					<a href="#" class="small-box-footer">More info <i
-						class="fa fa-arrow-circle-right"></i></a>
-				</div>
-			</div>
-			<!-- ./col -->
-			<div class="col-lg-3 col-xs-6">
+						
+			<div class="col-lg-4 col-xs-6">
 				<!-- small box -->
 				<div class="small-box bg-yellow">
 					<div class="inner">
@@ -75,7 +57,7 @@
 				</div>
 			</div>
 			<!-- ./col -->
-			<div class="col-lg-3 col-xs-6">
+			<div class="col-lg-4 col-xs-6">
 				<!-- small box -->
 				<div class="small-box bg-red">
 					<div class="inner">
@@ -149,46 +131,131 @@
 	console.log(sales);
 	
 	var d = new Date();
-	var t = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t='';
+	if(d.getDate() < 10){
+		t = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
+	
+	d.setDate(d.getDate() - 1);
+	var t1='';
+	if(d.getDate() < 10){
+		t1 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t1 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
 	d.setDate(d.getDate() - 1);
-	var t1 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t2='';
+	if(d.getDate() < 10){
+		t2 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t2 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
+	
+	d.setDate(d.getDate() - 1);
+	var t3='';
+	if(d.getDate() < 10){
+		t3 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t3 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
+	
+	d.setDate(d.getDate() - 1);
+	var t4='';
+	if(d.getDate() < 10){
+		t4 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t4 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
 	d.setDate(d.getDate() - 1);
-	var t2 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t5='';
+	if(d.getDate() < 10){
+		t5 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t5 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
 	d.setDate(d.getDate() - 1);
-	var t3 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-
+	var t6='';
+	if(d.getDate() < 10){
+		t6 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t6 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
+	
 	d.setDate(d.getDate() - 1);
-	var t4 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-
-	d.setDate(d.getDate() - 1);
-	var t5 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-
-	d.setDate(d.getDate() - 1);
-	var t6 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-
-	d.setDate(d.getDate() - 1);
-    var t7 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t7='';
+	if(d.getDate() < 10){
+		t7 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t7 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
     d.setDate(d.getDate() - 1);
-    var t8 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t8='';
+	if(d.getDate() < 10){
+		t8 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t8 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
+
 
     d.setDate(d.getDate() - 1);
-    var t9 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t9='';
+	if(d.getDate() < 10){
+		t9 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t9 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
     d.setDate(d.getDate() - 1);
-    var t10 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t10='';
+	if(d.getDate() < 10){
+		t10 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t10 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
     d.setDate(d.getDate() - 1);
-    var t11 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t11='';
+	if(d.getDate() < 10){
+		t11 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t11 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
     d.setDate(d.getDate() - 1);
-    var t12 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t12='';
+	if(d.getDate() < 10){
+		t12 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t12 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 
     d.setDate(d.getDate() - 1);
-    var t13 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	var t13='';
+	if(d.getDate() < 10){
+		t13 = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+	}
+	else{
+		t13 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	}
 	
 	var s = 0;
 	var s1 = 0;

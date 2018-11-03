@@ -223,7 +223,7 @@
 				itemType.name=$("#name").val();
 				itemType.description=$("#description").val();
 				itemType.proType=$("#pro-type").val();
-				alert(itemType.id);
+				//alert(itemType.id);
 				$.ajax({
 					
 					type: 'POST',

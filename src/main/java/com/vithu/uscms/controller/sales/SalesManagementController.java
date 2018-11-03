@@ -65,6 +65,8 @@ public class SalesManagementController {
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
+
+System.out.println("----------hi i have permission to access sales view"+currentUser.getAuthorityMap());
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
 
 					returnResult = salesService.getAllSales();
@@ -75,7 +77,7 @@ public class SalesManagementController {
 		} catch (Exception e) {
 			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
 		}
-
+		System.out.println("--"+returnResult.getMessage());
 		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
 			request.setAttribute("response", returnResult);

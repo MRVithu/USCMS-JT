@@ -56,7 +56,7 @@
 						}
 						setTimeout(function() {
 							if (res.status == true) {
-								//window.location.href = "/home";
+								window.location.href = "/home";
 							}
 						}, 500);
 					},

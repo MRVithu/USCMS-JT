@@ -37,13 +37,13 @@ public class ProductManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`,\r\n"
+					"SELECT p.`id`, p.`name`,b.`id` AS brandId, b.`name` AS brandName, p.`code`, p.`description`, p.`reorder_qty` AS reQty,\r\n"
 							+ "i.`id` AS itemTypeId, i.`name` AS itemTypeName, p.`size`, p.`selling_price` AS salesPrice,\r\n"
-							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount,u.name as addedBy\r\n"
-							+ "FROM `products` p\r\n" + "LEFT JOIN `pro_brands` b\r\n" + "ON p.`brand`=b.`id`\r\n"
-							+ "LEFT JOIN `pro_item_types` i\r\n" + "ON p.`pro_item_type`=i.`id`\r\n"
-							+ "LEFT JOIN `employees` e\r\n" + "ON e.`id`=p.`added_by`\r\n" + "LEFT JOIN `users` u\r\n"
-							+ "ON u.`id`=e.`user_id`\r\n" + "WHERE p.`is_deleted`=FALSE;");
+							+ "p.`last_purchase_price` AS purchasePrice, p.`min_price` AS minPrice, p.`dicount_par` AS discount,u.name AS addedBy\r\n"
+							+ "FROM `products` p \r\n" + "LEFT JOIN `pro_brands` b ON p.`brand`=b.`id`\r\n"
+							+ "LEFT JOIN `pro_item_types` i ON p.`pro_item_type`=i.`id`\r\n"
+							+ "LEFT JOIN `employees` e ON e.`id`=p.`added_by`\r\n"
+							+ "LEFT JOIN `users` u ON u.`id`=e.`user_id`\r\n" + "WHERE p.`is_deleted`=FALSE;");
 			res = stmt.executeQuery();
 			List<Product> productList = new ArrayList<Product>();
 			while (res.next()) {
@@ -58,14 +58,14 @@ public class ProductManagementService {
 				product.setSelleingPrice(res.getDouble("salesPrice"));
 				product.setLastPurchasePrice(res.getDouble("purchasePrice"));
 				product.setMinPrice(res.getDouble("minPrice"));
+				product.setReOrderQty(res.getInt("reQty"));
 
-				Employee addedBy=new Employee();
-				User user=new User();
+				Employee addedBy = new Employee();
+				User user = new User();
 				user.setName(res.getString("addedBy"));
 				addedBy.setUser(user);
 				product.setAddedBy(addedBy);
-				
-				
+
 				Brand brand = new Brand();
 				brand.setId(res.getInt("brandId"));
 				brand.setName(res.getString("brandName"));
@@ -126,13 +126,13 @@ public class ProductManagementService {
 
 			// Add Product Credentials
 			addStmt = newConn.prepareStatement(
-					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`,`added_by`) \r\n"
+					"INSERT INTO `products`(`name`, `brand`, `code`, `description`, `pro_item_type`, `size`, `selling_price`, `last_purchase_price`, `min_price`, `dicount_par`,`added_by`, `reorder_qty`) \r\n"
 							+ "VALUES ('" + newProduct.getName() + "','" + newProduct.getBrand().getId() + "','"
 							+ newProduct.getCode() + "','" + newProduct.getDescription() + "','"
 							+ newProduct.getItemType().getId() + "','" + newProduct.getSize() + "','"
 							+ newProduct.getSelleingPrice() + "','" + newProduct.getLastPurchasePrice() + "', '"
 							+ newProduct.getMinPrice() + "', '" + newProduct.getDiscount() + "','"
-							+ newProduct.getAddedBy().getId() + "');",
+							+ newProduct.getAddedBy().getId() + "', '" + newProduct.getReOrderQty() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addStmt.executeUpdate();
 
@@ -165,7 +165,8 @@ public class ProductManagementService {
 					+ newProduct.getItemType().getId() + "', `size`='" + newProduct.getSize() + "', `selling_price`='"
 					+ newProduct.getSelleingPrice() + "', `last_purchase_price`='" + newProduct.getLastPurchasePrice()
 					+ "', `min_price`='" + newProduct.getMinPrice() + "', `dicount_par`='" + newProduct.getMinPrice()
-					+ "' WHERE `id`='" + newProduct.getId() + "'", Statement.RETURN_GENERATED_KEYS);
+					+ "', `reorder_qty` = '" + newProduct.getReOrderQty() + "' WHERE `id`='" + newProduct.getId() + "'",
+					Statement.RETURN_GENERATED_KEYS);
 			updateStmt.executeUpdate();
 
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Updated Successfully");
@@ -182,5 +183,29 @@ public class ProductManagementService {
 			}
 		}
 	}
+	
+	// METHOD TO GET MAX PURCHASE ID
+	public GenericResult getMaxPurchaseId() {
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement("SELECT * FROM `products` ORDER BY id DESC LIMIT 0, 1;");
+			res = stmt.executeQuery();
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+
+			while (res.next()) {
+				rs.setResult(res.getInt("id"));
+			}
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", JsonFormer.form(rs));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+
+	}
+
 
 }

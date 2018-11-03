@@ -15,6 +15,7 @@ import com.vithu.uscms.entities.Payment;
 import com.vithu.uscms.entities.Product;
 import com.vithu.uscms.entities.Purchase;
 import com.vithu.uscms.entities.PurchaseProduct;
+import com.vithu.uscms.entities.Report;
 import com.vithu.uscms.entities.Supplier;
 import com.vithu.uscms.entities.User;
 import com.vithu.uscms.others.DBConnection;
@@ -251,21 +252,22 @@ public class PurchaseManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT s.`t_date`, SUM(p.`total`) AS amount\r\n" + 
+					"SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n" + 
 					"FROM `purchases` s\r\n" + 
 					"LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + 
 					"GROUP BY s.`t_date`");
 			res = stmt.executeQuery();
 
-			List<Payment> purList = new ArrayList<Payment>();
+			List<Report> purList = new ArrayList<Report>();
 			while (res.next()) {
 				System.out.println("id : " + res.getString("t_date"));
 
-				Payment pay = new Payment();
-				pay.setAmount(res.getDouble("amount"));
-				pay.settDate(res.getString("t_date"));
+				Report re = new Report();
+				re.setAmount(res.getDouble("amount"));
+				re.settDate(res.getString("t_date"));
+				re.setQty(res.getInt("qty"));
 
-				purList.add(pay);
+				purList.add(re);
 			}
 
 			GenericResult rs = new GenericResult();

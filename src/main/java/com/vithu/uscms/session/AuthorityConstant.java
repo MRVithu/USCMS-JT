@@ -19,7 +19,12 @@ public class AuthorityConstant {
 	public static final String AUTH_VIEW_EMPLOYEE = "CAN_VIEW_EMPLOYEE";
 	public static final String AUTH_DELETE_EMPLOYEE = "CAN_DELETE_EMPLOYEE";
 	
+	// Sale Constant
+	public static final String AUTH_ADD_SALE = "CAN_ADD_SALE";
+	public static final String AUTH_VIEW_SALE = "CAN_VIEW_SALE";
+		
 
+	
 	
 	
 

@@ -55,7 +55,7 @@ public class UserLoginService {
 							+ "LEFT JOIN customers c ON  u.id = c.user_id\r\n"
 							+ "LEFT JOIN roles o ON e.role_id = o.id\r\n"
 							+ "WHERE u.user_name = ? AND u.is_deleted = ?;");
-			
+
 			searchStmt.setString(1, logger.getUserName());
 			// searchStmt.setString(2, logger.getPassword());
 			searchStmt.setBoolean(2, false);
@@ -65,7 +65,7 @@ public class UserLoginService {
 
 				if (rs.getString("password") != null) {
 					System.out.println(logger.getPassword() + "-------------------------");
-					System.out.println( rs.getString("password"));
+					System.out.println(rs.getString("password"));
 					boolean matchedPassword = deService.checkDataMatch(logger.getPassword(), rs.getString("password"));
 
 					if (matchedPassword) {
@@ -83,12 +83,11 @@ public class UserLoginService {
 						employee.setAddress(rs.getString("address"));
 						employee.setContact(rs.getString("contact"));
 						System.out.println(rs.getString("user_name"));
-						if( rs.getDate("dob") != null) {
+						if (rs.getDate("dob") != null) {
 							employee.setDob(rs.getDate("dob").toString());
-						}
-						else {
+						} else {
 							employee.setDob("");
-						}					
+						}
 						employee.setNic(rs.getString("nic"));
 						employee.setRole(rs.getString("role"));
 						employee.setUser(user);
@@ -118,13 +117,16 @@ public class UserLoginService {
 				loginStmt.executeUpdate();
 
 				// get authorities and populate into authority map
-				getAuthoityTokenStmt = newConn.prepareStatement("SELECT authority FROM emp_authority WHERE emp_id = ?");
+				getAuthoityTokenStmt = newConn.prepareStatement("SELECT `authority`\r\n" + "FROM `emp_authority` a\r\n"
+						+ "LEFT JOIN `employees` e ON e.`id`=a.`emp_id`\r\n" + "WHERE `user_id` = ?");
 				getAuthoityTokenStmt.setInt(1, user.getId());
 				rs = getAuthoityTokenStmt.executeQuery();
-
+				System.out.println("empid:" + user.getId());
 				Map<String, Boolean> authorityMap = new HashMap<String, Boolean>();
 
 				while (rs.next()) {
+					System.out.println("------------------------------------------------------------------");
+					System.out.println("auth:" + rs.getString("authority"));
 					authorityMap.put(rs.getString("authority"), true);
 				}
 				currUser.setAuthorityMap(authorityMap);

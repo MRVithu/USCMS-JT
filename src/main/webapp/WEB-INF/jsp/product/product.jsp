@@ -105,13 +105,13 @@
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Purchase Price</label> <input
-								type="number" name="purPrice" value="0" id="pur-price"
+								type="number" name="purPrice" value="0.00" id="pur-price"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
 						<div class="input-group">
 							<label class="input-group-addon">Sales Price</label> <input
-								type="number" name="salesPrice" value="0" id="sales-price"
+								type="number" name="salesPrice" value="0.0" id="sales-price"
 								class="form-control number field-wid" /><label
 								class="input-group-addon small-addon">Rs.</label>
 						</div>
@@ -128,6 +128,11 @@
 								class="input-group-addon small-addon"><b>%</b></label>
 						</div>
 						<div class="input-group">
+							<label class="input-group-addon">Reorder Qty</label> <input
+								type="number" value="1" id="re-qty" name="discount"
+								class="form-control number field-wid" />
+						</div>
+						<div class="input-group">
 							<label class="input-group-addon">Description</label> <input
 								type="text" id="description" name="description"
 								class="form-control " />
@@ -136,13 +141,6 @@
 							<label class="input-group-addon">Added By</label> <input
 								type="text" id="added-by" class="form-control " />
 						</div>
-						<div class="input-group">
-							<label class="input-group-addon">Pro-Image :</label> <input
-								name="image" id="image" type="file" class="form-control" />
-						</div>
-						<img id="previewing" class="previewing"
-							src='<c:url value="/resources/dist/img/noimage.png" />' /> <span
-							style="color: red;"></span>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -169,10 +167,13 @@
 <script>
 	var products = "";
 	products = ${products.resultString};
+	
+	var proMaxId="";
+	proMaxId = ${proMaxId.result};
 
 	//Data table
 	$(function() {
-		console.log(<%= session.getAttribute("currUser") %>);
+		
 		
 		$('#user-table').DataTable({
 			"aoColumnDefs" : [ {
@@ -206,7 +207,7 @@
 	function deleteProduct(id){
 		try{
 			$.ajax({
-		        url:'http://127.0.0.1:8080/deleteProduct/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
+		        url: apiUrl+'deleteProduct/'+ id +'.json?token=<%=session.getAttribute("Token")%>',
 		        type: 'POST',
 		        data: { id:id },
 		        success: function (res) {
@@ -235,10 +236,12 @@
 	$("#btn-add").on("click",function(){
 		method="addProduct.json";
 		clear();
-		$("#code").val("P");
+		var code=getMaxId("P", proMaxId.result);
+		$("#code").val(code);
 		$(".modal-title").html("Add Product");
 		$(".form-control").prop("readonly", false);
 		$(".form-control").prop("disabled", false);
+		$("#code").prop("disabled", true);
 		$("#modal").modal({backdrop: 'static', keyboard: false});
 		$("#reset-btn").show();
 		$("#submit-btn").show();
@@ -251,6 +254,7 @@
 		method = "updateProduct.json";
 		$(".form-control").prop("readonly", false);
 		$(".form-control").prop("disabled", false);
+		$("#code").prop("disabled", true);
   		fillDataToModal(id);
   		$(".modal-title").html("Edit Product");
   		$("#pro-id").val(id);
@@ -267,9 +271,22 @@
 		try
 		{
 			if ($("#code").val().trim() == ""){
-				alertMessage(res.description, "Product code can not be empty");
-			}else{
-				alert($("#code").val());
+				alertMessage( "Product code can not be empty", "error");
+			}
+			else if ($("#name").val().trim() == ""){
+				alertMessage("Product name can not be empty", "error");
+			}
+			else if ($("#pur-price").val().trim() == ""){
+				alertMessage("Purchase price can not be empty", "error");
+			}
+			else if ($("#sales-price").val().trim() == ""){
+				alertMessage("Sales price can not be empty", "error");
+			}
+			else if ($("#sales-price").val() < $("#pur-price").val()){
+				alertMessage("Sales price can not be less than purchase price", "error");
+			}
+			else{
+				//alert($("#code").val());
 				var product = {};
 				product.id=$("#pro-id").val();
 				product.name=$("#name").val();
@@ -282,23 +299,22 @@
 				product.description=$("#description").val();
 				product.brand=$("#brand").val();
 				product.itemType=$("#item-type").val();
+				product.reQty=$("#re-qty").val();
 				
 				console.log(product);
 				console.log(method);
 				
 				// {data:JSON.stringify(product)}
 				
-				var frmData = new FormData(form);
-				frmData.append("kkkkkkkk", "lllllllllll");
-				console.log(frmData);
+				//var frmData = new FormData(form);
+				//var frmData = $("#productFrom").serialize()
+				//frmData.append("kkkkkkkk", "lllllllllll");
+				//console.log(frmData);
 				$.ajax({
 					
 					type: 'POST',
-					url: 'http://localhost:8080/'+method+'?token=<%=session.getAttribute("Token")%>',
-					data: frmData,
-			  	 	contentType: false,
-			  	 	cache: false, 						// To unable request pages to be cached
-					processData: false,
+					url: apiUrl+method+'?token=<%=session.getAttribute("Token")%>',
+					data: {data:JSON.stringify(product)},
 					success: function(res) {
 						console.log(res);
 						console.log(res.status);
@@ -307,7 +323,7 @@
 						if (res.status == false) {
 							alertMessage(res.description, 'error');
 						} else if (res.status == true) {
-							alertMessage(res.description, 'error');
+							alertMessage(res.description, 'success');
 						}
 	
 						setTimeout(function() {
@@ -344,7 +360,8 @@
 				$("#min-price").val(product.minPrice);
 				$("#discount").val(product.discount);
 				$("#description").val(product.description);
-				$("#added-by").val(product.addedBy.user.name)
+				$("#added-by").val(product.addedBy.user.name);
+				$("#re-qty").val(product.reOrderQty);
 				
 				$("#brand").prepend("<option>"+product.brand.name+"</option>");
 				$("#item-type").prepend("<option>"+product.itemType.name+"</option>");
@@ -355,11 +372,11 @@
 	//Function for clear all fields in all modals.
 	function clear(){
 		$("#name").val("");
-		$("#code").val("");
 		$("#size").val("");
 		$("#pur-price").val("");
 		$("#sales-price").val("");
 		$("#min-price").val("");
+		$("#re-qty").val("");
 		$("#discount").val("");
 		$("#description").val("");
   	}

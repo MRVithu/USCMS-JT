@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+
 
 
 <aside class="main-sidebar" id="tofix">
@@ -18,14 +20,14 @@
 				<img src="<c:url value="/resources/dist/img/vithu.jpg" />"
 					class="img-circle" alt="User Image">
 			</div>
-			
+
 			<div class="pull-left info">
-				<p><%=session.getAttribute("ROLE")%></p>
+				<p><%=session.getAttribute("NAME")%></p>
 				<!-- Status -->
-				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+				<a href="#"><i style="color:#06fb30" class="fa fa-circle text-success"></i> Online</a>
 			</div>
 		</div>
-<%-- 
+		<%-- 
 		<!-- search form (Optional) -->
 		<form action="#" method="get" class="sidebar-form">
 			<div class="input-group">
@@ -40,127 +42,142 @@
 		</form>
 		<!-- /.search form -->
  --%>
- 
-<hr>
+
+		<hr>
 		<!-- Sidebar Menu -->
 		<ul class="sidebar-menu">
-			<li
-				class="treeview ${current == 'employee' or current == 'customer' or current == 'supplier' ? 'active' : '' }  ">
+			<li id='user-m'
+				class="treeview">
 				<a href="#"><i class="fa fa-user"></i> <span>Users</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="${current == 'employee' ? 'active' : '' }"><a
+					<li class="menu-employee"><a
 						href="/employee.html?token=<%=session.getAttribute("Token")%>"><i
-							class="fa fa-circle-thin"></i><span> Employees</span></a></li>
+							class="fa fa-circle-thin"></i><span> ${currentPage} Employees</span></a></li>
 
-					<li class="${current == 'customer' ? 'active' : '' }"><a
+					<li class="menu-customer"><a
 						href="/customer.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Customers</span></a></li>
 
-					<li class="${current == 'supplier' ? 'active' : '' }"><a
+					<li class="menu-supplier"><a
 						href="/supplier.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Suppliers</span></a></li>
 				</ul>
 			</li>
 
-			<li
-				class='treeview <%=session.getAttribute("ROLE") == "Admin" ?  "hidden":"hi"%> '>
+			<li id="pro-m"
+				class='treeview   <%=session.getAttribute("ROLE") == "Cashier" ? "hidden" : ""%> '>
 				<a href="#"><i class="fa  fa-link"></i> <span>Product</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="${current == 'product' ? 'active' : '' }"><a
+					<li class="menu-product"><a
 						href="/product.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Products</span></a></li>
 
-					<li class="${current == 'brand' ? 'active' : '' }"><a
+					<li class="menu-brand"><a
 						href="/brand.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Brands</span></a></li>
 
-					<li class="${current == 'productType' ? 'active' : '' }"><a
+					<li class="menu-productType"><a
 						href="/productType.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Product Types</span></a></li>
 
-					<li class="${current == 'itemType' ? 'active' : '' }"><a
+					<li class="menu-itemType"><a
 						href="/itemType.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Item Types</span></a></li>
 				</ul>
 			</li>
 
-			<li
-				class="treeview ${current == 'sales' or current == 'salesAdd' or current== 'salesOrder'  ? 'active' : '' }">
+			<li id="sal-m"
+				class="treeview">
 				<a href="#"><i class="fa  fa-cart-arrow-down"></i> <span>Sales</span>
 					<span class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="${current == 'sales' ? 'active' : '' }"><a
+					<li class="menu-sales"><a
 						href="/sales.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Sales</span></a></li>
 
-					<li class="${current == 'brand' ? 'active' : '' }"><a
+<%-- 
+					<li class="menu-productType"><a
 						href="/salesOrder.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Sales Order</span></a></li>
-
+ --%>
 				</ul>
 			</li>
 
 
-			<li
-				class="treeview ${current == 'purchaseOrder' or current == 'purchase'   ? 'active' : '' }">
+			<li id="pur-m"
+				class="treeview">
 				<a href="#"><i class="fa  fa-truck"></i> <span>Purchase</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="${current == 'purchaseOrder' ? 'active' : '' }"><a
+					<li class="menu-purchase"><a
 						href="/purchase.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Purchase</span></a></li>
 
-					<li class="${current == 'purchase' ? 'active' : '' }"><a
+					<li class="menu-purchaseOrder"><a
 						href="/purchaseOrder.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Purchase Order</span></a></li>
 
 				</ul>
 			</li>
 
-			<li class="treeview"><a href="#"><i class="fa fa-money"></i>
-					<span>Transections</span> <span class="pull-right-container">
-						<i class="fa fa-angle-left pull-right"></i>
-				</span> </a>
-				<ul class="treeview-menu">
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i><span>Customer Transections</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>Supplier Transections</span></a></li>
-					<li class="active"><a href="#"><i
-							class="fa fa-circle-thin"></i> <span>ank Transections</span></a></li>
-				</ul></li>
+			
 
-			<li
-				class="treeview ${current == 'bank' or current == 'counter' or current== 'department'  ? 'active' : '' }">
+			<li id="otr-m"
+				class="treeview">
 				<a href="#"><i class="fa  fa-link"></i> <span>Others</span> <span
 					class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
-					<li class="${current == 'bank' ? 'active' : '' }"><a
+					<li class="menu-bank"><a
 						href="/bank.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Banks</span></a></li>
 
-					<li class="${current == 'department' ? 'active' : '' }"><a
+					<li class="menu-department"><a
 						href="/department.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Departments</span></a></li>
 
-					<li class="${current == 'counter' ? 'active' : '' }"><a
+					<li class="menu-counter"><a
 						href="/counter.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Counters</span></a></li>
 
 				</ul>
 			</li>
+
+			<li id="rep-m"
+				class="treeview">
+				<a href="#"><i class="ion ion-stats-bars"></i> <span>Report</span> <span
+					class="pull-right-container"> <i
+						class="fa fa-angle-left pull-right"></i>
+				</span> </a>
+				<ul class="treeview-menu">
+					<li class="menu-salesAmountVsQty"><a
+						href="/salesAmountVsQty.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Sales Amount Vs Qty</span></a></li>
+
+					<li class="menu-purAmountVsQty"><a
+						href="/purAmountVsQty.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Purchase Amount Vs Qty</span></a></li>
+							
+							
+					<li class="menu-salesAmountVsProduct"><a
+						href="/salesAmountVsProduct.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Sales Amount Vs Product</span></a></li>
+
+
+				</ul>
+			</li>
+
 
 		</ul>
 		<!-- /.sidebar-menu -->
@@ -170,3 +187,24 @@
 	<!-- /.sidebar -->
 </aside>
 
+<script>
+	var role = "<%=session.getAttribute("ROLE")%>";
+	console.log("*********************"+role);
+	
+	if(role == 'Cashier'){
+		$("#user-m").addClass("hidden");
+		$("#pro-m").addClass("hidden");
+		$("#rep-m").addClass("hidden");
+		$("#otr-m").addClass("hidden");
+		$("#pur-m").addClass("hidden");
+	}
+	else if(role == 'Admin'){
+		$("#user-m").removeClass("hidden");
+		$("#pro-m").removeClass("hidden");
+		$("#rep-m").removeClass("hidden");
+		$("#otr-m").removeClass("hidden");
+		$("#pur-m").removeClass("hidden");
+	
+	}
+
+</script>

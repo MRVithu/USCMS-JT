@@ -17,13 +17,13 @@
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	 
 	  <!-- Bootstrap Core CSS -->
-	  <link href="<c:url value="../resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
+	  <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
 		
 	  <!-- Theme style -->
-	  <link href="<c:url value="../resources/dist/css/AdminLTE.min.css" />" rel="stylesheet">
+	  <link href="<c:url value="/resources/dist/css/AdminLTE.min.css" />" rel="stylesheet">
 		
 	  <!-- AdminLTE Skins.  -->
-   	  <link href="<c:url value="../resources/plugins/iCheck/square/blue.css" />" rel="stylesheet">
+   	  <link href="<c:url value="/resources/plugins/iCheck/square/blue.css" />" rel="stylesheet">
    	  
    	  <!-- Common css  -->
    	  <link href="<c:url value="/resources/common/css/uscms.css" />" rel="stylesheet">

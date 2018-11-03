@@ -77,6 +77,9 @@ public class ProductManagementController {
 		ItemTypeManagementService itemTypeService = new ItemTypeManagementService();
 		mandatoryResult = itemTypeService.getAllItemTypes();
 		model.addAttribute("itemTypes", mandatoryResult);
+		
+		mandatoryResult = proService.getMaxPurchaseId();
+		model.addAttribute("proMaxId", mandatoryResult);
 
 		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
 			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
@@ -132,61 +135,63 @@ public class ProductManagementController {
 		CurrentUser currentUser = TokenManager.validateToken(token);
 
 		try {
-
+			
 			if (currentUser == null) {
 				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
 			} else if (currentUser != null) {
 				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
-
+					JSONObject product = new JSONObject(request.getParameter("data"));
+					
 					// Validate Product Code
-					GenericResult validateCode = ValueValidator.validateText(request.getParameter("code"), "Code");
+					GenericResult validateCode = ValueValidator.validateText(product.getString("code"), "Code");
 					if (validateCode.isStatus()) {
 
-						addProduct.setCode(request.getParameter("code"));
-						addProduct.setName(request.getParameter("name"));
-						addProduct.setDescription(request.getParameter("description"));
+						addProduct.setCode(product.getString("code"));
+						addProduct.setName(product.getString("name"));
+						addProduct.setDescription(product.getString("description"));
 
 						GenericResult validateDiscount = ValueValidator
-								.validateTextForNumbers(request.getParameter("discount"), "discount");
+								.validateTextForNumbers(product.getString("discount"), "discount");
 						if (validateDiscount.isStatus()) {
-							addProduct.setDiscount(Double.parseDouble(request.getParameter("discount")));
+							addProduct.setDiscount(Double.parseDouble(product.getString("discount")));
 						} else {
 							addProduct.setDiscount(0.00);
 						}
 
 						GenericResult validateSalesPrice = ValueValidator
-								.validateTextForNumbers(request.getParameter("salesPrice"), "salesPrice");
+								.validateTextForNumbers(product.getString("salesPrice"), "salesPrice");
 						if (validateSalesPrice.isStatus()) {
-							addProduct.setSelleingPrice(Double.parseDouble(request.getParameter("salesPrice")));
+							addProduct.setSelleingPrice(Double.parseDouble(product.getString("salesPrice")));
 						} else {
 							addProduct.setSelleingPrice(0.00);
 						}
 
 						GenericResult validateMinPrice = ValueValidator
-								.validateTextForNumbers(request.getParameter("minPrice"), "minPrice");
+								.validateTextForNumbers(product.getString("minPrice"), "minPrice");
 						if (validateMinPrice.isStatus()) {
-							addProduct.setMinPrice(Double.parseDouble(request.getParameter("minPrice")));
+							addProduct.setMinPrice(Double.parseDouble(product.getString("minPrice")));
 						} else {
 							addProduct.setMinPrice(0.00);
 						}
 
 						GenericResult validatePurPrice = ValueValidator
-								.validateTextForNumbers(request.getParameter("purPrice"), "purPrice");
+								.validateTextForNumbers(product.getString("purPrice"), "purPrice");
 						if (validatePurPrice.isStatus()) {
-							addProduct.setLastPurchasePrice(Double.parseDouble(request.getParameter("purPrice")));
+							addProduct.setLastPurchasePrice(Double.parseDouble(product.getString("purPrice")));
 						} else {
 							addProduct.setLastPurchasePrice(0.00);
 						}
 
-						addProduct.setSize(request.getParameter("size"));
+						addProduct.setSize(product.getString("size"));
+						addProduct.setReOrderQty(product.getInt("reQty"));
 						addProduct.setAddedBy(currentUser.getEmployee());
 
 						Brand brand = new Brand();
-						brand.setId(Integer.parseInt(request.getParameter("brand")));
+						brand.setId(Integer.parseInt(product.getString("brand")));
 						addProduct.setBrand(brand);
 
 						ItemType itemType = new ItemType();
-						itemType.setId(Integer.parseInt(request.getParameter("itemType")));
+						itemType.setId(Integer.parseInt(product.getString("itemType")));
 						addProduct.setItemType(itemType);
 
 						// Save file on system
@@ -249,12 +254,41 @@ public class ProductManagementController {
 						updateProduct.setCode(product.getString("code"));
 						updateProduct.setName(product.getString("name"));
 						updateProduct.setDescription(product.getString("description"));
-						updateProduct.setDiscount(product.getDouble("discount"));
-						updateProduct.setLastPurchasePrice(product.getDouble("purPrice"));
-						updateProduct.setMinPrice(product.getDouble("minPrice"));
-						updateProduct.setSelleingPrice(product.getDouble("salesPrice"));
-						updateProduct.setSize(product.getString("size"));
+						GenericResult validateDiscount = ValueValidator
+								.validateTextForNumbers(product.getString("discount"), "discount");
+						if (validateDiscount.isStatus()) {
+							updateProduct.setDiscount(Double.parseDouble(product.getString("discount")));
+						} else {
+							updateProduct.setDiscount(0.00);
+						}
 
+						GenericResult validateSalesPrice = ValueValidator
+								.validateTextForNumbers(product.getString("salesPrice"), "salesPrice");
+						if (validateSalesPrice.isStatus()) {
+							updateProduct.setSelleingPrice(Double.parseDouble(product.getString("salesPrice")));
+						} else {
+							updateProduct.setSelleingPrice(0.00);
+						}
+
+						GenericResult validateMinPrice = ValueValidator
+								.validateTextForNumbers(product.getString("minPrice"), "minPrice");
+						if (validateMinPrice.isStatus()) {
+							updateProduct.setMinPrice(Double.parseDouble(product.getString("minPrice")));
+						} else {
+							updateProduct.setMinPrice(0.00);
+						}
+
+						GenericResult validatePurPrice = ValueValidator
+								.validateTextForNumbers(product.getString("purPrice"), "purPrice");
+						if (validatePurPrice.isStatus()) {
+							updateProduct.setLastPurchasePrice(Double.parseDouble(product.getString("purPrice")));
+						} else {
+							updateProduct.setLastPurchasePrice(0.00);
+						}
+						
+						updateProduct.setSize(product.getString("size"));
+						updateProduct.setReOrderQty(product.getInt("reQty"));
+						
 						Brand brand = new Brand();
 						brand.setId(product.getInt("brand"));
 						updateProduct.setBrand(brand);

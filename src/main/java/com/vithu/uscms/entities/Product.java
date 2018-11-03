@@ -19,6 +19,7 @@ public class Product {
 	private String size;
 	private Employee addedBy;
 	private String imgUrl;
+	private Integer reOrderQty;
 
 	// *************************************************************
 	// ** CONSTRUCTORS
@@ -130,6 +131,14 @@ public class Product {
 
 	public void setAddedBy(Employee addedBy) {
 		this.addedBy = addedBy;
+	}
+
+	public Integer getReOrderQty() {
+		return reOrderQty;
+	}
+
+	public void setReOrderQty(Integer reOrderQty) {
+		this.reOrderQty = reOrderQty;
 	}
 
 }

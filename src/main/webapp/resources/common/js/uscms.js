@@ -8,6 +8,9 @@
 /** CHECK LOGIN FUNCTION											              **/
 /** ***************************************************************************** **/
 
+//var apiUrl = 'http://localhost:8080/USCMS-JT/';
+var apiUrl = 'http://127.0.0.1:8080/';
+
 $(document).ready(function() {
 	var sessionToken = $("#checklogintext").val();
 		console.log("session token : "+sessionToken);
@@ -169,4 +172,13 @@ function alertMessage(msg, type) {
 		hideAnimation : 'slideUp',
 		hideDuration : 200
 	});
+}
+
+function formatCurrency(x) {
+	x = parseFloat(x).toFixed(2);
+    x = x.toString();
+    var pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(x))
+        x = x.replace(pattern, "$1,$2");
+    return x;
 }

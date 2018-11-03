@@ -137,4 +137,22 @@
 			value="/WEB-INF/jsp/transaction/sales/SalesAdd.jsp" />
 		<put-attribute name="current" value="salesAdd" />
 	</definition>
+	
+	<definition name="salesAmountVsQty" extends="common">
+		<put-attribute name="title" value="USCMS Sales amount Vs qty" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/salesAmountVsQty.jsp" />
+		<put-attribute name="current" value="salesAmountVsQty" />
+	</definition>
+	
+	<definition name="purAmountVsQty" extends="common">
+		<put-attribute name="title" value="USCMS Purchase amount Vs qty" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/purAmountVsQty.jsp" />
+		<put-attribute name="current" value="purAmountVsQty" />
+	</definition>
+	
+	<definition name="salesAmountVsProduct" extends="common">
+		<put-attribute name="title" value="USCMS Sales amount Vs Product" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/salesAmountVsProduct.jsp" />
+		<put-attribute name="current" value="salesAmountVsProduct" />
+	</definition>
 </tiles-definitions>
