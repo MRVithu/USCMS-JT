@@ -39,7 +39,7 @@
 
 </head>
 
-<body id="sidebar-style" class="hold-transition skin-yellow sidebar-mini">
+<body id="sidebar-style" class="hold-transition skin-green sidebar-mini">
 	 
 	<!-- REQUIRED JS SCRIPTS -->
 	<!-- jQuery 2.2.3 -->
@@ -66,6 +66,7 @@
 	  <tiles:insertAttribute name = "header"></tiles:insertAttribute>
 	 
 	  <!-- Left side column. contains the logo and sidebar -->
+	  <c:set var="currentPage"><tiles:getAsString name="current"/></c:set>
 	  <tiles:insertAttribute name = "leftMenu"></tiles:insertAttribute>
 	 
 	  <!-- Body -->
@@ -80,5 +81,9 @@
 	</div>
 	<!-- ./wrapper -->
 	
+	<script>
+		$(".menu-${currentPage}").addClass("active");
+		$(".menu-${currentPage}").parent().parent().addClass("active");
+	</script>
 </body>
 </html>
