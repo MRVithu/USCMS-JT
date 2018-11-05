@@ -144,7 +144,7 @@ System.out.println("----------hi i have permission to access sales view"+current
 	// ADD NEW Sales
 	@RequestMapping(value = "/addSales", method = RequestMethod.POST)
 	@ResponseBody
-	public String addPurchaseOrder(@RequestParam("token") String token, HttpServletRequest request) {
+	public String addSales(@RequestParam("token") String token, HttpServletRequest request) {
 
 		Sales newSales = new Sales();
 

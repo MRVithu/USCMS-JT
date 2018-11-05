@@ -45,14 +45,14 @@ public class SalesManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"select s.`id`,s.`code`, s.`t_date`, u.`name` as customer, us.`name` as salesOfficer, ua.`name` as addedBy, d.`name` as dept\r\n"
-							+ "from `sales` s\r\n" + "left join `customers` c\r\n" + "on s.`customer`=c.`id`\r\n"
-							+ "	left join `users` u\r\n" + "	on c.`user_id`=u.`id`\r\n"
-							+ "left join `employees` so\r\n" + "on s.`sales_officer`=so.`id`\r\n"
-							+ "	LEFT JOIN `users` us\r\n" + "	ON so.`user_id`=us.`id`\r\n"
-							+ "left join `employees` ab\r\n" + "on s.`added_by`=ab.`id`\r\n"
-							+ "	LEFT JOIN `users` ua\r\n" + "	ON ab.`user_id`=ua.`id`\r\n"
-							+ "left join `departments` d\r\n" + "on s.`dept`=d.`id`");
+					"SELECT s.`id`,s.`code`, s.`t_date`, u.`name` AS customer, us.`name` AS salesOfficer, ua.`name` AS addedBy, d.`name` AS dept\r\n"
+							+ "FROM `sales` s\r\n" + "LEFT JOIN `customers` c ON s.`customer`=c.`id`\r\n"
+							+ "LEFT JOIN `users` u ON c.`user_id`=u.`id`\r\n"
+							+ "LEFT JOIN `employees` so ON s.`sales_officer`=so.`id`\r\n"
+							+ "LEFT JOIN `users` us ON so.`user_id`=us.`id`\r\n"
+							+ "LEFT JOIN `employees` ab ON s.`added_by`=ab.`id`\r\n"
+							+ "LEFT JOIN `users` ua ON ab.`user_id`=ua.`id`\r\n"
+							+ "LEFT JOIN `departments` d ON s.`dept`=d.`id`\r\n" + "ORDER BY s.`code` DESC;");
 			res = stmt.executeQuery();
 
 			List<Sales> salesList = new ArrayList<Sales>();
@@ -188,9 +188,9 @@ public class SalesManagementService {
 			// Add sales credentials
 			addSalesStmt = newConn.prepareStatement(
 					"INSERT INTO `sales` (`pay`, `code`, `customer`, `t_date`, `sales_officer`, `added_by`, `dept`) VALUE('"
-							+ lastPayId + "','"+newSales.getCode()+"', '" + newSales.getCustomer().getId() + "', '" + newSales.gettDate()
-							+ "', '" + newSales.getSalesOfficer().getId() + "', '" + newSales.getAddedBy().getId()
-							+ "', '" + newSales.getDept().getId() + "');",
+							+ lastPayId + "','" + newSales.getCode() + "', '" + newSales.getCustomer().getId() + "', '"
+							+ newSales.gettDate() + "', '" + newSales.getSalesOfficer().getId() + "', '"
+							+ newSales.getAddedBy().getId() + "', '" + newSales.getDept().getId() + "');",
 					Statement.RETURN_GENERATED_KEYS);
 			addSalesStmt.executeUpdate();
 
@@ -214,7 +214,8 @@ public class SalesManagementService {
 								+ salesProduct.getQty() + "', '" + salesProduct.getUnitPrice() + "'); ");
 				addSPStmt.executeUpdate();
 			}
-System.out.println("success");
+
+			System.out.println("success");
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Sales Added Successfully.");
 
 		} catch (Exception e) {
@@ -262,11 +263,8 @@ System.out.println("success");
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n" + 
-					"FROM `sales` s\r\n" + 
-					"LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + 
-					"GROUP BY s.`t_date`" + 
-					"");
+					"SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n" + "FROM `sales` s\r\n"
+							+ "LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + "GROUP BY s.`t_date`" + "");
 			res = stmt.executeQuery();
 
 			List<Report> salesList = new ArrayList<Report>();
@@ -291,6 +289,6 @@ System.out.println("success");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
-		}		
+		}
 	}
 }

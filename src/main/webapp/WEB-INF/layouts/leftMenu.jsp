@@ -161,6 +161,14 @@
 						class="fa fa-angle-left pull-right"></i>
 				</span> </a>
 				<ul class="treeview-menu">
+					<li class="menu-reachedZeroLevelProduct"><a
+						href="/reachedZeroLevelProduct.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Reached Zero Level Products</span></a></li>
+				
+					<li class="menu-reachedMinLevelProduct"><a
+						href="/reachedMinLevelProduct.html?token=<%=session.getAttribute("Token")%>"><i
+							class="fa fa-circle-thin"></i><span> Reached Reorder Level Products</span></a></li>
+				
 					<li class="menu-salesAmountVsQty"><a
 						href="/salesAmountVsQty.html?token=<%=session.getAttribute("Token")%>"><i
 							class="fa fa-circle-thin"></i><span> Sales Amount Vs Qty</span></a></li>

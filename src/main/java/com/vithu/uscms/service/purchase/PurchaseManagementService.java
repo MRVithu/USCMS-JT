@@ -44,11 +44,12 @@ public class PurchaseManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement("SELECT p.`id`, p.`t_date`, p.`code`, u.`name` AS supplier, p.`pay`,\r\n"
-					+ "ui.`name` AS addedBy,  d.`name` as dept\r\n" + "FROM `purchases` p\r\n"
-					+ "LEFT JOIN `suppliers` s\r\n" + "ON s.`id`=p.`supplier`\r\n" + "LEFT JOIN `users` u\r\n"
-					+ "ON u.`id`=s.`user_id`\r\n" + "LEFT JOIN `employees` e\r\n" + "ON e.`id`=p.`added_by`\r\n"
-					+ "LEFT JOIN `users` ui\r\n" + "ON ui.`id`=e.`user_id`\r\n" + "left join `departments` d\r\n"
-					+ "on d.`id`=p.`dept`");
+					+ "ui.`name` AS addedBy,  d.`name` AS dept\r\n" + "FROM `purchases` p\r\n"
+					+ "LEFT JOIN `suppliers` s ON s.`id`=p.`supplier`\r\n"
+					+ "LEFT JOIN `users` u ON u.`id`=s.`user_id`\r\n"
+					+ "LEFT JOIN `employees` e ON e.`id`=p.`added_by`\r\n"
+					+ "LEFT JOIN `users` ui ON ui.`id`=e.`user_id`\r\n"
+					+ "LEFT JOIN `departments` d ON d.`id`=p.`dept`\r\n" + "ORDER BY p.`code` DESC;");
 			res = stmt.executeQuery();
 
 			List<Purchase> purchaseList = new ArrayList<Purchase>();
@@ -244,18 +245,15 @@ public class PurchaseManagementService {
 
 	}
 
-	
 	public GenericResult getPurAmountDayBy() {
 
 		PreparedStatement stmt = null;
 
 		try {
 			newConn = conn.getCon();
-			stmt = newConn.prepareStatement(
-					"SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n" + 
-					"FROM `purchases` s\r\n" + 
-					"LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n" + 
-					"GROUP BY s.`t_date`");
+			stmt = newConn.prepareStatement("SELECT s.`t_date`, SUM(p.`total`) AS amount, COUNT(p.`total`) AS qty\r\n"
+					+ "FROM `purchases` s\r\n" + "LEFT JOIN `payments` p ON p.`id`=s.`pay`\r\n"
+					+ "GROUP BY s.`t_date`");
 			res = stmt.executeQuery();
 
 			List<Report> purList = new ArrayList<Report>();
@@ -280,6 +278,6 @@ public class PurchaseManagementService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
-		}		
+		}
 	}
 }

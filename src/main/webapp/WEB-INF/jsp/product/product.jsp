@@ -282,9 +282,6 @@
 			else if ($("#sales-price").val().trim() == ""){
 				alertMessage("Sales price can not be empty", "error");
 			}
-			else if ($("#sales-price").val() < $("#pur-price").val()){
-				alertMessage("Sales price can not be less than purchase price", "error");
-			}
 			else{
 				//alert($("#code").val());
 				var product = {};

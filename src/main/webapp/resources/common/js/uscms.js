@@ -170,7 +170,7 @@ function alertMessage(msg, type) {
 		showAnimation : 'slideDown',
 		showDuration : 400,
 		hideAnimation : 'slideUp',
-		hideDuration : 200
+		hideDuration : 800
 	});
 }
 

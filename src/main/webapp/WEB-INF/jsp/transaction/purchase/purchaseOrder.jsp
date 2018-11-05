@@ -159,8 +159,8 @@
 				});
 				$("#grand-total").html(formatNumber(grandTotal,2));
 				if(po.isClosed==false){				
-					var htmlString="<input type='button' onclick='' id='btn-make-purchase' class='btn btn-info app-button tbtn' value='Make as purchase' />";
-					htmlString +="<input type='button' onclick='closePurchaseOrder("+id+")' id='btn-close' class='btn btn-danger app-button tbtn'  value='Close Order' />"
+					 //htmlString="<input type='button' onclick='' id='btn-make-purchase' class='btn btn-info app-button tbtn' value='Make as purchase' />";
+					 var htmlString ="<input type='button' onclick='closePurchaseOrder("+id+")' id='btn-close' class='btn btn-danger app-button tbtn'  value='Close Order' />"
 					$("#pop-table-footer").html(htmlString);
 				}
 				else{

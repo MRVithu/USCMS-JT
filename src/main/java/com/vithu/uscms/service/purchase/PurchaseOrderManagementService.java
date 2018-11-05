@@ -41,11 +41,12 @@ public class PurchaseOrderManagementService {
 		try {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement(
-					"SELECT po.`id`,po.`t_date`,u.`name` AS supplier, po.`expected_date`,po.`code`, po.`is_closed`, ui.`name` AS addedBy, po.`note`, d.`name` as dept\r\n"
-							+ "FROM `purchase_order` po\r\n" + "LEFT JOIN `suppliers` s\r\n"
-							+ "ON s.`id`=po.`supplier`\r\n" + "LEFT JOIN `users` u\r\n" + "ON u.`id`=s.`user_id`\r\n"
-							+ "LEFT JOIN `employees` e\r\n" + "ON e.`id`=po.`added_by`\r\n" + "LEFT JOIN `users` ui\r\n"
-							+ "ON ui.`id`=e.`user_id`\r\n" + "left join `departments` d\r\n" + "on d.`id`=po.`dept`");
+					"SELECT po.`id`,po.`t_date`,u.`name` AS supplier, po.`expected_date`,po.`code`, po.`is_closed`, ui.`name` AS addedBy, po.`note`, d.`name` AS dept\r\n"
+							+ "FROM `purchase_order` po\r\n" + "LEFT JOIN `suppliers` s ON s.`id`=po.`supplier`\r\n"
+							+ "LEFT JOIN `users` u ON u.`id`=s.`user_id`\r\n"
+							+ "LEFT JOIN `employees` e ON e.`id`=po.`added_by`\r\n"
+							+ "LEFT JOIN `users` ui ON ui.`id`=e.`user_id`\r\n"
+							+ "LEFT JOIN `departments` d ON d.`id`=po.`dept`\r\n" + "ORDER BY po.`code` DESC;");
 			res = stmt.executeQuery();
 
 			List<PurchaseOrder> purchaseOrderList = new ArrayList<PurchaseOrder>();
@@ -203,14 +204,14 @@ public class PurchaseOrderManagementService {
 			newConn = conn.getCon();
 			stmt = newConn.prepareStatement("SELECT * FROM `purchase_order` ORDER BY id DESC LIMIT 0, 1");
 			res = stmt.executeQuery();
-			
+
 			GenericResult rs = new GenericResult();
 			rs.setStatus(true);
 
 			while (res.next()) {
 				rs.setResult(res.getInt("id"));
 			}
-			
+
 			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", JsonFormer.form(rs));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -219,7 +220,7 @@ public class PurchaseOrderManagementService {
 		}
 
 	}
-	
+
 	public int getTodayPurchaseOrders() {
 
 		PreparedStatement getTodayPurchaseOrdersStmt = null;
@@ -227,21 +228,16 @@ public class PurchaseOrderManagementService {
 
 		try {
 			newConn = conn.getCon();
-			getTodayPurchaseOrdersStmt = newConn.prepareStatement(
-					"select count(id) As todayPurchaseOrders\r\n" + 
-					"from `purchase_order`\r\n" + 
-					"WHERE `t_date`=CURDATE();");
+			getTodayPurchaseOrdersStmt = newConn.prepareStatement("select count(id) As todayPurchaseOrders\r\n"
+					+ "from `purchase_order`\r\n" + "WHERE `t_date`=CURDATE();");
 			res = getTodayPurchaseOrdersStmt.executeQuery();
-
-			
 
 			while (res.next()) {
 				todayPurchaseOrders = res.getInt("todayPurchaseOrders");
 			}
-			
 
 			return todayPurchaseOrders;
-		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

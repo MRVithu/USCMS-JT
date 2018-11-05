@@ -155,4 +155,16 @@
 		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/salesAmountVsProduct.jsp" />
 		<put-attribute name="current" value="salesAmountVsProduct" />
 	</definition>
+	
+	<definition name="reachedMinLevelProduct" extends="common">
+		<put-attribute name="title" value="USCMS Reached Reorder Level Products" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/reachedMinLevelProduct.jsp" />
+		<put-attribute name="current" value="reachedMinLevelProduct" />
+	</definition>
+	
+	<definition name="reachedZeroLevelProduct" extends="common">
+		<put-attribute name="title" value="USCMS Reached Zero Level Products" />
+		<put-attribute name="containerbody" value="/WEB-INF/jsp/report/reachedZeroLevelProduct.jsp" />
+		<put-attribute name="current" value="reachedZeroLevelProduct" />
+	</definition>
 </tiles-definitions>

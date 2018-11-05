@@ -145,6 +145,77 @@ public class ReportManagementController {
 		}
 		return response;
 	}
+	
+	@RequestMapping("/reachedMinLevelProduct")
+	public String getReachedMinLevelProduct(@RequestParam("token") String token,  HttpServletRequest request, Model model) {
+		CurrentUser currentUser = TokenManager.validateToken(token);
+		String mediaType = URLFormatter.getMediaType(request);
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "", "");
+		
+		try {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+
+					ReportManagementService rtService = new ReportManagementService();
+					returnResult = rtService.getReachedMinLevelProduct();
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
+		} catch (Exception e) {
+			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+		}
+
+		
+		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
+			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
+			request.setAttribute("response", returnResult);
+			response = "jsonview";
+		} else {
+			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
+			model.addAttribute("reachedMinLevelProduct", returnResult);
+			response = "reachedMinLevelProduct";
+		}
+		return response;
+	}
 
 
+	@RequestMapping("/reachedZeroLevelProduct")
+	public String getReachedZeroLevelProduct(@RequestParam("token") String token,  HttpServletRequest request, Model model) {
+		CurrentUser currentUser = TokenManager.validateToken(token);
+		String mediaType = URLFormatter.getMediaType(request);
+		GenericResult returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, "", "", "", "");
+		
+		try {
+			if (currentUser == null) {
+				returnResult = new GenericResult(false, MessageConstant.MSG_INVALID_TOKEN, "");
+			} else if (currentUser != null) {
+				if (currentUser.getAuthorityMap().get(AuthorityConstant.AUTH_VIEW_CUSTOMER) != null) {
+
+					ReportManagementService rtService = new ReportManagementService();
+					returnResult = rtService.getReachedZeroLevelProduct();
+				} else {
+					returnResult = new GenericResult(false, MessageConstant.MSG_NO_AUTH, "");
+				}
+			}
+		} catch (Exception e) {
+			returnResult = new GenericResult(false, MessageConstant.MSG_FAILED, e.toString());
+		}
+
+		
+		if (URLFormatter.MEDIA_JSON.equals(mediaType)) {
+			returnResult.setRequestedFormat(URLFormatter.MEDIA_JSON);
+			request.setAttribute("response", returnResult);
+			response = "jsonview";
+		} else {
+			returnResult.setRequestedFormat(URLFormatter.MEDIA_PAGE);
+			model.addAttribute("reachedZeroLevelProduct", returnResult);
+			response = "reachedZeroLevelProduct";
+		}
+		return response;
+	}
+
+	
 }

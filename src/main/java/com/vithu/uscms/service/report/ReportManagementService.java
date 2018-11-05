@@ -72,4 +72,106 @@ public class ReportManagementService {
 		}
 	}
 
+	// METHOD TO VIEW ALL SALES
+	public GenericResult getReachedMinLevelProduct() {
+
+		PreparedStatement stmt = null;
+
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement(
+					"SELECT p.`id`, p.`code`, p.`name`,b.`name` AS brand, p.`reorder_qty`,`reorder_qty`-(SUM(pp.`quantity`)-SUM(sp.`quantity`)) AS inventry\r\n"
+							+ "FROM `products` p\r\n" + "LEFT JOIN `sale_products` sp ON sp.`product`=p.`id`\r\n"
+							+ "LEFT JOIN `purchase_products` pp ON pp.`product`=p.`id`\r\n"
+							+ "LEFT JOIN `pro_brands` b ON b.`id`=p.`brand`\r\n" + "GROUP BY p.`id`");
+			res = stmt.executeQuery();
+
+			List<Report> rList = new ArrayList<Report>();
+			while (res.next()) {
+
+				if (0 > res.getInt("inventry")) {
+					Report rt = new Report();
+					Product product = new Product();
+					Brand brand = new Brand();
+
+					System.out.println("--" + res.getInt("reorder_qty") + ">" + res.getInt("inventry") + "--");
+					product.setName(res.getString("name"));
+					product.setCode(res.getString("code"));
+					product.setReOrderQty(res.getInt("reorder_qty"));
+
+					brand.setName(res.getString("brand"));
+					product.setBrand(brand);
+
+					rt.setQty(res.getInt("inventry"));
+					rt.setProduct(product);
+
+					rList.add(rt);
+
+				}
+
+			}
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+			rs.setResult(rList);
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", rList,
+					JsonFormer.form(rs), " ");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+	}
+
+	// METHOD TO VIEW ALL SALES
+	public GenericResult getReachedZeroLevelProduct() {
+
+		PreparedStatement stmt = null;
+
+		try {
+			newConn = conn.getCon();
+			stmt = newConn.prepareStatement(
+					"SELECT p.`id`, p.`code`, p.`name`,b.`name` AS brand, p.`reorder_qty`,(SUM(pp.`quantity`)-SUM(sp.`quantity`)) AS inventry,SUM(pp.`quantity`) AS purchase,SUM(sp.`quantity`) AS sales\r\n"
+							+ "FROM `products` p\r\n" + "LEFT JOIN `sale_products` sp ON sp.`product`=p.`id`\r\n"
+							+ "LEFT JOIN `purchase_products` pp ON pp.`product`=p.`id`\r\n"
+							+ "LEFT JOIN `pro_brands` b ON b.`id`=p.`brand`\r\n" + "GROUP BY p.`id`");
+			res = stmt.executeQuery();
+
+			List<Report> rList = new ArrayList<Report>();
+			while (res.next()) {
+				
+				if (0 == (res.getInt("purchase")-res.getInt("sales"))) {
+					Report rt = new Report();
+					Product product = new Product();
+					Brand brand = new Brand();
+
+					product.setName(res.getString("name"));
+					product.setCode(res.getString("code"));
+					product.setReOrderQty(res.getInt("reorder_qty"));
+
+					brand.setName(res.getString("brand"));
+					product.setBrand(brand);
+
+					rt.setQty(res.getInt("inventry"));
+					rt.setProduct(product);
+
+					rList.add(rt);
+
+				}
+
+			}
+
+			GenericResult rs = new GenericResult();
+			rs.setStatus(true);
+			rs.setResult(rList);
+
+			return new GenericResult(true, MessageConstant.MSG_SUCCESS, "Retriveed successfully", rList,
+					JsonFormer.form(rs), " ");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new GenericResult(false, MessageConstant.MSG_FAILED, e.getMessage());
+		}
+	}
 }
